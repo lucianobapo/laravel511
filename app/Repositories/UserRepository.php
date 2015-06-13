@@ -12,7 +12,7 @@ class UserRepository {
         }
 
         $user = User::where('provider_id', '=', $userData->id)->first();
-        dd($user);
+        dd($userData->id);
         $emailExists = User::where('email', '=', $userData->email)->first();
 
         if(!$user && $emailExists) {
