@@ -1,7 +1,8 @@
 <?php namespace App\Repositories;
 
 use App\Models\User;
-use Config;
+//use Config;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository {
 
@@ -12,7 +13,7 @@ class UserRepository {
         }
 
         $user = User::where('provider_id', '=', $userData->id)->first();
-        dd($userData->id);
+
         $emailExists = User::where('email', '=', $userData->email)->first();
 
         if(!$user && $emailExists) {
