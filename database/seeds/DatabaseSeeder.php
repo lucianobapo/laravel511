@@ -18,26 +18,26 @@ class DatabaseSeeder extends Seeder {
 //////        $this->call('TagsTableSeeder');
 //////		$this->call('ArticlesTableSeeder');
 
-		$this->call('SharedCurrenciesTableSeeder');
-		$this->call('SharedOrderPaymentsTableSeeder');
-		$this->call('SharedOrderTypesTableSeeder');
-		$this->call('SharedUnitOfMeasuresTableSeeder');
+//		$this->call('SharedCurrenciesTableSeeder');
+//		$this->call('SharedOrderPaymentsTableSeeder');
+//		$this->call('SharedOrderTypesTableSeeder');
+//		$this->call('SharedUnitOfMeasuresTableSeeder');
+//
+//        $this->call('SharedStatsTableSeeder');
+//
+//        $this->call('CostAllocatesTableSeeder');
 
-        $this->call('SharedStatsTableSeeder');
-
-        $this->call('CostAllocatesTableSeeder');
-
-        $this->call('ProductsTableSeeder');
-        $this->call('ProductGroupsTableSeeder');
-
-        $this->call('PartnerGroupsTableSeeder');
-		$this->call('PartnersTableSeeder');
-        $this->call('UsersTableSeeder');
-
-		$this->call('AddressesTableSeeder');
-		$this->call('OrdersTableSeeder');
-		$this->call('PurchaseOrdersTableSeeder');
-		$this->call('RoleTableSeeder');
+//        $this->call('ProductsTableSeeder');
+//        $this->call('ProductGroupsTableSeeder');
+//
+//        $this->call('PartnerGroupsTableSeeder');
+//		$this->call('PartnersTableSeeder');
+//        $this->call('UsersTableSeeder');
+//
+//		$this->call('AddressesTableSeeder');
+//		$this->call('OrdersTableSeeder');
+//		$this->call('PurchaseOrdersTableSeeder');
+//		$this->call('RoleTableSeeder');
 	}
 
 }

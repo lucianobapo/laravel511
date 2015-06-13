@@ -217,7 +217,8 @@ return [
         'Currency'  => App\Facades\CurrencyFacade::class,
         'Flash'     => Laracasts\Flash\Flash::class,
         'Debugbar'  => Barryvdh\Debugbar\Facade::class,
-        'Bernardino\EasyAuthenticator\Models\User' => \App\Models\User::class,
+//        'Bernardino\EasyAuthenticator\Models\User' => \App\Models\User::class,
+        'Bernardino\EasyAuthenticator\Repositories\UserRepository' => \App\Repositories\UserRepository::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
     ],
 
