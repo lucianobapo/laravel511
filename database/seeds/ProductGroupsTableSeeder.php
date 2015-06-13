@@ -29,13 +29,11 @@ class ProductGroupsTableSeeder extends Seeder
                     'grupo' => $group->nome,
                 ]);
                 $productsArray = $productGroup->products()->get()->toArray();
-                $count = count($productsArray);
                 $newProductsArray = [];
-//                dd($count);
-                if ($count>0) {
+//                dd(count($productsArray));
+                if (count($productsArray)>0) {
 //                    dd($productsArray);
                     foreach ($productsArray as $key=>$value) {
-
                         $newProductsArray[$key]=$value['id'];
                     }
                     $newProductsArray[$key+1]=$newProductId;
@@ -46,6 +44,13 @@ class ProductGroupsTableSeeder extends Seeder
                 }
 
                 $productGroup->products()->sync($newProductsArray);
+                if ($group->nome=='Delivery'){
+                    $produtos = $productGroup->products()->get();
+                    foreach ($produtos as $produto) {
+                        $produto->estoque=true;
+                        $produto->save();
+                    }
+                }
 
             }
 
