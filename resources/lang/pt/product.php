@@ -16,6 +16,7 @@ return array(
 	'actionTitle' => 'Ações',
 	'actionBtn' => 'Adicionar',
 	'actionDeleteTitle' => 'Remover',
+    'actionEditTitle' => 'Editar',
 	'productCreated' => 'Produto Criado com sucesso!',
 	'productCreatedTitle' => 'Produto Criado',
 	'productDeleted' => 'Produto Removido com sucesso!',

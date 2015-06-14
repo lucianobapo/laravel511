@@ -48,11 +48,15 @@ class RoutesRepository{
                 resource('products','Erp\ProductsController', [
                     'names' => [
                         'index'=>'products.index',
+                        'edit'=>'products.edit',
+                        'update'=>'products.update',
                         'store'=>'products.store',
                         'destroy'=>'products.destroy',
                     ],
                     'only'=>[
                         'index',
+                        'edit',
+                        'update',
                         'store',
                         'destroy',
                     ],

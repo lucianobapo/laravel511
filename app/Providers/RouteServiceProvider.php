@@ -28,6 +28,7 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot($router);
         $router->model('orders', 'App\Models\Order');
+        $router->model('products', 'App\Models\Product');
 
 //        $router->bind('orders',function($id){
 //            return \App\Models\Order::findOrFail($id)->with('partner');

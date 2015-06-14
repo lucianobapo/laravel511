@@ -158,7 +158,8 @@ return [
         App\Providers\CurrencyServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        Bernardino\EasyAuthenticator\EasyAuthenticatorServiceProvider::class,
+//        Bernardino\EasyAuthenticator\EasyAuthenticatorServiceProvider::class,
+        App\Providers\EasyAuthenticatorServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
 

@@ -33,6 +33,15 @@ class Product extends Model {
     private $filtro;
 
     /**
+     * A Product belongs to a CostAllocate.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function cost() {
+        return $this->belongsTo('App\Models\CostAllocate');
+    }
+
+    /**
      * Partner can have many orders.
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

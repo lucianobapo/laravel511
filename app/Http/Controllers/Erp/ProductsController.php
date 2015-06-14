@@ -4,11 +4,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\CostAllocate;
 use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\SharedOrderType;
 use App\Models\SharedStat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class ProductsController extends Controller {
 
     public function __construct() {
-        $this->middleware('auth',['except'=> ['index']]);
+//        $this->middleware('auth',['except'=> ['index']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 
     }
@@ -30,7 +32,6 @@ class ProductsController extends Controller {
      */
     public function index(Product $product, Request $request, $host)
     {
-
         $params = $request->all();
         if ( !isset($params['direction']) ) $params['direction'] = false;
         if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
@@ -38,14 +39,31 @@ class ProductsController extends Controller {
         $product = $product->with('groups','status');
 
         return view('erp.products.index', compact('host'))->with([
-//            'products' => $product->all(),
-            'products' => $product->with('groups','status')->paginate(10)->appends($params),
-//            'products' => $product->paginate()->appends($params),
+            'products' => $product->with('groups','status','cost')->paginate(10)->appends($params),
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
+            'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
             'status'=> SharedStat::lists('descricao','id'),
             'estoque' => $this->calculaEstoque(),
         ]);
+    }
+
+    public function edit($host, Product $product){
+//        dd($product);
+        $params['direction'] = false;
+
+        return view('erp.products.index', compact('host'))->with([
+            'products' => $product->with('groups','status','cost')->paginate(10),
+            'params' => ['host'=>$host]+$params,
+            'grupos'=> ProductGroup::lists('grupo','id'),
+            'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
+            'status'=> SharedStat::lists('descricao','id'),
+            'estoque' => $this->calculaEstoque(),
+        ]);
+    }
+
+    public function update(Product $product){
+        dd($product);
     }
 
     /**
@@ -77,6 +95,9 @@ class ProductsController extends Controller {
         //Adicionando Grupos
         $this->syncGroups($newProduct, $attributes['grupos']);
 
+        //Adicionando Status
+        $this->syncStatus($newProduct, $attributes['status']);
+
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 
         return redirect(route('products.index', $host));
@@ -85,8 +106,11 @@ class ProductsController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param $host
+     * @param Product $product
      * @return Response
+     * @throws \Exception
      */
     public function destroy(Request $request, $host, Product $product)
     {
@@ -111,6 +135,17 @@ class ProductsController extends Controller {
     private function syncGroups(Product $product, $group)
     {
         $product->groups()->sync(is_null($group)?[]:$group);
+    }
+
+    /**
+     * Sync up a list of status in the database.
+     *
+     * @param Product $product
+     * @param array $status
+     */
+    private function syncStatus(Product $product, $status)
+    {
+        $product->status()->sync(is_null($status)?[]:$status);
     }
 
     private function calculaEstoque()
