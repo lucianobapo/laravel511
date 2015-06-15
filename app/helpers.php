@@ -38,6 +38,7 @@ if ( ! function_exists('setTraffic')){
         if (config('app.storeTraffic'))
             \App\Models\Traffic::create([
                 'user_info' => $user,
+                'session_id' => app('session')->getId(),
                 'remote_address' => $_SERVER['REMOTE_ADDR'],
                 'server_info' => json_encode([
                     $_SERVER['HTTP_HOST'],

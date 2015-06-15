@@ -11,6 +11,7 @@ class Traffic extends Model {
      */
     protected $fillable = [
         'user_info',
+        'session_id',
         'remote_address',
         'server_info',
     ];

@@ -74,6 +74,8 @@ class RoutesRepository{
                         'destroy',
                     ],
                 ]);
+
+                get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
             });
 
 
