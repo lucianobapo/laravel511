@@ -96,7 +96,7 @@ class RoutesRepository{
         Route::group([
             'domain' => '{host}.'.config('app.domain'),
 //            'prefix' => 'delivery',
-            'where' => ['host' => 'laravel'],
+            'where' => ['host' => 'delivery'],
         ], function(){
 
             get('/', ['as'=>'delivery.index', 'uses'=>'DeliveryController@index']);
