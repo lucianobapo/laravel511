@@ -33,6 +33,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('report.menuName') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li>{!! link_to_route('reports.estoque', trans('report.menuEstoque'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.estatOrdem', trans('report.menuEstatOrdem'), $host) !!}</li>
                     </ul>
                 </li>
             </ul>

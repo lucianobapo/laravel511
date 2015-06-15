@@ -14,6 +14,7 @@ return array(
 //	'empty' => 'Sem parceiros para exibir',
 	'menuName' => 'Relatórios',
 	'menuEstoque' => 'Estoque',
+	'menuEstatOrdem' => 'Estatística de Ordens',
 //	'actionTitle' => 'Ações',
 //	'actionBtn' => 'Adicionar',
 //	'actionDeleteTitle' => 'Remover',
@@ -26,5 +27,17 @@ return array(
         'title' => 'Posição do estoque',
         'produto' => 'Produto',
         'estoque' => 'Estoque',
+    ],
+    'estatOrdem' => [
+        'title' => 'Estatística de Ordens',
+        'tipo' => 'Tipo de Ordem',
+        'quantidade' => 'Quantidade',
+        'porcentagem' => 'Porcentagem',
+        'valoresMensais' => [
+            'mes' => 'Mês',
+            'valorVenda' => 'Total de Venda',
+            'valorCompra' => 'Total de Compra',
+            'diferenca' => 'Saldo',
+        ],
     ],
 );

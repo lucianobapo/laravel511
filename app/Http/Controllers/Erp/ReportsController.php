@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Erp;
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -24,5 +27,78 @@ class ReportsController extends Controller
             'products' => $product->where(['estoque'=>1])->orderBy('nome', 'asc' )->get(),
             'estoque' => $this->orderRepository->calculaEstoque(),
         ]);
+    }
+
+    public function estatOrdem($host, Order $order){
+//        $query = DB::table('orders')
+//            ->join('shared_order_types as s', 'orders.type_id', '=', 's.id')
+//            ->where('s.tipo', '=', 'ordemVenda')
+//            ->get();
+
+        $arrayDaSoma = [];
+        $from = Carbon::now()->startOfMonth();
+        $to = Carbon::now()->endOfMonth();
+        $this->somaMeses($order, $from, $to, $arrayDaSoma);
+//        dd($arrayDaSoma);
+
+        $orders = $order->with('type')->get();
+
+        $ordersVenda = $orders
+            ->filter(function($item) {
+                if (!!array_search('ordemVenda',$item->type->toArray()))
+                    return $item;
+            });
+        $ordersCompra = $orders
+            ->filter(function($item) {
+                if (!!array_search('ordemCompra',$item->type->toArray()))
+                    return $item;
+            });
+
+        return view('erp.reports.estatOrdem', compact('host'))->with([
+            'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
+                'data' => [
+                    'totalOrder'=>count($orders),
+                    'totalVenda'=>count($ordersVenda),
+                    'totalCompra'=>count($ordersCompra),
+                ],
+                'percentage' => [
+                    'totalOrder'=>(count($orders)*100)/count($orders),
+                    'totalVenda'=>(count($ordersVenda)*100)/count($orders),
+                    'totalCompra'=>(count($ordersCompra)*100)/count($orders),
+                ],
+            ]),
+            'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
+                'data' => $arrayDaSoma,
+            ]),
+        ]);
+    }
+
+    /**
+     * @param $ordersMes
+     * @return array
+     */
+    private function somaValorOrdensMes($ordersMes)
+    {
+//        $ordersMes = $order->whereBetween('posted_at', [$from, $to])->with('type')->get();
+        $data['vendas'] = 0;
+        $data['compras'] = 0;
+        foreach ($ordersMes as $orderValue) {
+            if ($orderValue->type->tipo == 'ordemVenda') {
+                $data['vendas'] = $data['vendas'] + $orderValue->valor_total;
+            }
+            if ($orderValue->type->tipo == 'ordemCompra') {
+                $data['compras'] = $data['compras'] + $orderValue->valor_total;
+            }
+        }
+        return $data;
+    }
+
+    public function somaMeses(Order $order, Carbon $from, $to, &$arrayDaSoma){
+        $ordersMes = $order->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])->with('type')->get();
+        if (count($ordersMes)>0){
+            $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
+            return $this->somaMeses($order, $from->subMonth(), $to->subMonth(),$arrayDaSoma);
+        }
+
     }
 }
