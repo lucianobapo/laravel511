@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
                 'email'=> $user->email,
                 'provider'=> strtolower($user->provider),
                 'provider_id'=> $user->social_identifier,
-            ],false);
+            ],false,false);
             $newUser->partner()->save($partner);
         }
 

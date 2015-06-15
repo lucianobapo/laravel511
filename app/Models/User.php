@@ -68,7 +68,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @param  array  $attributes
      * @return static
      */
-    public static function create(array $attributes = [], $criaPartner=true)
+    public static function create(array $attributes = [], $criaPartner=true, $enviaMensagem=true)
     {
         if (!isset($attributes['mandante'])) $attributes['mandante'] = config('app.mandante');
         $model = new static($attributes);
@@ -78,7 +78,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if ($criaPartner) static::createPartner($model);
 
-        MessagesRepository::sendUserCreated([
+        if ($enviaMensagem) MessagesRepository::sendUserCreated([
             'name'=>config('mail.from')['name'],
             'email'=>config('mail.from')['address'],
             'user'=>$model
