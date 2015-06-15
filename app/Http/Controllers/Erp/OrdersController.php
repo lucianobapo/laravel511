@@ -14,6 +14,8 @@ use App\Models\SharedCurrency;
 use App\Models\SharedOrderPayment;
 use App\Models\SharedOrderType;
 use App\Models\SharedStat;
+use App\Repositories\MessagesRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +55,6 @@ class OrdersController extends Controller {
      */
 	public function index(Order $order, Request $request, $host)
 	{
-//        dd(Auth::user()->mandante);
         $params = $request->all();
         if ( !isset($params['direction']) ) $params['direction'] = false;
         if ( isset($params['sortBy']) ) $order = $order->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
@@ -147,6 +148,7 @@ class OrdersController extends Controller {
         $this->syncStatus($addedOrder, $attributes['status']);
 
 //        flash()->success(trans('delivery.flash.pedidoAdd', ['pedido' => $addedOrder->id]));
+//        MessagesRepository::send(['name'=>Auth::user()->name,'email'=>Auth::user()->email]);
         flash()->overlay(trans('order.flash.orderCreated', ['ordem' => $addedOrder->id]),trans('order.flash.orderCreatedTitle'));
         return redirect(route('orders.index', $host));
     }

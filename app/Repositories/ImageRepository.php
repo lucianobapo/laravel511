@@ -13,9 +13,52 @@ namespace App\Repositories;
 //use \Illuminate\Mail\Mailer as Mail;
 //use Illuminate\Validation\Validator;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 class ImageRepository {
     var $image;
     var $image_type;
+
+    /**
+     * @param Request $request
+     * @param $nome
+     * @return string
+     */
+    public function saveImageFile(Request $request, $nome)
+    {
+        $uploadedFile = $request->file('imagem');
+        $tempFile = $uploadedFile->getPath(). DIRECTORY_SEPARATOR.$uploadedFile->getFilename();
+//        dd(is_file($tempFile));
+        $clientOriginalName = 'imagem-de-' . $nome . '.' . $uploadedFile->getClientOriginalExtension();
+        // checking file is valid.
+        if ($uploadedFile->isValid()) {
+            $imageDir = config('filesystems.imageLocation') . DIRECTORY_SEPARATOR;
+            if (!Storage::exists($imageDir)) Storage::makeDirectory($imageDir);
+//            dd($imageDir . $clientOriginalName);
+            $this->load($tempFile);
+            $this->resizeToHeight(150);
+            $this->save($tempFile,IMAGETYPE_PNG);
+//            dd(file_get_contents($tempFile));
+//            Storage::put($imageDir . $clientOriginalName, file_get_contents($uploadedFile));
+            Storage::put($imageDir . $clientOriginalName, file_get_contents($tempFile));
+//            dd($clientOriginalName);
+        } else {
+            dd($clientOriginalName);
+//                // sending back with error message.
+//                Session::flash('error', 'uploaded file is not valid');
+//                return redirect(route('products.index', $host));
+        }
+        return $clientOriginalName;
+    }
+
+    public function updateImageFile(Request $request, $newFileName, $oldFileName){
+        $file = config('filesystems.imageLocation') . DIRECTORY_SEPARATOR . $oldFileName;
+        if (Storage::exists($file)) Storage::delete($file);
+        return $this->saveImageFile($request,str_slug($newFileName));
+    }
+
+
 
     function load($filename) {
 

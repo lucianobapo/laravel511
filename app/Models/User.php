@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Repositories\MessagesRepository;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -76,6 +77,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $model->save();
 
         if ($criaPartner) static::createPartner($model);
+
+        MessagesRepository::sendUserCreated([
+            'name'=>config('mail.from')['name'],
+            'email'=>config('mail.from')['address'],
+            'user'=>$model
+        ]);
         return $model;
     }
 

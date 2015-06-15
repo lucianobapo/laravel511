@@ -6233,9 +6233,11 @@ label,
 }
 @media (max-width: 767px) {
   .h1s {
+    font-family: 'Architects Daughter', cursive, "Roboto", Helvetica, Arial, sans-serif;
     font-size: 23.4px;
   }
   .h2s {
+    font-family: 'Architects Daughter', cursive, "Roboto", Helvetica, Arial, sans-serif;
     font-size: 19.5px;
   }
   .h3s {
@@ -6253,10 +6255,6 @@ h1 {
 }
 h2 {
   font-family: 'Architects Daughter', cursive, "Roboto", Helvetica, Arial, sans-serif;
-}
-.h2s {
-  font-family: 'Architects Daughter', cursive, "Roboto", Helvetica, Arial, sans-serif;
-  font-size: 30px;
 }
 h3 {
   font-family: "Roboto", Helvetica, Arial, sans-serif;

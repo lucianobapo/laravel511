@@ -16,6 +16,15 @@ class ProductGroupsTableSeeder extends Seeder
         ProductGroup::truncate();
         DB::table('product_product_group')->truncate();
 
+        ProductGroup::create([
+            'mandante' => config('app.mandante'),
+            'grupo' => 'Estoque Produção 3',
+        ]);
+        ProductGroup::create([
+            'mandante' => config('app.mandante'),
+            'grupo' => 'Estoque Revenda 8-18',
+        ]);
+
         $oldProducts = (new \App\Models\OldProduct)->listar();
 
         foreach($oldProducts as $product){

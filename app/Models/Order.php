@@ -92,6 +92,14 @@ class Order extends Model {
     public function status() {
         return $this->belongsToMany('App\Models\SharedStat')->withTimestamps();
     }
+    public function getStatusListAttribute(){
+        $status = $this->status->toArray();
+        $lista = '';
+        foreach($status as $stat){
+            $lista = $lista . $stat['descricao'].', ';
+        }
+        return substr($lista, 0, -2);
+    }
 
     /**
      * Order can have many items.
@@ -150,14 +158,7 @@ class Order extends Model {
         return Carbon::now()->format('Y-m-d\TH:i');
     }
 
-    public function getStatusListAttribute(){
-        $status = $this->status->toArray();
-        $lista = '';
-        foreach($status as $stat){
-            $lista = $lista . $stat['descricao'].', ';
-        }
-        return substr($lista, 0, -2);
-    }
+
 
 //    public function cachedAll(CacheRepository $cache){
 ////        dd($this->with('partner', 'currency', 'type', 'payment', 'status', 'orderItems')->get());

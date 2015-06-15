@@ -15,6 +15,8 @@ use App\Models\ProductGroup;
 use App\Models\SharedCurrency;
 use App\Models\SharedOrderPayment;
 use App\Models\SharedOrderType;
+use App\Repositories\MessagesRepository;
+use App\Repositories\OrderRepository;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Cache\Repository as CacheRepository;
@@ -43,16 +45,18 @@ class DeliveryController extends Controller {
      * @var \Illuminate\View\View
      */
     private $cartView;
+    private $orderRepository;
 
     /**
      * @param CacheRepository $cache
      */
-    public function __construct(CacheRepository $cache) {
+    public function __construct(CacheRepository $cache, OrderRepository $orderRepository) {
 //        $this->middleware('auth',['except'=> ['index','show']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 
         $this->cache = $cache;
         $this->cartView = view('delivery.partials.cartVazio');
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -74,7 +78,7 @@ class DeliveryController extends Controller {
         if(count($products = ProductGroup::where(['grupo'=>'Delivery'])->first()->products()->with('status')->orderBy('promocao', 'desc' )->orderBy('nome', 'asc' )->get() ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $products,
-                'estoque' => $this->calculaEstoque(),
+                'estoque' => $this->orderRepository->calculaEstoque(),
             ]);
         } else {
             $panelBody = trans('delivery.index.semProdutos');
@@ -251,6 +255,14 @@ class DeliveryController extends Controller {
             $product->find($key)->itemOrders()->save($addedItemOrder);
         }
 
+        MessagesRepository::sendOrderCreated([
+            'host'=>$host,
+            'name'=>config('mail.from')['name'],
+            'email'=>config('mail.from')['address'],
+            'user'=>$addedPartner->user,
+            'order'=>$addedOrder,
+        ]);
+
         flash()->success(trans('delivery.flash.pedidoAdd', ['pedido' => $addedOrder->id, 'email' => $addedPartner->contacts()->where(['contact_type'=>'email'])->first()->contact_data]));
         if (Session::has('cart')) Session::forget('cart');
         return redirect(route('delivery.index', $host));
@@ -352,30 +364,4 @@ class DeliveryController extends Controller {
     private function syncStatus(Order $order, $status) {
         $order->status()->sync(is_null($status)?[]:$status);
     }
-
-    private function calculaEstoque()
-    {
-        $saldo_produtos = [];
-        foreach (SharedOrderType::where(['tipo' => 'ordemVenda'])->first()->orders()->with('orderItems','orderItems.product')->get() as $ordem) {
-            foreach ($ordem->orderItems as $item) {
-
-                if (!$item->product->estoque) continue;
-                if (isset($saldo_produtos[$item->product_id]))
-                    $saldo_produtos[$item->product_id] = $saldo_produtos[$item->product_id] - $item->quantidade;
-                else
-                    $saldo_produtos[$item->product_id] = -$item->quantidade;
-            }
-        }
-        foreach (SharedOrderType::where(['tipo' => 'ordemCompra'])->first()->orders()->with('orderItems','orderItems.product')->get() as $ordem) {
-            foreach ($ordem->orderItems as $item) {
-                if (!$item->product->estoque) continue;
-                if (isset($saldo_produtos[$item->product_id]))
-                    $saldo_produtos[$item->product_id] = $saldo_produtos[$item->product_id] + $item->quantidade;
-                else
-                    $saldo_produtos[$item->product_id] = +$item->quantidade;
-            }
-        }
-        return $saldo_produtos;
-    }
-
 }

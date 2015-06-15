@@ -131,4 +131,14 @@ class Product extends Model {
         return substr($lista, 0, -2);
     }
 
+    public function checkStatus(array $lista, $status){
+        foreach($lista as $item) if ($item['status']==$status) return true;
+        return false;
+    }
+
+    public function checkGroup(array $lista, $group){
+        foreach($lista as $item) if ($item['grupo']==$group) return true;
+        return false;
+    }
+
 }

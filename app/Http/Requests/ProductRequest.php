@@ -23,12 +23,14 @@ class ProductRequest extends Request {
 	public function rules()
 	{
         return [
-            'imagem' => 'required|mimes:png',
+            'imagem' => 'required_if:method,POST|mimes:png',
 			'nome' => 'required|min:3',
+			'cost_id' => 'required',
             'valorUnitVenda' => 'numeric',
             'valorUnitVendaPromocao' => 'numeric',
             'valorUnitCompra' => 'numeric',
             'promocao' => 'boolean',
+            'estoque' => 'boolean',
 		];
 	}
 
@@ -37,10 +39,13 @@ class ProductRequest extends Request {
             $factory->getTranslator(),
             $this->all(),
             $this->container->call([$this, 'rules']),
-            array(),
+            [
+                "required_if"      => "O campo :attribute deve ser preenchido.",
+            ],
             [
                 'imagem'=> trans('modelProduct.attributes.imagem'),
                 'nome'=> trans('modelProduct.attributes.nome'),
+                'cost_id'=> trans('modelProduct.attributes.costId'),
                 'valorUnitVenda'=> trans('modelProduct.attributes.valorUnitVenda'),
                 'valorUnitVendaPromocao'=> trans('modelProduct.attributes.valorUnitVendaPromocao'),
                 'valorUnitCompra'=> trans('modelProduct.attributes.valorUnitCompra'),

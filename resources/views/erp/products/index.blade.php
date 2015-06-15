@@ -37,30 +37,25 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            {!! Form::open([
-                'url'=>route('products.store', $host),
+            {!! Form::model($product, [
+                'method'=>$method,
+                'url'=>route($route, isset($product->id)?[$host,$product->id]:$host),
                 'files' => true,
             ]) !!}
-            {!! Form::model($order, [
-                'method'=>'PATCH',
-                'url'=>route('orders.update',
-                [$host,$order->id]),
-            'ng-app'=>"myApp",
-            'ng-controller'=>"myCtrl",
-            ]) !!}
+            <!-- method Form Input -->
+            {!! Form::hidden('method',$method) !!}
             <td></td>
             <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required'=>true]) !!}</td>
             <td>{!! Form::file('imagem', ['class'=>'form-control', 'accept'=>'.png']) !!}</td>
             <td>{!! Form::checkbox('promocao', 1, null, ['class'=>'']) !!}</td>
-            <td>{!! Form::select('grupos[]', $grupos, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-            <td>{!! Form::select('cost_id', $costs, null, ['class'=>'form-control select2']) !!}</td>
+            <td>{!! Form::select('grupos[]', $grupos, $group_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+            <td>{!! Form::select('cost_id', $costs, $cost_selected, ['class'=>'form-control select2']) !!}</td>
             <td>{!! Form::text('valorUnitVenda', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
             <td>{!! Form::text('valorUnitVendaPromocao', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
             <td>{!! Form::text('valorUnitCompra', null, ['size'=>'10', 'class'=>'form-control']) !!}</td>
             <td>{!! Form::checkbox('estoque', 1, null, ['class'=>'']) !!}</td>
-            <td>{!! Form::select('status[]', $status, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-            <td>{!! Form::submit(trans('product.actionBtn'), ['class'=>'form-control btn btn-primary']) !!}</td>
+            <td>{!! Form::select('status[]', $status, $status_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+            <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
             {!! Form::close() !!}
         </tr>
         @if(count($products))
@@ -75,7 +70,7 @@
                     <td>{{ formatBRL($product->valorUnitVenda) }}</td>
                     <td>{{ formatBRL($product->valorUnitVendaPromocao) }}</td>
                     <td>{{ formatBRL($product->valorUnitCompra) }}</td>
-                    <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:0 }}</td>
+                    <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:trans('modelProduct.attributes.semEstoque') }}</td>
                     <td>{{ $product->status_list }}</td>
                     <td>
                         {!! Form::open([
@@ -84,7 +79,7 @@
                             'method' => 'DELETE',
                         ]) !!}
 
-                        {!! sprintf( link_to_route('products.edit', '%s', [$host,$product->id], [
+                        {!! sprintf( link_to_route('products.edit', '%s', [$product->id]+$params, [
                         'title'=>trans('product.actionEditTitle'),
                         ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
 

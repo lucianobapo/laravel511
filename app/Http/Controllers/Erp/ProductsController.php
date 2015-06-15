@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\SharedOrderType;
 use App\Models\SharedStat;
+use App\Repositories\ImageRepository;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +19,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller {
 
-    public function __construct() {
+    private $orderRepository;
+    private $imageRepository;
+
+    public function __construct(OrderRepository $orderRepository, ImageRepository $imageRepository) {
 //        $this->middleware('auth',['except'=> ['index']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
-
+        $this->orderRepository = $orderRepository;
+        $this->imageRepository = $imageRepository;
     }
 
     /**
@@ -36,34 +42,69 @@ class ProductsController extends Controller {
         if ( !isset($params['direction']) ) $params['direction'] = false;
         if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
         else $product = $product->orderBy('nome', 'asc' );
-        $product = $product->with('groups','status');
 
-        return view('erp.products.index', compact('host'))->with([
+        return view('erp.products.index', compact('host','product'))->with([
+            'method' => 'POST',
+            'route' => 'products.store',
             'products' => $product->with('groups','status','cost')->paginate(10)->appends($params),
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
+            'group_selected' => null,
             'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
+            'cost_selected' => null,
             'status'=> SharedStat::lists('descricao','id'),
-            'estoque' => $this->calculaEstoque(),
+            'status_selected' => null,
+            'estoque' => $this->orderRepository->calculaEstoque(),
+            'submitButtonText' => trans('product.actionAddBtn'),
         ]);
     }
 
-    public function edit($host, Product $product){
-//        dd($product);
-        $params['direction'] = false;
+    public function edit($host, Product $product, Request $request){
+        $params = $request->all();
+        if ( !isset($params['direction']) ) $params['direction'] = false;
+        if ( isset($params['sortBy']) ) $productOrdered = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
+        else $productOrdered = $product->orderBy('nome', 'asc' );
 
-        return view('erp.products.index', compact('host'))->with([
-            'products' => $product->with('groups','status','cost')->paginate(10),
+        return view('erp.products.index', compact('host','product'))->with([
+            'method' => 'PATCH',
+            'route' => 'products.update',
+            'products' => $productOrdered->with('groups','status','cost')->paginate(10)->appends($params),
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
+            'group_selected' => $product->groups()->getRelatedIds()->toArray(),
             'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
+            'cost_selected' => $product->cost_id,
             'status'=> SharedStat::lists('descricao','id'),
-            'estoque' => $this->calculaEstoque(),
+            'status_selected' => $product->status()->getRelatedIds()->toArray(),
+            'estoque' => $this->orderRepository->calculaEstoque(),
+            'submitButtonText' => trans('product.actionUpdateBtn'),
         ]);
     }
 
-    public function update(Product $product){
-        dd($product);
+    public function update($host, Product $product, ProductRequest $request){
+//        dd(Storage::exists(config('filesystems.imageLocation') . DIRECTORY_SEPARATOR . $product->imagem));
+        $attributes = $request->all();
+
+        if (!empty($attributes['imagem'])){
+            $attributes['imagem'] = $this->imageRepository->updateImageFile($request,str_slug($product->nome),$product->imagem);
+        }
+
+        if(!isset($attributes['estoque'])) $attributes['estoque']=false;
+        if(!isset($attributes['promocao'])) $attributes['promocao']=false;
+
+        $updatedProduct = $product->update($attributes);
+
+        //Adicionando Grupos
+        if (empty($attributes['grupos'])) $this->syncGroups($product, []);
+        else $this->syncGroups($product, $attributes['grupos']);
+
+        //Adicionando Status
+        if (empty($attributes['status'])) $this->syncStatus($product, []);
+        else $this->syncStatus($product, $attributes['status']);
+
+        flash()->overlay(trans('product.flash.productUpdated', ['produto' => $product->id]),trans('product.flash.productUpdatedTitle'));
+
+        return redirect(route('products.index', $host));
     }
 
     /**
@@ -73,30 +114,18 @@ class ProductsController extends Controller {
      */
     public function store(Product $product, ProductRequest $request, $host)
     {
-        // doing the validation, passing post data, rules and the messages
-        $uploadedFile = $request->file('imagem');
-        $clientOriginalName = 'imagem-de-'.str_slug(substr($uploadedFile->getClientOriginalName(),0,-4)).'.'.$uploadedFile->getClientOriginalExtension();
-        // checking file is valid.
-        if ($uploadedFile->isValid()) {
-            $imageDir = config('filesystems.imageLocation') . DIRECTORY_SEPARATOR;
-            if (!Storage::exists($imageDir)) Storage::makeDirectory($imageDir);
-            Storage::put($imageDir . $clientOriginalName, file_get_contents($uploadedFile));
-        } else {
-            dd($clientOriginalName);
-//                // sending back with error message.
-//                Session::flash('error', 'uploaded file is not valid');
-//                return redirect(route('products.index', $host));
-        }
         $attributes = $request->all();
         $attributes['mandante'] = Auth::user()->mandante;
-        $attributes['imagem'] = $clientOriginalName;
+        $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
         $newProduct = $product->create($attributes);
 
         //Adicionando Grupos
-        $this->syncGroups($newProduct, $attributes['grupos']);
+        if (empty($attributes['grupos'])) $this->syncGroups($newProduct,  [''=>'']);
+        else $this->syncStatus($newProduct, $attributes['grupos']);
 
         //Adicionando Status
-        $this->syncStatus($newProduct, $attributes['status']);
+        if (empty($attributes['status'])) $this->syncStatus($newProduct,  [''=>'']);
+        else $this->syncStatus($newProduct, $attributes['status']);
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 
@@ -147,30 +176,4 @@ class ProductsController extends Controller {
     {
         $product->status()->sync(is_null($status)?[]:$status);
     }
-
-    private function calculaEstoque()
-    {
-        $saldo_produtos = [];
-        foreach (SharedOrderType::where(['tipo' => 'ordemVenda'])->first()->orders()->with('orderItems','orderItems.product')->get() as $ordem) {
-            foreach ($ordem->orderItems as $item) {
-
-                if (!$item->product->estoque) continue;
-                if (isset($saldo_produtos[$item->product_id]))
-                    $saldo_produtos[$item->product_id] = $saldo_produtos[$item->product_id] - $item->quantidade;
-                else
-                    $saldo_produtos[$item->product_id] = -$item->quantidade;
-            }
-        }
-        foreach (SharedOrderType::where(['tipo' => 'ordemCompra'])->first()->orders()->with('orderItems','orderItems.product')->get() as $ordem) {
-            foreach ($ordem->orderItems as $item) {
-                if (!$item->product->estoque) continue;
-                if (isset($saldo_produtos[$item->product_id]))
-                    $saldo_produtos[$item->product_id] = $saldo_produtos[$item->product_id] + $item->quantidade;
-                else
-                    $saldo_produtos[$item->product_id] = +$item->quantidade;
-            }
-        }
-        return $saldo_produtos;
-    }
-
 }
