@@ -154,6 +154,14 @@ class Order extends Model {
      * @param $date
      * @return string
      */
+    public function getPostedAtForFieldAttribute() {
+            return Carbon::parse($this->attributes['posted_at'])->format('Y-m-d\TH:i');
+    }
+
+    /**
+     * Get the posted_at attribute.
+     * @return string
+     */
     public function getTodayAttribute() {
         return Carbon::now()->format('Y-m-d\TH:i');
     }

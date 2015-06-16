@@ -14,7 +14,7 @@
     ]) !!}
         @include ('erp.orders.partials.form', ['submitButtonText'=>trans('order.update.orderBtn'),
             'select2tagStatus'=>'select2tag',
-            'postedAtInit'=>$order->today,
+            'postedAtInit'=>$order->posted_at_for_field,
         ])
     {!! Form::close() !!}
 @endsection
