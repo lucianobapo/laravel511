@@ -26,17 +26,20 @@
         </thead>
         <tbody>
         <tr>
-            {!! Form::open([
-                'url'=>route('partners.store', $host),
+            {!! Form::model($partner, [
+                'method'=>$method,
+                'url'=>route($route, isset($partner->id)?[$host,$partner->id]:$host),
                 'files' => true,
             ]) !!}
+            <!-- method Form Input -->
+            {!! Form::hidden('method',$method) !!}
             <td></td>
             <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
             <td>{!! Form::input('date','data_nascimento', null, ['class'=>'form-control']) !!}</td>
             <td>{!! Form::text('observacao', null, ['class'=>'form-control']) !!}</td>
-            <td>{!! Form::select('grupos[]', $grupos, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-            <td>{!! Form::select('status[]', $status, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-            <td>{!! Form::submit(trans('partner.actionBtn'), ['class'=>'form-control btn btn-primary']) !!}</td>
+            <td>{!! Form::select('grupos[]', $grupos, $group_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+            <td>{!! Form::select('status[]', $status, $status_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+            <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
             {!! Form::close() !!}
         </tr>
         @if(count($partners))
@@ -54,6 +57,10 @@
                             'id' => 'form'.$partner->id,
                             'method' => 'DELETE',
                         ]) !!}
+
+                        {!! sprintf( link_to_route('partners.edit', '%s', [$partner->id]+$params, [
+                        'title'=>trans('partner.actionEditTitle'),
+                        ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
 
                         {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('partner.actionDeleteTitle'),

@@ -14,10 +14,17 @@ return array(
 	'empty' => 'Sem parceiros para exibir',
 	'menuName' => 'Parceiros',
 	'actionTitle' => 'Ações',
-	'actionBtn' => 'Adicionar',
+	'actionAddBtn' => 'Adicionar',
+	'actionUpdateBtn' => 'Atualizar',
 	'actionDeleteTitle' => 'Remover',
-//	'productCreated' => 'Produto Criado com sucesso!',
-//	'productCreatedTitle' => 'Produto Criado',
-//	'productDeleted' => 'Produto Removido com sucesso!',
-//	'productDeletedTitle' => 'Produto Removido',
+	'actionEditTitle' => 'Editar',
+
+    'flash' => [
+        'created' => 'Parceiro criado com sucesso!',
+        'createdTitle' => 'Parceiro criado',
+        'updated' => 'Parceiro :nome atualizado com sucesso!',
+        'updatedTitle' => 'Parceiro atualizado',
+        'deleted' => 'Parceiro :nome removido com sucesso!',
+        'deletedTitle' => 'Parceiro removido',
+    ], // flash
 );

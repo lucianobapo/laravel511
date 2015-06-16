@@ -23,7 +23,7 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers;
 
     protected $redirectTo = '/orders';
-    protected $redirectAfterLogout = '/';
+    protected $redirectAfterLogout = '/orders';
 
     /**
      * Create a new authentication controller instance.

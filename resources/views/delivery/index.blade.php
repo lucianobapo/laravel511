@@ -22,6 +22,14 @@
                     <h3 class="h3s">{{ $panelBlockTitle }}</h3>
                 </div>
                 <div class="panel-body">
+                    @if (Session::get('session'))
+                        <div class="alert alert-warning">
+                            <strong>{{ trans('delivery.index.errorTitle') }}</strong> {{ trans('delivery.index.errorText') }}<br><br>
+                            <ul>
+                                <li>{{ trans('delivery.index.'.str_slug(Session::get('session'))) }}</li>
+                            </ul>
+                        </div>
+                    @endif
                     <div class="text-right" id="btnPedido" style="margin: 10px 0px;">
                         @if(Session::has('cart'))
                             {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success tooltipsted2']) !!}

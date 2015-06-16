@@ -16,7 +16,8 @@ return [
      * The route to the login page. By default this is set to
      * be login. Feel free to change this as you wish.
      */
-    'login_page' => 'easyLogin',
+//    'login_page' => 'easyLogin',
+    'login_page' => '/',
 
     // Route you want to use when logging out.
     'logout' => 'easyLogout',

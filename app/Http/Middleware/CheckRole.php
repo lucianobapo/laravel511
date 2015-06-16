@@ -28,7 +28,7 @@ class CheckRole{
             return $next($request);
         }
         flash()->error(trans('app.accessUnauthorized'));
-        return redirect('/');
+        return redirect('/welcome');
 
 //        return response([
 //            'error' => [

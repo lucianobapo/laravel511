@@ -67,11 +67,15 @@ class RoutesRepository{
                         'index'=>'partners.index',
                         'store'=>'partners.store',
                         'destroy'=>'partners.destroy',
+                        'edit'=>'partners.edit',
+                        'update'=>'partners.update',
                     ],
                     'only'=>[
                         'index',
                         'store',
                         'destroy',
+                        'edit',
+                        'update',
                     ],
                 ]);
 

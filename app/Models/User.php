@@ -72,17 +72,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         if (!isset($attributes['mandante'])) $attributes['mandante'] = config('app.mandante');
         $model = new static($attributes);
-//        \Debugbar::info($model);
-//        dd($model);
         $model->save();
+//        dd($criaPartner);
 
         if ($criaPartner) static::createPartner($model);
 
-        if ($enviaMensagem) MessagesRepository::sendUserCreated([
-            'name'=>config('mail.from')['name'],
-            'email'=>config('mail.from')['address'],
-            'user'=>$model
-        ]);
+//        if ($enviaMensagem) MessagesRepository::sendUserCreated([
+//            'name'=>config('mail.from')['name'],
+//            'email'=>config('mail.from')['address'],
+//            'user'=>$model
+//        ]);
         return $model;
     }
 
@@ -93,13 +92,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             'nome' => $user->name,
         ]);
 
-//        \Debugbar::info($addedPartner);
         $addedContact = (new Contact)->firstOrCreate([
             'mandante' => $user->mandante,
             'partner_id' => $addedPartner->id,
             'contact_type' => 'email',
             'contact_data' => $user->email,
         ]);
+
+        $addedPartner->status()->sync([0=>SharedStat::where(['status'=>'ativado'])->first()->id]);
+        $addedPartner->groups()->sync([0=>PartnerGroup::where(['grupo'=>'Cliente'])->first()->id]);
+
 //        \Debugbar::info($addedContact);
 
 //        $addedPartner->user()->save($addedPartner);

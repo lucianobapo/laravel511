@@ -25,19 +25,22 @@ class UsersTableSeeder extends Seeder
             if ($user->email=='amanda_vsa@hotmail.com') continue;
             if ($user->email=='ilhanet.lan@gmail.com') continue;
             if (empty($user->provider)) continue;
-//            dd(config('app.mandante'));
             $partner = Partner::where(['old_id'=>$user->id_cliente])->first();
+            $extra =[];
+            if ($user->email=='luciano.bapo@gmail.com'){
+                $extra = [
+                    'role_id' => 2,
+                ];
+            }
             $newUser = User::create([
                 'mandante' => config('app.mandante'),
                 'name'=> $partner->nome,
                 'email'=> $user->email,
                 'provider'=> strtolower($user->provider),
                 'provider_id'=> $user->social_identifier,
-            ],false,false);
+            ]+$extra,false,false);
             $newUser->partner()->save($partner);
         }
-
-
 
 //        foreach (range(1, 10) as $index) {
 //            User::create([

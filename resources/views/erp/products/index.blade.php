@@ -45,7 +45,7 @@
             <!-- method Form Input -->
             {!! Form::hidden('method',$method) !!}
             <td></td>
-            <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required'=>true]) !!}</td>
+            <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
             <td>{!! Form::file('imagem', ['class'=>'form-control', 'accept'=>'.png']) !!}</td>
             <td>{!! Form::checkbox('promocao', 1, null, ['class'=>'']) !!}</td>
             <td>{!! Form::select('grupos[]', $grupos, $group_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>

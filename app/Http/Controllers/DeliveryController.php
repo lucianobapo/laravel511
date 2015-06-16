@@ -269,7 +269,10 @@ class DeliveryController extends Controller {
             'order'=>$addedOrder,
         ]);
 
-        flash()->success(trans('delivery.flash.pedidoAdd', ['pedido' => $addedOrder->id, 'email' => $addedPartner->contacts()->where(['contact_type'=>'email'])->first()->contact_data]));
+        $params = ['pedido' => $addedOrder->id, 'email' => ''];
+        if (!is_null($email = $addedPartner->contacts()->where(['contact_type' => 'email'])->first()))
+            $params['email'] = $email->contact_data;
+        flash()->success(trans('delivery.flash.pedidoAdd', $params));
         if (Session::has('cart')) Session::forget('cart');
         return redirect(route('delivery.index', $host));
 

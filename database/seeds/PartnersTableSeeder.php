@@ -23,16 +23,13 @@ class PartnersTableSeeder extends Seeder
         Document::truncate();
 
         $oldPartner = (new \App\Models\OldPartner)->listar();
-//        dd($oldPartner);
 
         foreach ($oldPartner as $partner) {
-            //dd(Carbon::now()->timezone('America/Sao_Paulo'));
             $extra =[];
             if (!empty($partner->aniversario)){
                 $extra = [
                     'data_nascimento' => Carbon::createFromTimestamp($partner->aniversario)->timezone('America/Sao_Paulo')->format('Y-m-d'),
                 ];
-//                dd(Carbon::createFromTimestamp($partner->aniversario)->timezone('America/Sao_Paulo')->format('Y-m-d'));
             }
 
             $newPartner = Partner::create([

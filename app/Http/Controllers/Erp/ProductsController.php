@@ -120,11 +120,11 @@ class ProductsController extends Controller {
         $newProduct = $product->create($attributes);
 
         //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($newProduct,  [''=>'']);
+        if (empty($attributes['grupos'])) $this->syncGroups($newProduct,  []);
         else $this->syncStatus($newProduct, $attributes['grupos']);
 
         //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($newProduct,  [''=>'']);
+        if (empty($attributes['status'])) $this->syncStatus($newProduct,  []);
         else $this->syncStatus($newProduct, $attributes['status']);
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));

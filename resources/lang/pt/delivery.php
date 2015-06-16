@@ -38,6 +38,9 @@ return array(
         'subTitle' => 'Frete grátis na entrega de Bebidas e Porções.',
         'panelTitle' => 'Faça o pedido e receba em sua casa.',
         'semProdutos' => 'Nenhum produto para exibir',
+        'email-is-already-in-use' => 'Email do usuário já está cadastrado em nosso sistema com outras credenciais.',
+        'errorTitle' => 'Aviso!',
+        'errorText' => 'Infelizmente não foi possível entrar.',
 //        'published_at' => 'Publicado Em',
     ], // index
 
