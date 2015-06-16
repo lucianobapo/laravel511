@@ -44,4 +44,9 @@ class PartnersController extends Controller {
         $partner->groups()->sync(is_null($group)?[]:$group);
     }
 
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
+
 }

@@ -9,12 +9,14 @@ use App\Models\CostAllocate;
 use App\Models\ItemOrder;
 use App\Models\Order;
 use App\Models\Partner;
+use App\Models\PartnerGroup;
 use App\Models\Product;
 
 use App\Models\ProductGroup;
 use App\Models\SharedCurrency;
 use App\Models\SharedOrderPayment;
 use App\Models\SharedOrderType;
+use App\Models\SharedStat;
 use App\Repositories\MessagesRepository;
 use App\Repositories\OrderRepository;
 use Carbon\Carbon;
@@ -217,11 +219,14 @@ class DeliveryController extends Controller {
         // Adicionando Partner
         $addedPartner = $this->getAddedPartner($attributes);
         $addedPartner->orders()->save($addedOrder);
+        $addedPartner->status()->sync([0=>SharedStat::where(['status'=>'ativado'])->first()->id]);
+        $addedPartner->groups()->sync([0=>PartnerGroup::where(['grupo'=>'Cliente'])->first()->id]);
 
         //Adicionando o endereço
         $addedAddress = $this->getAddedAddress($attributes);
         $addedPartner->addresses()->save($addedAddress);
         $addedAddress->orders()->save($addedOrder);
+
 
         //Adicionando os contatos
         if (!empty($attributes['email'])) {
@@ -259,7 +264,8 @@ class DeliveryController extends Controller {
             'host'=>$host,
             'name'=>config('mail.from')['name'],
             'email'=>config('mail.from')['address'],
-            'user'=>$addedPartner->user,
+            'user'=>isset($addedPartner->user)?$addedPartner->user:null,
+            'partner'=>$addedPartner,
             'order'=>$addedOrder,
         ]);
 

@@ -12,7 +12,9 @@
         "laracasts/flash": "dev-master",
         "bernardino/easy-authenticator": "dev-master",
         "gloudemans/shoppingcart": "dev-master",
-        "league/flysystem-aws-s3-v3": "^1.0@dev"
+        "league/flysystem-aws-s3-v3": "^1.0@dev",
+        "spatie/laravel-backup": "dev-master",
+        "graham-campbell/htmlmin": "^3.1@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

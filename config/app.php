@@ -161,6 +161,7 @@ return [
 //        Bernardino\EasyAuthenticator\EasyAuthenticatorServiceProvider::class,
         App\Providers\EasyAuthenticatorServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
 
 
     ],

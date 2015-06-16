@@ -28,13 +28,13 @@ class CreatePartnerGroupsTable extends Migration {
 
             $table->integer('partner_id')->unsigned()->index();
             $table->foreign('partner_id')->references('id')
-                ->on('products')
+                ->on('partners')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
 
             $table->integer('partner_group_id')->unsigned()->index();
             $table->foreign('partner_group_id')->references('id')
-                ->on('product_groups')
+                ->on('partner_groups')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
         });

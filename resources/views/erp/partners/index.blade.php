@@ -1,3 +1,4 @@
+
 @extends('erp.app')
 
 @section('headScriptCss')
@@ -32,7 +33,7 @@
             <td></td>
             <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
             <td>{!! Form::input('date','data_nascimento', null, ['class'=>'form-control']) !!}</td>
-            <td>{!! Form::text('observacao', null, ['class'=>'form-control', 'required']) !!}</td>
+            <td>{!! Form::text('observacao', null, ['class'=>'form-control']) !!}</td>
             <td>{!! Form::select('grupos[]', $grupos, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
             <td>{!! Form::select('status[]', $status, null, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
             <td>{!! Form::submit(trans('partner.actionBtn'), ['class'=>'form-control btn btn-primary']) !!}</td>
