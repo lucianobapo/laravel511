@@ -41,7 +41,12 @@ class ReportsController extends Controller
         $this->somaMeses($order, $from, $to, $arrayDaSoma);
 //        dd($arrayDaSoma);
 
-        $orders = $order->with('type')->get();
+        $orders = $order->with('type','status')
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
 
         $ordersVenda = $orders
             ->filter(function($item) {
@@ -94,7 +99,13 @@ class ReportsController extends Controller
     }
 
     public function somaMeses(Order $order, Carbon $from, $to, &$arrayDaSoma){
-        $ordersMes = $order->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])->with('type')->get();
+        $ordersMes = $order->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])
+            ->with('type','status')
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
         if (count($ordersMes)>0){
             $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
             return $this->somaMeses($order, $from->subMonth(), $to->subMonth(),$arrayDaSoma);

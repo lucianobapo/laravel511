@@ -8,7 +8,7 @@ class OrderRepository {
     public function calculaEstoque()
     {
         $saldo_produtos = [];
-        $products = Product::with('itemOrders','itemOrders.order','itemOrders.order.type','status','groups')->get();
+        $products = Product::with('itemOrders','itemOrders.order','itemOrders.order.type','itemOrders.order.status','status','groups')->get();
         foreach ($products as $product) {
             if (!$product->estoque) continue;
             if ($product->checkStatus($product->status->toArray(),'Desativado')) continue;
@@ -22,6 +22,9 @@ class OrderRepository {
             }
 
             foreach ($product->itemOrders as $item) {
+                if (is_null($ord = $item->order)) continue;
+                if (strpos($ord->status_list,'Finalizado')===false) continue;
+
                 if ($item->order->type->tipo=='ordemVenda')
                     $quantidade=-$item->quantidade;
                 elseif ($item->order->type->tipo=='ordemCompra')
