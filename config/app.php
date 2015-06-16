@@ -162,6 +162,7 @@ return [
         App\Providers\EasyAuthenticatorServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
+        GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
 
 
     ],
@@ -222,6 +223,7 @@ return [
 //        'Bernardino\EasyAuthenticator\Models\User' => \App\Models\User::class,
         'Bernardino\EasyAuthenticator\Repositories\UserRepository' => \App\Repositories\UserRepository::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
+        'HTMLMin'   => GrahamCampbell\HTMLMin\Facades\HTMLMin::class,
     ],
 
 ];
