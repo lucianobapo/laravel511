@@ -21,6 +21,12 @@ return [
             'exclude' => [
                 storage_path(),
                 base_path('vendor'),
+                base_path('node_modules'),
+                base_path('.idea'),
+                base_path('.git'),
+                base_path('.env'),
+                base_path('.env.local'),
+                base_path('.env.production'),
             ],
         ],
 
