@@ -2,6 +2,7 @@
 
 use App\Http\Requests\Request;
 use App\Repositories\LangValidatorRepository;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryRequest extends Request {
 
@@ -22,18 +23,22 @@ class DeliveryRequest extends Request {
 	 */
 	public function rules()
 	{
-
-        return [
+        $retorno = [
             'email' => 'required_without:telefone',
-			'nome' => 'required',
-			'cep' => 'required_if:address_id,novo',
-			'logradouro' => 'required_if:address_id,novo',
-			'numero' => 'required_if:address_id,novo',
+            'nome' => 'required',
+            'cep' => 'required_if:address_id,novo',
+            'logradouro' => 'required_if:address_id,novo',
+            'numero' => 'required_if:address_id,novo',
 //            'product_id0' => 'required_without_all:product_id1,product_id2,product_id3,product_id4,product_id5',
 //            'cost_id0' => 'required_without_all:cost_id1,cost_id2,cost_id3,cost_id4,cost_id5',
 //            'quantidade0' => 'numeric|required_without_all:quantidade1,quantidade2,quantidade3,quantidade4,quantidade5',
 //            'valor_unitario0' => 'numeric|required_without_all:valor_unitario1,valor_unitario2,valor_unitario3,valor_unitario4,valor_unitario5',
-		];
+        ];
+        if (Auth::guest()) {
+            $retorno['logradouro'] = 'required';
+            $retorno['numero'] = 'required';
+        }
+        return $retorno;
 	}
 
     public function validator(\Illuminate\Validation\Factory $factory){
