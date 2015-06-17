@@ -24,7 +24,7 @@ class RoutesRepository{
 //                'errorRedirect' => '/',//return redirect(route('orders.index', $host));
 //                'host' => '{host}',
                 'middleware' => ['auth', 'roles'],
-                'roles' => ['Administrator', 'Order Manager']
+                'roles' => ['Root', 'Administrator']
             ], function() {
                 resource('orders','Erp\OrdersController', [
                     'names' => [
@@ -81,6 +81,10 @@ class RoutesRepository{
 
                 get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
                 get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
+
+                controller('confirmations', 'Erp\OrderConfirmationsController', [
+                    'getIndex'=>'confirmations.index',
+                ]);
             });
 
 

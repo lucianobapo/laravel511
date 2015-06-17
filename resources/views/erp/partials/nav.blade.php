@@ -27,6 +27,7 @@
 
                 {{--<li>{!! link_to_route('relatorios.index', 'Relatorios') !!}</li>--}}
                 <li>{!! link_to_route('orders.index', trans('order.menuOrder'), $host) !!}</li>
+                <li>{!! link_to_route('confirmations.index', trans('confirmation.menuName'), $host) !!}</li>
                 <li>{!! link_to_route('products.index', trans('product.menuProduct'), $host) !!}</li>
                 <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
                 <li class="dropdown">

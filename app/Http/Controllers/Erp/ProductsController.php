@@ -39,14 +39,15 @@ class ProductsController extends Controller {
     public function index(Product $product, Request $request, $host)
     {
         $params = $request->all();
-        if ( !isset($params['direction']) ) $params['direction'] = false;
-        if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-        else $product = $product->orderBy('nome', 'asc' );
+        $productOrdered = $this->sorting($product, $params);
+//        if ( !isset($params['direction']) ) $params['direction'] = false;
+//        if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
+//        else $product = $product->orderBy('nome', 'asc' );
 
         return view('erp.products.index', compact('host','product'))->with([
             'method' => 'POST',
             'route' => 'products.store',
-            'products' => $product->with('groups','status','cost')->paginate(10)->appends($params),
+            'products' => $productOrdered->with('groups','status','cost')->paginate(10)->appends($params),
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
             'group_selected' => null,
@@ -61,9 +62,7 @@ class ProductsController extends Controller {
 
     public function edit($host, Product $product, Request $request){
         $params = $request->all();
-        if ( !isset($params['direction']) ) $params['direction'] = false;
-        if ( isset($params['sortBy']) ) $productOrdered = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-        else $productOrdered = $product->orderBy('nome', 'asc' );
+        $productOrdered = $this->sorting($product, $params);
 
         return view('erp.products.index', compact('host','product'))->with([
             'method' => 'PATCH',
@@ -82,7 +81,6 @@ class ProductsController extends Controller {
     }
 
     public function update($host, Product $product, ProductRequest $request){
-//        dd(Storage::exists(config('filesystems.imageLocation') . DIRECTORY_SEPARATOR . $product->imagem));
         $attributes = $request->all();
 
         if (!empty($attributes['imagem'])){
@@ -94,13 +92,7 @@ class ProductsController extends Controller {
 
         $updatedProduct = $product->update($attributes);
 
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($product, []);
-        else $this->syncGroups($product, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($product, []);
-        else $this->syncStatus($product, $attributes['status']);
+        $this->syncItems($product, $attributes);
 
         flash()->overlay(trans('product.flash.productUpdated', ['produto' => $product->id]),trans('product.flash.productUpdatedTitle'));
 
@@ -117,15 +109,10 @@ class ProductsController extends Controller {
         $attributes = $request->all();
         $attributes['mandante'] = Auth::user()->mandante;
         $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
+
         $newProduct = $product->create($attributes);
 
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($newProduct,  []);
-        else $this->syncStatus($newProduct, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($newProduct,  []);
-        else $this->syncStatus($newProduct, $attributes['status']);
+        $this->syncItems($newProduct, $attributes);
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 
@@ -148,10 +135,6 @@ class ProductsController extends Controller {
             flash()->overlay(trans('product.productDeleted'),trans('product.productDeletedTitle'));
 
             return redirect(route('products.index', $host));
-//            dd($product->id);
-//            dd($product->id);
-//            Product::find($id)->delete();
-//            dd($request->method());
         }
     }
 
@@ -175,5 +158,34 @@ class ProductsController extends Controller {
     private function syncStatus(Product $product, $status)
     {
         $product->status()->sync(is_null($status)?[]:$status);
+    }
+
+    /**
+     * @param Product $product
+     * @param $attributes
+     */
+    private function syncItems(Product $product, $attributes)
+    {
+        //Adicionando Grupos
+        if (empty($attributes['grupos'])) $this->syncGroups($product, []);
+        else $this->syncGroups($product, $attributes['grupos']);
+
+        //Adicionando Status
+        if (empty($attributes['status'])) $this->syncStatus($product, []);
+        else $this->syncStatus($product, $attributes['status']);
+    }
+
+    /**
+     * @param Product $product
+     * @param $params
+     * @return array
+     */
+    private function sorting(Product $product, &$params)
+    {
+        if (!isset($params['direction'])) $params['direction'] = false;
+        if (isset($params['sortBy']))
+            return $product->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
+        else
+            return $product->orderBy('nome', 'asc');
     }
 }

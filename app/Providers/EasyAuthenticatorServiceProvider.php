@@ -37,22 +37,25 @@ class EasyAuthenticatorServiceProvider extends ServiceProvider {
 //            'password' => 'Bernardino\EasyAuthenticator\PasswordController',
 //        ]);
 
-        Route::get(config('easyAuthenticator.login_page'), function() {
-            return view('easyAuthenticator::login');
-        });
+//        Route::get(config('easyAuthenticator.login_page'), function() {
+//            return view('easyAuthenticator::login');
+//        });
 
-        Route::get(config('easyAuthenticator.logout'), function() {
-            return $this->app['authenticator']->logout();
-        });
+        get(config('easyAuthenticator.logout'), ['as'=>'easy.logout', 'uses'=>'Bernardino\EasyAuthenticator\AuthenticatorManager@logout']);
+//        Route::get(config('easyAuthenticator.logout'), function() {
+//            dd($this->app['authenticator']);
+//            return $this->app['authenticator']->logout();
+//        });
 
 //        Route::get(config('easyAuthenticator.login_redirect'), function() {
 //            $user = User::find(\Auth::id());
 //            return view('easyAuthenticator::dashboard')->with('user', $user);
 //        });
 
-        Route::get('easyAuth/{provider?}', function($provider = null) {
-            return $this->app['authenticator']->login($provider);
-        });
+        get('easyAuth/{provider?}', ['as'=>'easy.provider', 'uses'=>'Bernardino\EasyAuthenticator\AuthenticatorManager@login']);
+//        Route::get('easyAuth/{provider?}', function($provider = null) {
+//            return $this->app['authenticator']->login($provider);
+//        });
 
 //        Route::get('activate/{code}', 'bernardino\EasyAuthenticator\AuthController@accountIsActive');
     }

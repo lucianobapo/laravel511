@@ -76,7 +76,7 @@
                         </td>
                     </tr>
                 @endif
-            @endforeach
+                @endforeach
             </tbody>
         </table>
         {!! $orders->render() !!}

@@ -22,14 +22,12 @@ class PartnersController extends Controller {
     public function index(Partner $partner, Request $request, $host)
     {
         $params = $request->all();
-        if ( !isset($params['direction']) ) $params['direction'] = false;
-        if ( isset($params['sortBy']) ) $partner = $partner->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-        else $partner = $partner->orderBy('nome', 'asc' );
+        $partnerOrdered = $this->sorting($partner, $params);
 
         return view('erp.partners.index', compact('host','partner'))->with([
             'method' => 'POST',
             'route' => 'partners.store',
-            'partners' => $partner->with('groups','status')->paginate(10)->appends($params),
+            'partners' => $partnerOrdered->with('groups','status')->paginate(10)->appends($params),
             'params' => ['host'=>$host]+$params,
             'grupos'=> PartnerGroup::lists('grupo','id'),
             'group_selected' => null,
@@ -41,9 +39,7 @@ class PartnersController extends Controller {
 
     public function edit($host, Partner $partner, Request $request){
         $params = $request->all();
-        if ( !isset($params['direction']) ) $params['direction'] = false;
-        if ( isset($params['sortBy']) ) $partnerOrdered = $partner->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-        else $partnerOrdered = $partner->orderBy('nome', 'asc' );
+        $partnerOrdered = $this->sorting($partner, $params);
 
         return view('erp.partners.index', compact('host','partner'))->with([
             'method' => 'PATCH',
@@ -92,13 +88,7 @@ class PartnersController extends Controller {
 
         $newPartner = $partner->create($attributes);
 
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($newPartner,  []);
-        else $this->syncStatus($newPartner, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($newPartner,  []);
-        else $this->syncStatus($newPartner, $attributes['status']);
+        $this->syncItems($newPartner, $attributes);
 
         flash()->overlay(trans('partner.flash.created'),trans('partner.flash.createdTitle'));
 
@@ -110,13 +100,7 @@ class PartnersController extends Controller {
 
         $updatedPartner = $partner->update($attributes);
 
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($partner, []);
-        else $this->syncGroups($partner, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($partner, []);
-        else $this->syncStatus($partner, $attributes['status']);
+        $this->syncItems($partner, $attributes);
 
         flash()->overlay(trans('partner.flash.updated', ['nome' => $partner->nome]),trans('partner.flash.updatedTitle'));
 
@@ -132,6 +116,35 @@ class PartnersController extends Controller {
 
             return redirect(route('partners.index', $host));
         }
+    }
+
+    /**
+     * @param Partner $partner
+     * @param $params
+     * @return array
+     */
+    private function sorting(Partner $partner, &$params)
+    {
+        if (!isset($params['direction'])) $params['direction'] = false;
+        if (isset($params['sortBy']))
+            return $partner->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
+        else
+            return $partner->orderBy('nome', 'asc');
+    }
+
+    /**
+     * @param Partner $partner
+     * @param $attributes
+     */
+    private function syncItems(Partner $partner, $attributes)
+    {
+        //Adicionando Grupos
+        if (empty($attributes['grupos'])) $this->syncGroups($partner, []);
+        else $this->syncGroups($partner, $attributes['grupos']);
+
+        //Adicionando Status
+        if (empty($attributes['status'])) $this->syncStatus($partner, []);
+        else $this->syncStatus($partner, $attributes['status']);
     }
 
 }

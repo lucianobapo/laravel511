@@ -85,7 +85,7 @@
     <!-- Telefone Form Input -->
     <div class="form-group col-sm-6">
         {!! labelEx('telefone',trans('modelPartner.attributes.telefone').' <span style="color:red;">*</span>') !!}
-        {!! Form::text('telefone',null,['class'=>'form-control']) !!}
+        {!! Form::input('tel', 'telefone',null,['class'=>'form-control']) !!}
     </div>
 </div>
 

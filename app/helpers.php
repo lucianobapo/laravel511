@@ -1,5 +1,20 @@
 <?php
 
+if (!function_exists('controller')) {
+    /**
+     * Route a resource to a controller.
+     *
+     * @param  string  $name
+     * @param  string  $controller
+     * @param  array   $options
+     * @return void
+     */
+    function controller($name, $controller, array $options = [])
+    {
+        return app('router')->controller($name, $controller, $options);
+    }
+}
+
 if ( ! function_exists('link_to_route_sort_by')){
     function link_to_route_sort_by($route, $column, $body, array $params=array(), array $attributes = array()){
         $params['sortBy']=$column;

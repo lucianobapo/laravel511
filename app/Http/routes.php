@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
+Route::controller('welcome', 'WelcomeController');
+
+//Route::get('/welcome', function () {
+//    return view('welcome');
+//});
 
 RoutesRepository::erpRoutes();
 RoutesRepository::deliveryRoutes();

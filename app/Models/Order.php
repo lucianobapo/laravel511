@@ -109,6 +109,15 @@ class Order extends Model {
         return $this->hasMany('App\Models\ItemOrder');
 //        return $this->hasMany('ItemOrder')->with('order', 'product', 'cost', 'currency');
     }
+
+    /**
+     * Order can have many confirmations.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function confirmations(){
+        return $this->hasMany('App\Models\OrderConfirmation');
+    }
+
     /**
      * Order can have many items.
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -20,6 +20,8 @@ class Product extends Model {
         'cost_id',
         'nome',
         'imagem',
+        'cod_fiscal',
+        'cod_barra',
         'promocao',
         'estoque',
         'valorUnitVenda',
