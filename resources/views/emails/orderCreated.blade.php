@@ -1,7 +1,7 @@
 <div style="padding: 19px;margin-bottom: 20px;
     background-color: #f5f5f5;border: 1px solid #e3e3e3;border-radius: 4px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
-    <h1>Nova Ordem nº {!! link_to_route('orders.edit',$order->id,[$host,$order->id]) !!}</h1>
+    <h1>Nova Ordem nº {!! link_to_route('orders.edit',$order->id,['laravel',$order->id]) !!}</h1>
     <p>Entregar em: {{ $order->address->endereco }}</p>
     <p>Tipo: {{ $order->type->descricao }}</p>
     <p>Pagamento: {{ $order->payment->descricao }}</p>
