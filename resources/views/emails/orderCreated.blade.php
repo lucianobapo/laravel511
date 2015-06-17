@@ -3,6 +3,7 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
     <h1>Nova Ordem nº {!! link_to_route('orders.edit',$order->id,['laravel',$order->id]) !!}</h1>
     <p>Entregar em: {{ $order->address->endereco }}</p>
+    <p>Observação: {{ $order->address->obs }}</p>
     <p>Tipo: {{ $order->type->descricao }}</p>
     <p>Pagamento: {{ $order->payment->descricao }}</p>
     <p>Troco: {{ $order->troco }}</p>
