@@ -18,6 +18,7 @@ return array(
         'data_nascimento' => 'Data de Nascimento',
         'tax_id' => 'CPF',
         'telefone' => 'Telefone',
+        'whatsapp' => 'WhatsApp',
         'email' => 'Email',
         'cep' => 'CEP',
         'logradouro' => 'Logradouro',

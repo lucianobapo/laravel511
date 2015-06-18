@@ -122,6 +122,14 @@ class Partner extends Model {
     public function contacts(){
         return $this->hasMany('App\Models\Contact');
     }
+    public function getContactListAttribute(){
+        $contacts = $this->contacts->toArray();
+        $lista = '';
+        foreach($contacts as $contact){
+            $lista = $lista . ucfirst($contact['contact_type']).', ';
+        }
+        return substr($lista, 0, -2);
+    }
 
     /**
      * Partner can have many documents.

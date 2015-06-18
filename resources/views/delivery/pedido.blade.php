@@ -43,4 +43,5 @@
     </script>
 
     @include('angular.clickOnceDirective')
+    @include('angular.numbersOnlyDirective')
 @endsection

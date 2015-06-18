@@ -61,6 +61,7 @@ return array(
             'dadosContato' => 'Dados de Contato',
             'dadosEntrega' => 'Endereço de entrega',
             'requiredTag' => 'Campos obrigatórios',
+            'requiredTag2' => 'Pelo menos um dos campos devem ser preenchidos',
             'oldAddress' => 'Endereços utilizados anteriormente',
             'createAddress' => 'Cadastrar Novo endereço',
             'placeholder' => [

@@ -5,6 +5,7 @@
     'data-toggle'=>"validator",
     'ng-app'=>"myApp",
     'ng-controller'=>"myCtrl",
+    'novalidate',
 ]) !!}
 {!! Form::hidden('total',$totalCartUnformatted) !!}
 
@@ -19,7 +20,13 @@
 @endforeach
 
 <div>
-    <em><span style="color:red;">*</span> {{ trans('delivery.pedidos.form.requiredTag') }}</em>
+    <p>
+        <em><span style="color:red;">*</span> {{ trans('delivery.pedidos.form.requiredTag') }}</em>
+    </p>
+    <p>
+        <em><span style="color:red;">**</span> {{ trans('delivery.pedidos.form.requiredTag2') }}</em>
+    </p>
+
     <h4 class="h4s">{{ trans('delivery.pedidos.form.formaPagamento') }}:</h4><hr>
 </div>
 <div class="row">
@@ -75,17 +82,22 @@
 </div>
 <div class="row{{ (Auth::guest())?'':' hide' }}">
     <!-- Email Form Input -->
-    <div class="form-group col-sm-6">
-        {!! labelEx('email',trans('modelPartner.attributes.email').' <span style="color:red;">*</span>') !!}
+    <div class="form-group col-sm-4">
+        {!! labelEx('email',trans('modelPartner.attributes.email').' <span style="color:red;">**</span>') !!}
         {!! Form::input('email','email', (Auth::guest())?null:Auth::user()->email,[
             'class'=>'form-control',
             Auth::guest()?'enabled':'enabled',
         ]) !!}
     </div>
     <!-- Telefone Form Input -->
-    <div class="form-group col-sm-6">
-        {!! labelEx('telefone',trans('modelPartner.attributes.telefone').' <span style="color:red;">*</span>') !!}
+    <div class="form-group col-sm-4">
+        {!! labelEx('telefone',trans('modelPartner.attributes.telefone').' <span style="color:red;">**</span>') !!}
         {!! Form::input('tel', 'telefone',null,['class'=>'form-control']) !!}
+    </div>
+    <!-- Whatsapp Form Input -->
+    <div class="form-group col-sm-4">
+        {!! labelEx('whatsapp',trans('modelPartner.attributes.whatsapp').' <span style="color:red;">**</span>') !!}
+        {!! Form::input('tel', 'whatsapp',null,['class'=>'form-control']) !!}
     </div>
 </div>
 
@@ -99,8 +111,9 @@
     <!-- Cep Form Input -->
     <div class="form-group col-sm-3">
         {!! labelEx('cep',trans('modelPartner.attributes.cep').' <span style="color:red;">*</span>') !!}
-        {!! Form::text('cep',null,['class'=>'form-control',
+        {!! Form::text('cep',null,['class'=>'form-control numbersOnly',
             'ng-disabled'=>"oldAddress",
+            'maxlength'=>8,
             'placeholder'=>trans('delivery.pedidos.form.placeholder.cep')]) !!}
     </div>
     <!-- Logradouro Form Input -->
@@ -149,6 +162,4 @@
         {!! Form::submit(trans('delivery.pedidos.finalizarBtn'),['class'=>'btn btn-success form-control', 'click-once'=>trans('delivery.clickOnce')]) !!}
     </div>
 </div>
-
-
 {!! Form::close() !!}

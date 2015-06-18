@@ -24,7 +24,8 @@ class DeliveryRequest extends Request {
 	public function rules()
 	{
         $retorno = [
-            'email' => 'required_without:telefone',
+//            'email' => 'required_without:telefone',
+            'email' => 'email|required_without_all:telefone,whatsapp',
             'nome' => 'required',
             'cep' => 'required_if:address_id,novo',
             'logradouro' => 'required_if:address_id,novo',
@@ -35,6 +36,7 @@ class DeliveryRequest extends Request {
 //            'valor_unitario0' => 'numeric|required_without_all:valor_unitario1,valor_unitario2,valor_unitario3,valor_unitario4,valor_unitario5',
         ];
         if (Auth::guest()) {
+            $retorno['cep'] = 'required';
             $retorno['logradouro'] = 'required';
             $retorno['numero'] = 'required';
         }
@@ -47,11 +49,13 @@ class DeliveryRequest extends Request {
             $this->all(),
             $this->container->call([$this, 'rules']),
             [
-                'required_without'    => 'O campo :attribute ou :values deve ser preenchido.',
+//                'required_without'    => 'O campo :attribute ou :values deve ser preenchido.',
+                'required_without_all'    => 'Um dos campos :attribute / :values devem ser preenchidos.',
             ],
             [
                 'email'=> trans('modelPartner.attributes.email'),
                 'telefone'=> trans('modelPartner.attributes.telefone'),
+                'whatsapp'=> trans('modelPartner.attributes.whatsapp'),
                 'nome'=> trans('modelPartner.attributes.nome'),
                 'cep'=> trans('modelPartner.attributes.cep'),
                 'logradouro'=> trans('modelPartner.attributes.logradouro'),

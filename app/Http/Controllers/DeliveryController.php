@@ -247,6 +247,15 @@ class DeliveryController extends Controller {
                     'contact_data' => $attributes['telefone']
                 ]) );
         }
+        if (!empty($attributes['whatsapp'])) {
+            $addedPartner->contacts()->save(
+                Contact::firstOrCreate([
+                    'mandante' => Auth::check()?Auth::user()->mandante:config('app.mandante'),
+                    'partner_id' => $addedPartner->id,
+                    'contact_type' => 'whatsapp',
+                    'contact_data' => $attributes['whatsapp']
+                ]) );
+        }
 
 
         //Adicionando os itens do pedido

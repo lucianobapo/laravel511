@@ -55,6 +55,7 @@ return array(
 	"required_if"      => "O campo :attribute deve ser preenchido quando :other é :value.",
 	"required_with"    => "O campo :attribute deve ser preenchido quando :values está presente.",
 	"required_without" => "O campo :attribute deve ser preenchido quando :values não está presente.",
+//    'required_without_all' => 'The :attribute field is required when none of :values are present.',
 	"required_without_all" => "Um dos campos :attribute deve ser preenchido.",
 	"same"             => "O :attribute e :other devem ser iguais.",
 	"size"             => array(
