@@ -27,7 +27,11 @@
                     <td>{{ $order->type->descricao }}</td>
                     <td>{{ $order->payment->descricao }}</td>
                     <td>{{ $order->status_list }}</td>
-                    <td></td>
+                    <td>
+                        {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                        'title'=>trans('confirmation.actionEditTitle'),
+                        ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
+                    </td>
                 </tr>
             @endforeach
         </tbody>

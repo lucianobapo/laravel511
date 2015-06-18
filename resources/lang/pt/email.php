@@ -13,4 +13,5 @@ return array(
 	'userCreatedSubject' => 'Novo usuário Registrado - :user',
 	'userLoginSubject' => 'Login de usuário - :user',
 	'orderCreatedSubject' => 'Nova ordem criada nº:ordem',
+	'orderConfirmationSubject' => 'Novo pedido nº:ordem',
 );

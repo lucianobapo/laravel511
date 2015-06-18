@@ -17,14 +17,27 @@ return array(
 //	'actionAddBtn' => 'Adicionar',
 //	'actionUpdateBtn' => 'Atualizar',
 //	'actionDeleteTitle' => 'Remover',
-//	'actionEditTitle' => 'Editar',
+	'actionEditTitle' => 'Confirmar Ordem',
 
-//    'flash' => [
-//        'created' => 'Parceiro criado com sucesso!',
-//        'createdTitle' => 'Parceiro criado',
+    'confirm' =>[
+        'title' => 'Confirmar Ordem nº:ordem',
+    ],
+
+    'btn' => [
+        'recebido' => 'Confirmar Recebimento do Pedido',
+        'producao',
+        'pronto',
+        'entregando',
+        'entregue',
+        'pago',
+    ],
+
+    'flash' => [
+        'confirmed' => 'Ordem nº:ordem confirmada com sucesso!',
+        'confirmedTitle' => 'Ordem confirmada',
 //        'updated' => 'Parceiro :nome atualizado com sucesso!',
 //        'updatedTitle' => 'Parceiro atualizado',
 //        'deleted' => 'Parceiro :nome removido com sucesso!',
 //        'deletedTitle' => 'Parceiro removido',
-//    ], // flash
+    ], // flash
 );

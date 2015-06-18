@@ -63,4 +63,22 @@ class MessagesRepository{
             $message->to($this->fields['email'], $this->fields['name'])->subject(trans('email.userLoginSubject',['user'=>$this->fields['user']->name]));
         });
     }
+
+    public static function sendConfirmation(Array $fields)
+    {
+        $func = new static;
+        $func->setFields($fields);
+        $func->messageConfirmation();
+    }
+    /**
+     * Send message if the Order successful confirmed.
+     */
+    public function messageConfirmation(){
+//        dd($this->fields);
+        return Mail::send('emails.orderConfirmation', $this->fields, function($message) {
+            $message->to($this->fields['email'], $this->fields['name'])
+                ->bcc($this->fields['bccEmail'],$this->fields['bccName'])
+                ->subject(trans('email.orderConfirmationSubject',['ordem'=>$this->fields['order']->id]));
+        });
+    }
 }

@@ -84,6 +84,8 @@ class RoutesRepository{
 
                 controller('confirmations', 'Erp\OrderConfirmationsController', [
                     'getIndex'=>'confirmations.index',
+                    'getConfirm'=>'confirmations.getConfirm',
+                    'postConfirm'=>'confirmations.postConfirm',
                 ]);
             });
 

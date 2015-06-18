@@ -56,6 +56,7 @@ return [
 
 //    'from' => ['address' => null, 'name' => null],
     'from' => ['address' => env('MAIL_ADDRESS', null), 'name' => env('MAIL_NAME', null)],
+    'bcc' => ['address' => env('MAIL_ADDRESS_BCC', null), 'name' => env('MAIL_NAME_BCC', null)],
 
     'to' => [
         'address' => env('MAIL_UNIVERSAL_ADDRESS', null),

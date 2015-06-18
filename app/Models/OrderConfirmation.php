@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderConfirmation extends Model
 {
@@ -18,6 +20,16 @@ class OrderConfirmation extends Model
         'order_id',
         'type',
     ];
+
+    /**
+     * Get the posted_at attribute.
+     *
+     * @param $date
+     * @return string
+     */
+    public function getCreatedAtAttribute($date) {
+        return Carbon::parse($date)->format('d/m/Y H:i');
+    }
 
     /**
      * An OrderConfirmation belongs to an Order.
