@@ -21,10 +21,15 @@ return array(
 
     'confirm' =>[
         'title' => 'Confirmar Ordem nº:ordem',
+        'posted_at' => 'Ordem postada em',
+        'recebido' => [
+            'btn' => 'Confirmar Recebimento do Pedido',
+            'label' => 'Mensagem',
+            'msg' => 'Olá, recebemos seu pedido, estamos providenciando a entrega.',
+        ],
     ],
 
     'btn' => [
-        'recebido' => 'Confirmar Recebimento do Pedido',
         'producao',
         'pronto',
         'entregando',

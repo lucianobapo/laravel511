@@ -16,7 +16,7 @@ class OrderConfirmationsController extends Controller
     public function getIndex(Order $order, $host)
     {
         return view('erp.confirmations.index',compact('host'))->with([
-            'orders' => $order->with('status')->get()
+            'orders' => $order->with('status','currency','type','payment','partner')->get()
                 ->filter(function($item) {
                     if (strpos($item->status_list,'Aberto')!==false)
                         return $item;
@@ -58,6 +58,7 @@ class OrderConfirmationsController extends Controller
                     'user'=>is_null($order->partner->user)?null:$order->partner->user,
                     'partner'=>$order->partner,
                     'order'=>$order,
+                    'msg' => $attributes['mensagem'],
                 ]);
 
             flash()->overlay(trans('confirmation.flash.confirmed',['ordem'=>$attributes['order_id']]),trans('confirmation.flash.confirmedTitle'));

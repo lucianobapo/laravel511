@@ -17,10 +17,16 @@ height: auto;"></p>
     @else
         <p>{{ $partner->nome }}</p>
     @endif
+    <p><strong>{{ $msg }}</strong></p>
     <p>Entregar em: {{ $order->address->endereco }}</p>
     <p>Observação: {{ $order->address->obs }}</p>
     <p>Pagamento: {{ $order->payment->descricao }}</p>
-    <p>Troco: {{ $order->troco }}</p>
+    @if(empty($order->troco))
+        <p>Troco: <em>Sem necessidade de Troco</em></p>
+    @else
+        <p>Troco: {{ $order->troco }}</p>
+    @endif
+
     @foreach($order->orderItems as $item)
         <p>- {{ $item->quantidade }} x {{ formatBRL($item->valor_unitario) }}: {{ $item->product->nome }} = {{ formatBRL($item->quantidade*$item->valor_unitario) }}</p>
     @endforeach
