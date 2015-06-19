@@ -25,6 +25,11 @@
         @if(stripos($order->partner->contact_list,'Email')!==false)
             <!-- mensagem Form Input -->
             <div class="form-group">
+                {!! Form::label('enviar',trans('confirmation.confirm.recebido.enviarMensagem')) !!}
+                {!! Form::checkbox('enviar', true, ['checked']) !!}
+            </div>
+            <!-- mensagem Form Input -->
+            <div class="form-group">
                 {!! Form::label('mensagem',trans('confirmation.confirm.recebido.label')) !!}
                 {!! Form::text('mensagem',trans('confirmation.confirm.recebido.msg'),['class'=>'form-control']) !!}
             </div>

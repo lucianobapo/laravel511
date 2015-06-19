@@ -13,11 +13,11 @@ transition: all 0.2s ease-in-out;
 display: inline-block;
 max-width: 100%;
 height: auto;"></p>
-        <p>{{ $user->name }}</p>
+        <h3><strong>{{ $user->name }}</strong></h3>
     @else
-        <p>{{ $partner->nome }}</p>
+        <h3><strong>{{ $partner->nome }}</strong></h3>
     @endif
-    <p><strong>{{ $msg }}</strong></p>
+    <h3>{{ $msg }}</h3>
     <p>Entregar em: {{ $order->address->endereco }}</p>
     <p>Observação: {{ $order->address->obs }}</p>
     <p>Pagamento: {{ $order->payment->descricao }}</p>

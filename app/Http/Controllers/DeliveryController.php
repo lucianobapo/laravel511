@@ -270,9 +270,8 @@ class DeliveryController extends Controller {
         }
 
         MessagesRepository::sendOrderCreated([
-            'host'=>$host,
-            'name'=>config('mail.from')['name'],
-            'email'=>config('mail.from')['address'],
+            'name'=>config('mail.from.name'),
+            'email'=>config('mail.from.address'),
             'user'=>isset($addedPartner->user)?$addedPartner->user:null,
             'partner'=>$addedPartner,
             'order'=>$addedOrder,

@@ -49,6 +49,8 @@ class OrderConfirmationsController extends Controller
                 }
             }
 
+            $sendMessage=isset($attributes['enviar'])?!!$attributes['enviar']:false;
+
             if ($sendMessage)
                 MessagesRepository::sendConfirmation([
                     'bccName'=>config('mail.bcc')['name'],

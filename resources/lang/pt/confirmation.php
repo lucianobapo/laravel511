@@ -25,6 +25,7 @@ return array(
         'recebido' => [
             'btn' => 'Confirmar Recebimento do Pedido',
             'label' => 'Mensagem',
+            'enviarMensagem' => 'Enviar email ao usuário',
             'msg' => 'Olá, recebemos seu pedido, estamos providenciando a entrega.',
         ],
     ],
