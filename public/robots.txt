@@ -1,6 +1,10 @@
 User-agent: *
-Disallow:
+Disallow: /
 User-agent: Baiduspider
 Disallow: /
 User-agent: Googlebot
+Allow: /
+User-agent: Adsbot-Google
+Allow: /
+User-agent: Mediapartners-Google
 Allow: /
