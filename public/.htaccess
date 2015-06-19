@@ -3,7 +3,10 @@
         Options -MultiViews
     </IfModule>
 
+    Options +FollowSymLinks
+    IndexIgnore */*
     RewriteEngine On
+    RewriteBase /
 
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
