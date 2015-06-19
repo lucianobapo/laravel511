@@ -5,6 +5,7 @@
 <meta name="description" content="{{ trans('delivery.head.metaDescription') }}">
 <meta name="robots" content="{{ trans('delivery.head.metaRobots') }}">
 <meta name="author" content="{{ trans('delivery.head.metaAuthor') }}">
+<meta name="google-site-verification" content="B0qADrueaz2VqkVySrBDlWHtmkjyXI6heuELzkEmmZ0" />
 <title>{{ trans('delivery.head.title') }}</title>
 
 {{--<link href="{{ asset('/css/app.compiled.css') }}" rel="stylesheet">--}}
