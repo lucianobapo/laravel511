@@ -44,4 +44,5 @@
 
     @include('angular.clickOnceDirective')
     @include('angular.numbersOnlyDirective')
+    @include('angular.cepDirective')
 @endsection

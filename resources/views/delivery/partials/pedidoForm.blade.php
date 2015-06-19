@@ -109,12 +109,13 @@
 
 <div class="row" ng-hide="oldAddress">
     <!-- Cep Form Input -->
-    <div class="form-group col-sm-3">
+    <div class="form-group col-sm-3 has-feedback">
         {!! labelEx('cep',trans('modelPartner.attributes.cep').' <span style="color:red;">*</span>') !!}
-        {!! Form::text('cep',null,['class'=>'form-control numbersOnly',
+        {!! Form::text('cep',null,['class'=>'form-control numbersOnly cep',
             'ng-disabled'=>"oldAddress",
             'maxlength'=>8,
             'placeholder'=>trans('delivery.pedidos.form.placeholder.cep')]) !!}
+        <span id="cep_loading" class="form-control-feedback ng-hide" style="right: 15px;"><i class="fa fa-spinner fa-spin"></i></span>
     </div>
     <!-- Logradouro Form Input -->
     <div class="form-group col-sm-5">
