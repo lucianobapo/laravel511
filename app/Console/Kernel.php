@@ -33,10 +33,9 @@ class Kernel extends ConsoleKernel
 //                 ->hourly();
 
         $schedule->command('backup:run')
-            ->hourly()
+            ->dailyAt('06:03')
             ->sendOutputTo($filePath)
             ->emailOutputTo(config('mail.from.address'));
-//        dd('a');
 
         $schedule->call(function () {
             $orders = Order::with('status','type','confirmations','partner','partner.user')
@@ -57,7 +56,8 @@ class Kernel extends ConsoleKernel
                     ]);
                 };
             }
-        })->everyTenMinutes()
-            ->sendOutputTo($filePath);
+        })
+            ->everyTenMinutes();
+//            ->everyMinute();
     }
 }
