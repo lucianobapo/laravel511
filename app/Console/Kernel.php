@@ -39,10 +39,10 @@ class Kernel extends ConsoleKernel
 //        dd('a');
 
         $schedule->call(function () {
-            $orders = Order::with('status','confirmations','partner','partner.user')
+            $orders = Order::with('status','type','confirmations','partner','partner.user')
                 ->get()
                 ->filter(function($item) {
-                    if (strpos($item->status_list,'Aberto')!==false)
+                    if ( (strpos($item->status_list,'Aberto')!==false) && ($item->type->tipo=='ordemVenda') )
                         return $item;
                 });
 
