@@ -5,15 +5,28 @@
     <table class="table table-hover table-condensed" ng-app="myApp">
         <thead>
             <tr>
+                <th>{{ trans('report.estoque.id') }}</th>
                 <th>{{ trans('report.estoque.produto') }}</th>
                 <th>{{ trans('report.estoque.estoque') }}</th>
+                <th>{{ trans('report.estoque.custoMedioUnitario') }}</th>
+                <th>{{ trans('report.estoque.custoMedioSubTotal') }}</th>
+                <th>{{ trans('report.estoque.valorVenda') }}</th>
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td colspan="4" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
+                <td>{{ formatBRL(isset($custoTotal)?$custoTotal:0) }}</td>
+                <td>{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>
+            </tr>
             @foreach($products as $product)
                 <tr>
+                    <td>{{ $product->id }}</td>
                     <td>{{ $product->nome }}</td>
                     <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:0 }}</td>
+                    <td>{{ formatBRL(isset($custoMedioEstoque[$product->id])?$custoMedioEstoque[$product->id]:0) }}</td>
+                    <td>{{ formatBRL(isset($custoSubTotal[$product->id])?$custoSubTotal[$product->id]:0) }}</td>
+                    <td>{{ formatBRL(isset($valorVenda[$product->id])?$valorVenda[$product->id]:0) }}</td>
                 </tr>
             @endforeach
         </tbody>

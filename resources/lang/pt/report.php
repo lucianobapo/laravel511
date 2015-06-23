@@ -25,8 +25,13 @@ return array(
 
     'estoque' => [
         'title' => 'Posição do estoque',
+        'id' => 'Id',
         'produto' => 'Produto',
         'estoque' => 'Estoque',
+        'total' => 'Total',
+        'custoMedioUnitario' => 'Custo médio unitario',
+        'custoMedioSubTotal' => 'Custo médio Subtotal',
+        'valorVenda' => 'Valor de venda',
     ],
     'estatOrdem' => [
         'title' => 'Estatística de Ordens',

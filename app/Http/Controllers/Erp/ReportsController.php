@@ -23,9 +23,26 @@ class ReportsController extends Controller
 
     public function estoque($host, Product $product)
     {
+        $saldos = $this->orderRepository->calculaEstoque();
+//        $custoMedioEstoque = [];
+//        $custoSubTotal = [];
+//        $custoTotal = 0;
+//        foreach($saldos['estoque'] as $id=>$productEstoque){
+//            if ($productEstoque>0) {
+//                $custoMedioEstoque[$id] = $this->orderRepository->calculaCustoMedioEstoque($id);
+//                $custoSubTotal[$id] = $custoMedioEstoque[$id]*$productEstoque;
+//                $custoTotal = $custoTotal + $custoSubTotal[$id];
+//            }
+//        }
+
         return view('erp.reports.estoque', compact('host'))->with([
             'products' => $product->where(['estoque'=>1])->orderBy('nome', 'asc' )->get(),
-            'estoque' => $this->orderRepository->calculaEstoque(),
+            'estoque' => $saldos['estoque'],
+            'custoMedioEstoque' => $saldos['custoMedio'],
+            'custoSubTotal' => $saldos['custoMedioSubTotal'],
+            'custoTotal' => $saldos['custoTotal'],
+            'valorVenda' => $saldos['valorVenda'],
+            'valorVendaTotal' => $saldos['valorVendaTotal'],
         ]);
     }
 

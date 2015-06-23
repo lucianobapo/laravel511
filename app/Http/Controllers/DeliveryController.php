@@ -80,7 +80,7 @@ class DeliveryController extends Controller {
         if(count($products = ProductGroup::where(['grupo'=>'Delivery'])->first()->products()->with('status')->orderBy('promocao', 'desc' )->orderBy('nome', 'asc' )->get() ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $products,
-                'estoque' => $this->orderRepository->calculaEstoque(),
+                'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
             ]);
         } else {
             $panelBody = trans('delivery.index.semProdutos');
