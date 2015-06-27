@@ -25,9 +25,19 @@ class OrderConfirmationsController extends Controller
     }
 
     public function getConfirm($host, $order){
+        $orderFound = Order::find($order);
         return view('erp.confirmations.confirm',compact('host'))->with([
             'confirmations' => OrderConfirmation::where(['order_id'=>$order])->get(),
-            'order' => Order::find($order),
+            'order' => $orderFound,
+            'viewConfirmRecebido' => view('erp.confirmations.partials.confirmRecebido',compact('host'))->with([
+                'order' => $orderFound,
+            ]),
+            'viewConfirmEntregando' => view('erp.confirmations.partials.confirmEntregando',compact('host'))->with([
+                'order' => $orderFound,
+            ]),
+            'viewConfirmEntregue' => view('erp.confirmations.partials.confirmEntregue',compact('host'))->with([
+                'order' => $orderFound,
+            ]),
         ]);
     }
 
@@ -35,11 +45,15 @@ class OrderConfirmationsController extends Controller
         if($request->method()==='POST'){
             $attributes = $request->all();
             $order = Order::find($attributes['order_id']);
-            OrderConfirmation::create([
+            $fields = [
                 'mandante' => Auth::user()->mandante,
-                'order_id'  => $attributes['order_id'],
+                'order_id' => $attributes['order_id'],
                 'type' => $attributes['type'],
-            ]);
+            ];
+            if (isset($attributes['mensagem']))
+                $fields['message'] = $attributes['mensagem'];
+//            dd($fields);
+            OrderConfirmation::create($fields);
 //            dd(($order->partner));
             $sendMessage=false;
             foreach ($order->partner->contacts as $contact) {

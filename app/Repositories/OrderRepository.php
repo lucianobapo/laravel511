@@ -16,6 +16,7 @@ class OrderRepository {
             if (!$product->estoque) continue;
             if ($product->checkStatus($product->status->toArray(),'Desativado')) continue;
             if ($product->checkGroup($product->groups->toArray(),'Estoque Produção 3')) {
+
                 $saldo_produtos['estoque'][$product->id]=3;
                 continue;
             }

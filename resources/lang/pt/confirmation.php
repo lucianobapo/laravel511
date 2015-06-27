@@ -28,6 +28,18 @@ return array(
             'enviarMensagem' => 'Enviar email ao usuário',
             'msg' => 'Olá, recebemos seu pedido, estamos providenciando a entrega.',
         ],
+        'entregando' => [
+            'btn' => 'Entregando o Pedido',
+            'label' => 'Km de saida',
+//            'enviarMensagem' => 'Enviar email ao usuário',
+            'msg' => 'Ex.: 8769 km',
+        ],
+        'entregue' => [
+            'btn' => 'Pedido entregue',
+            'label' => 'Km de chegada',
+//            'enviarMensagem' => 'Enviar email ao usuário',
+            'msg' => 'Ex.: 8944 km',
+        ],
     ],
 
     'btn' => [

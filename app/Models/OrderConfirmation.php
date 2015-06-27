@@ -19,6 +19,7 @@ class OrderConfirmation extends Model
         'mandante',
         'order_id',
         'type',
+        'message',
     ];
 
     /**
