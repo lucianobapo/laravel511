@@ -34,8 +34,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('backup:run')
             ->dailyAt('06:03')
-            ->sendOutputTo($filePath)
-            ->emailOutputTo(config('mail.from.address'));
+            ->sendOutputTo($filePath);
+//            ->emailOutputTo(config('mail.from.address'));
 
         $schedule->call(function () {
             $orders = Order::with('status','type','confirmations','partner','partner.user')

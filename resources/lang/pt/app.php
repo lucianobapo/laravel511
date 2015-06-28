@@ -13,6 +13,7 @@ return array(
 	'accessUnauthorized' => 'Acesso não autorizado',
 	'notFound' => 'Recurso não encontrado',
 
+
     'angular' => [
         'numbersOnly' => 'Digite somente números',
         'cepInvalido' => 'Cep Inválido',

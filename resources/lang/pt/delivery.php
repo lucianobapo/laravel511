@@ -11,6 +11,11 @@ return array(
 	*/
 
     'clickOnce' => 'Carregando...',
+    'deliveryFechado' => [
+        'productFormAlias' => 'Indisponível',
+        'errorTitle' => 'Aviso!',
+        'errorText' => 'Pedidos suspensos temporariamente para manutenção de estoque. Retorno previsto para :retorno.',
+    ],
 
     'nav' => [
         'login' => 'Entrar',

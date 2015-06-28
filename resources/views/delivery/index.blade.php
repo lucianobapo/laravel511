@@ -16,6 +16,13 @@
             <h2 class="h2s">{{ trans('delivery.index.subTitle') }}</h2>
         </div>
         <div class="row">
+            @if(!config('app.deliveryOpen'))
+                <div class="alert alert-warning">
+                    <strong>{{ trans('delivery.deliveryFechado.errorTitle') }}</strong>
+                    {{ trans('delivery.deliveryFechado.errorText', ['retorno' => config('app.deliveryReturn')]) }}
+                </div>
+            @endif
+
             <?php $panelBlockTitle = $panelTitle ?>
             <div class="panel panel-default">
                 <div class="panel-heading text-center">

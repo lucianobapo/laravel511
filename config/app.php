@@ -19,6 +19,8 @@ return [
     'storeTraffic' => env('APP_STORE_TRAFFIC', false),
     'orderItemCountMax' => env('ORDER_ITEM_COUNT_MAX', 3),
     'mandante' => env('MANDANTE', 'teste'),
+    'deliveryOpen' => env('DELIVERY_OPEN', true),
+    'deliveryReturn' => env('DELIVERY_RETURN', 'none'),
 
     /*
     |--------------------------------------------------------------------------
