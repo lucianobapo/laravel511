@@ -62,7 +62,7 @@ return [
     |
     */
 
-    'locale' => 'pt',
+    'locale' => 'pt-BR',
 //    'locale' => 'en',
 
     /*
@@ -158,6 +158,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\CurrencyServiceProvider::class,
+        App\Providers\FormatPercentServiceProvider::class,
+
+
         Laracasts\Flash\FlashServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
 //        Bernardino\EasyAuthenticator\EasyAuthenticatorServiceProvider::class,

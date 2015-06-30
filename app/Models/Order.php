@@ -118,6 +118,29 @@ class Order extends Model {
         return $this->hasMany('App\Models\OrderConfirmation');
     }
 
+    public function hasConfirmation($type){
+        $confirmations = $this->confirmations->toArray();
+        foreach($confirmations as $confirmation)
+            if ($confirmation['type']==$type) return true;
+        return false;
+    }
+
+    public function getKmInicialAttribute(){
+        $confirmations = $this->confirmations->toArray();
+        foreach($confirmations as $confirmation)
+            if ( ($confirmation['type']=='entregando') && (!empty($confirmation['message'])) )
+                return $confirmation['message']*1;
+        return 0;
+    }
+
+    public function getKmFinalAttribute(){
+        $confirmations = $this->confirmations->toArray();
+        foreach($confirmations as $confirmation)
+            if ( ($confirmation['type']=='entregue') && (!empty($confirmation['message'])) )
+                return $confirmation['message']*1;
+        return 0;
+    }
+
     /**
      * Order can have many items.
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -3,6 +3,9 @@
     <h1 class="h1s">{{ trans('report.estatOrdem.title') }}</h1>
     <hr>
     {!! $viewTableTipoOrdem !!}
+
+    <h2 class="h2s">{{ trans('report.estatOrdem.titleFinishedOrders') }}</h2>
+    <hr>
     {!! $viewTableValoresMensais !!}
 
 @endsection

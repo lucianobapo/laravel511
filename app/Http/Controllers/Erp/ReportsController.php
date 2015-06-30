@@ -16,6 +16,7 @@ class ReportsController extends Controller
 {
 
     private $orderRepository;
+    private $kmOrdersVendaEntregue = [];
 
     public function __construct(OrderRepository $orderRepository) {
         $this->orderRepository = $orderRepository;
@@ -24,16 +25,6 @@ class ReportsController extends Controller
     public function estoque($host, Product $product)
     {
         $saldos = $this->orderRepository->calculaEstoque();
-//        $custoMedioEstoque = [];
-//        $custoSubTotal = [];
-//        $custoTotal = 0;
-//        foreach($saldos['estoque'] as $id=>$productEstoque){
-//            if ($productEstoque>0) {
-//                $custoMedioEstoque[$id] = $this->orderRepository->calculaCustoMedioEstoque($id);
-//                $custoSubTotal[$id] = $custoMedioEstoque[$id]*$productEstoque;
-//                $custoTotal = $custoTotal + $custoSubTotal[$id];
-//            }
-//        }
 
         return view('erp.reports.estoque', compact('host'))->with([
             'products' => $product->where(['estoque'=>1])->orderBy('nome', 'asc' )->get(),
@@ -47,46 +38,70 @@ class ReportsController extends Controller
     }
 
     public function estatOrdem($host, Order $order){
-//        $query = DB::table('orders')
-//            ->join('shared_order_types as s', 'orders.type_id', '=', 's.id')
-//            ->where('s.tipo', '=', 'ordemVenda')
-//            ->get();
-
         $arrayDaSoma = [];
-        $from = Carbon::now()->startOfMonth();
-        $to = Carbon::now()->endOfMonth();
-        $this->somaMeses($order, $from, $to, $arrayDaSoma);
-//        dd($arrayDaSoma);
+        $this->somaMeses($order, Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $arrayDaSoma);
 
-        $orders = $order->with('type','status')
-            ->get()
+        $orders = $order->with('type','status','confirmations')->get();
+
+        $finishedOrders = $orders
             ->filter(function($item) {
                 if (strpos($item->status_list,'Finalizado')!==false)
                     return $item;
             });
+        $openedOrders = $orders
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Aberto')!==false)
+                    return $item;
+            });
+        $cancelledOrders = $orders
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Cancelado')!==false)
+                    return $item;
+            });
 
-        $ordersVenda = $orders
+        $ordersVenda = $finishedOrders
             ->filter(function($item) {
                 if (!!array_search('ordemVenda',$item->type->toArray()))
                     return $item;
             });
-        $ordersCompra = $orders
+        $ordersCompra = $finishedOrders
             ->filter(function($item) {
                 if (!!array_search('ordemCompra',$item->type->toArray()))
                     return $item;
             });
 
+        $ordersVendaEntregue = $ordersVenda
+            ->filter(function($item) {
+                if ($item->hasConfirmation('entregando')
+                    && $item->hasConfirmation('entregue')
+                    && ($item->kmFinal>$item->kmInicial)
+                ){
+                    $this->kmOrdersVendaEntregue[$item->id] = $item->kmFinal-$item->kmInicial;
+                    return $item;
+                }
+            });
+
+//        dd($this->kmOrdersVendaEntregue);
+
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
                 'data' => [
                     'totalOrder'=>count($orders),
+                    'openedOrders'=>count($openedOrders),
+                    'cancelledOrders'=>count($cancelledOrders),
+                    'finishedOrders'=>count($finishedOrders),
                     'totalVenda'=>count($ordersVenda),
                     'totalCompra'=>count($ordersCompra),
+                    'totalVendaEntregue'=>count($ordersVendaEntregue),
                 ],
                 'percentage' => [
-                    'totalOrder'=>(count($orders)*100)/count($orders),
-                    'totalVenda'=>(count($ordersVenda)*100)/count($orders),
-                    'totalCompra'=>(count($ordersCompra)*100)/count($orders),
+                    'totalOrder'=>formatPercent(count($orders)/count($orders)),
+                    'openedOrders'=>formatPercent(count($openedOrders)/count($orders)),
+                    'cancelledOrders'=>formatPercent(count($cancelledOrders)/count($orders)),
+                    'finishedOrders'=>formatPercent(count($finishedOrders)/count($orders)),
+                    'totalVenda'=>formatPercent(count($ordersVenda)/count($orders)),
+                    'totalCompra'=>formatPercent(count($ordersCompra)/count($orders)),
+                    'totalVendaEntregue'=>formatPercent(count($ordersVendaEntregue)/count($orders)),
                 ],
             ]),
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
@@ -101,9 +116,10 @@ class ReportsController extends Controller
      */
     private function somaValorOrdensMes($ordersMes)
     {
-//        $ordersMes = $order->whereBetween('posted_at', [$from, $to])->with('type')->get();
         $data['vendas'] = 0;
         $data['compras'] = 0;
+        $data['creditoFinanceiro'] = 0;
+        $data['debitoFinanceiro'] = 0;
         foreach ($ordersMes as $orderValue) {
             if ($orderValue->type->tipo == 'ordemVenda') {
                 $data['vendas'] = $data['vendas'] + $orderValue->valor_total;
@@ -111,13 +127,20 @@ class ReportsController extends Controller
             if ($orderValue->type->tipo == 'ordemCompra') {
                 $data['compras'] = $data['compras'] + $orderValue->valor_total;
             }
+            if ($orderValue->type->tipo == 'creditoFinanceiro') {
+                $data['creditoFinanceiro'] = $data['creditoFinanceiro'] + $orderValue->valor_total;
+            }
+            if ($orderValue->type->tipo == 'debitoFinanceiro') {
+                $data['debitoFinanceiro'] = $data['debitoFinanceiro'] + $orderValue->valor_total;
+            }
         }
         return $data;
     }
 
-    public function somaMeses(Order $order, Carbon $from, $to, &$arrayDaSoma){
-        $ordersMes = $order->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])
+    public function somaMeses(Order $order, Carbon $from, Carbon $to, array &$arrayDaSoma){
+        $ordersMes = $order
             ->with('type','status')
+            ->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])
             ->get()
             ->filter(function($item) {
                 if (strpos($item->status_list,'Finalizado')!==false)

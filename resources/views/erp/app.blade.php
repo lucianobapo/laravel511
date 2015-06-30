@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt_br">
+<html lang="{{ config('app.locale') }}">
 <head>
     @include('erp.partials.head')
 </head>

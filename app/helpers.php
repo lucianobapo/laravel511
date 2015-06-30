@@ -31,9 +31,16 @@ if ( ! function_exists('labelEx')){
 }
 
 if ( ! function_exists('formatBRL')){
-    function formatBRL($valor){
-        if (empty($valor)) return app('currency')->convert(0)->from('BRL')->format();
-        return app('currency')->convert($valor)->from('BRL')->format();
+    function formatBRL($valor = 0){
+        //if (empty($valor)) return app('currency')->convert(0)->from('BRL')->format();
+//        return app('currency')->convert($valor)->from('BRL')->format();
+        return app('currency')->format($valor);
+    }
+}
+
+if ( ! function_exists('formatPercent')){
+    function formatPercent($valor = 0){
+        return ( app('formatPercent')->format($valor));
     }
 }
 

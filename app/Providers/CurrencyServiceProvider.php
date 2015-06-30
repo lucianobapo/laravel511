@@ -1,9 +1,9 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Moltin\Currency\Currency;
-use Moltin\Currency\Exchange\OpenExchangeRates;
-use Moltin\Currency\Format\Runtime;
+//use Moltin\Currency\Currency;
+//use Moltin\Currency\Exchange\OpenExchangeRates;
+//use Moltin\Currency\Format\Runtime;
 
 class CurrencyServiceProvider extends ServiceProvider {
 
@@ -25,14 +25,18 @@ class CurrencyServiceProvider extends ServiceProvider {
 	public function register()
 	{
         $this->app->bind('currency', function () {
-            $exchange = new OpenExchangeRates(config('services.openExchangeRates.appId'));
-            $runtime = new Runtime;
-            $runtime->available['BRL'] = [
-                'format'      => 'R${price}',
-                'decimal'     => ',',
-                'thousand'    => '.'
-            ];
-            return new Currency($exchange, $runtime);
+            $formatter = new \NumberFormatter(config('app.locale'), \NumberFormatter::CURRENCY);
+//            $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, 2);
+            return $formatter;
+
+//            $exchange = new OpenExchangeRates(config('services.openExchangeRates.appId'));
+//            $runtime = new Runtime;
+//            $runtime->available['BRL'] = [
+//                'format'      => 'R${price}',
+//                'decimal'     => ',',
+//                'thousand'    => '.'
+//            ];
+//            return new Currency($exchange, $runtime);
         });
 
 	}

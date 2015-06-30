@@ -9,7 +9,7 @@
     <tbody>
     @foreach($data as $key=>$value)
         <tr>
-            <td>{{ $key }}</td>
+            <td>{{ trans('report.estatOrdem.tipos.'.$key) }}</td>
             <td>{{ $value }}</td>
             <td>{{ $percentage[$key] }}</td>
         </tr>
