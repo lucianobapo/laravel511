@@ -13,7 +13,7 @@
         <!-- posted_at Form Input -->
         <div class="form-group col-sm-6">
             {!! Form::label('posted_at',trans('confirmation.confirm.entregando.posted_at')) !!}
-            {!! Form::input('datetime-local','posted_at',$order->today,['class'=>'form-control']) !!}
+            {!! Form::input('datetime-local','posted_at',$order->today,['class'=>'form-control', 'required']) !!}
         </div>
         <!-- mensagem Form Input -->
         <div class="form-group col-sm-6">
