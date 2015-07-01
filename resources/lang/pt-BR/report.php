@@ -12,9 +12,7 @@ return array(
 
 //	'title' => 'Lista de Parceiros',
 //	'empty' => 'Sem parceiros para exibir',
-	'menuName' => 'Relatórios',
-	'menuEstoque' => 'Estoque',
-	'menuEstatOrdem' => 'Estatística de Ordens',
+
 //	'actionTitle' => 'Ações',
 //	'actionBtn' => 'Adicionar',
 //	'actionDeleteTitle' => 'Remover',
@@ -22,6 +20,13 @@ return array(
 //	'productCreatedTitle' => 'Produto Criado',
 //	'productDeleted' => 'Produto Removido com sucesso!',
 //	'productDeletedTitle' => 'Produto Removido',
+
+    'menu' => [
+        'topName' => 'Relatórios',
+        'estoque' => 'Estoque',
+        'estatOrdem' => 'Estatística de Ordens',
+        'dre' => 'DRE',
+    ],
 
     'estoque' => [
         'title' => 'Posição do estoque',
@@ -56,5 +61,16 @@ return array(
             'creditoFinanceiro' => 'Total de Crédito Financeiro',
             'diferenca' => 'Saldo',
         ],
+    ],
+
+    'dre' => [
+        'title' => 'DRE - Demonstrativo de Resultados do Exercício',
+        'estrutura' => 'Estrutura',
+//        'produto' => 'Produto',
+//        'estoque' => 'Estoque',
+//        'total' => 'Total',
+//        'custoMedioUnitario' => 'Custo médio unitario',
+//        'custoMedioSubTotal' => 'Custo médio Subtotal',
+//        'valorVenda' => 'Valor de venda',
     ],
 );

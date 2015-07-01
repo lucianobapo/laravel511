@@ -31,10 +31,11 @@
                 <li>{!! link_to_route('products.index', trans('product.menuProduct'), $host) !!}</li>
                 <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('report.menuName') }} <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('report.menu.topName') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>{!! link_to_route('reports.estoque', trans('report.menuEstoque'), $host) !!}</li>
-                        <li>{!! link_to_route('reports.estatOrdem', trans('report.menuEstatOrdem'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.estoque', trans('report.menu.estoque'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.estatOrdem', trans('report.menu.estatOrdem'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.dre', trans('report.menu.dre'), $host) !!}</li>
                     </ul>
                 </li>
             </ul>

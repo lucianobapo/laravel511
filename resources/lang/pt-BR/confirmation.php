@@ -31,12 +31,14 @@ return array(
         'entregando' => [
             'btn' => 'Entregando o Pedido',
             'label' => 'Km de saida',
+            'posted_at' => 'Data/Hora',
 //            'enviarMensagem' => 'Enviar email ao usuário',
             'msg' => 'Ex.: 8769 km',
         ],
         'entregue' => [
             'btn' => 'Pedido entregue',
             'label' => 'Km de chegada',
+            'posted_at' => 'Data/Hora',
 //            'enviarMensagem' => 'Enviar email ao usuário',
             'msg' => 'Ex.: 8944 km',
         ],

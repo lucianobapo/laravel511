@@ -34,6 +34,7 @@ class OrderConfirmationsController extends Controller
             ]),
             'viewConfirmEntregando' => view('erp.confirmations.partials.confirmEntregando',compact('host'))->with([
                 'order' => $orderFound,
+
             ]),
             'viewConfirmEntregue' => view('erp.confirmations.partials.confirmEntregue',compact('host'))->with([
                 'order' => $orderFound,
@@ -52,9 +53,9 @@ class OrderConfirmationsController extends Controller
             ];
             if (isset($attributes['mensagem']))
                 $fields['message'] = $attributes['mensagem'];
-//            dd($fields);
+            if (isset($attributes['posted_at']))
+                $fields['posted_at'] = $attributes['posted_at'];
             OrderConfirmation::create($fields);
-//            dd(($order->partner));
             $sendMessage=false;
             foreach ($order->partner->contacts as $contact) {
                 if ($contact->contact_type=='email') {

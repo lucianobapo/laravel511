@@ -81,8 +81,6 @@ class ReportsController extends Controller
                 }
             });
 
-//        dd($this->kmOrdersVendaEntregue);
-
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
                 'data' => [
@@ -107,6 +105,15 @@ class ReportsController extends Controller
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
                 'data' => $arrayDaSoma,
             ]),
+        ]);
+    }
+
+    public function dre($host, Order $order){
+        $periodos = [];
+        $this->comporPeriodos($periodos, $order, Carbon::now());
+        sort($periodos);
+        return view('erp.reports.dre', compact('host'))->with([
+            'periodos' => $periodos,
         ]);
     }
 
@@ -149,7 +156,23 @@ class ReportsController extends Controller
         if (count($ordersMes)>0){
             $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
             return $this->somaMeses($order, $from->subMonth(), $to->subMonth(),$arrayDaSoma);
-        }
+        } else return;
 
+    }
+
+    private function comporPeriodos(array &$periodos, Order $order, Carbon $finish_date, Carbon $start_date=null) {
+        $ordersMes = $order
+            ->with('type','status')
+            ->whereBetween('posted_at', [$finish_date->startOfMonth()->toDateTimeString(), $finish_date->endOfMonth()->toDateTimeString()])
+            ->orderBy('posted_at', 'asc' )
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
+        if (count($ordersMes)>0){
+            $periodos[]['title'] = $finish_date->startOfMonth()->format('m/Y');
+            return $this->comporPeriodos($periodos, $order, $finish_date->subMonth());
+        } else return;
     }
 }

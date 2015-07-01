@@ -5,7 +5,7 @@
     <ul>
         <li>{{ trans('confirmation.confirm.posted_at') }}: {{ $order->posted_at }}</li>
         @foreach($confirmations as $confirmation)
-            <li>{{ $confirmation->created_at }} - {{ $confirmation->type }} - {{ $confirmation->message }}</li>
+            <li>{{ $confirmation->created_at }} - {{ $confirmation->posted_at }} - {{ $confirmation->type }} - {{ $confirmation->message }}</li>
         @endforeach
     </ul>
 
