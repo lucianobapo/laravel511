@@ -22,7 +22,6 @@
         </div>
     </div>
 
-
     {!! link_to('#',trans('confirmation.confirm.entregando.btn'),['class'=>'col-sm-4 btn btn-success','send-delete'=>'_entregando'.$order->id]) !!}
 
     {!! Form::close() !!}

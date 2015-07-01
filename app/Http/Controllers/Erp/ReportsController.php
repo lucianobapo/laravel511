@@ -110,8 +110,10 @@ class ReportsController extends Controller
 
     public function dre($host, Order $order){
         $periodos = [];
+
         $this->comporPeriodos($periodos, $order, Carbon::now());
         sort($periodos);
+//        dd($periodos);
         return view('erp.reports.dre', compact('host'))->with([
             'periodos' => $periodos,
         ]);
@@ -162,7 +164,7 @@ class ReportsController extends Controller
 
     private function comporPeriodos(array &$periodos, Order $order, Carbon $finish_date, Carbon $start_date=null) {
         $ordersMes = $order
-            ->with('type','status')
+            ->with('type','status','payment','orderItems','orderItems.cost')
             ->whereBetween('posted_at', [$finish_date->startOfMonth()->toDateTimeString(), $finish_date->endOfMonth()->toDateTimeString()])
             ->orderBy('posted_at', 'asc' )
             ->get()
@@ -171,8 +173,74 @@ class ReportsController extends Controller
                     return $item;
             });
         if (count($ordersMes)>0){
-            $periodos[]['title'] = $finish_date->startOfMonth()->format('m/Y');
+            $periodos[] = [
+                'title' => $finish_date->startOfMonth()->format('m/Y'),
+                'ordersMes' => $this->comporDre($ordersMes),
+            ];
             return $this->comporPeriodos($periodos, $order, $finish_date->subMonth());
         } else return;
+    }
+
+    private function comporDre($orders) {
+        $data = [];
+        $ordersFiltred = $orders->filter(function($item) {
+            if ($item->type->tipo == 'ordemVenda')
+                return $item;
+        });
+        $data['receitaBrutaDinheiro'] = 0;
+        $data['receitaBrutaCartaoCredito'] = 0;
+        $data['receitaBrutaCartaoDebito'] = 0;
+        foreach ($ordersFiltred as $order) {
+            if ($order->payment->pagamento=='vistad')
+                $data['receitaBrutaDinheiro'] = $data['receitaBrutaDinheiro'] + $order->valor_total;
+            if ($order->payment->pagamento=='vistacc')
+                $data['receitaBrutaCartaoCredito'] = $data['receitaBrutaCartaoCredito'] + $order->valor_total;
+            if ($order->payment->pagamento=='vistacd')
+                $data['receitaBrutaCartaoDebito'] = $data['receitaBrutaCartaoDebito'] + $order->valor_total;
+        }
+        $data['receitaBruta'] = $data['receitaBrutaDinheiro'] + $data['receitaBrutaCartaoCredito'] + $data['receitaBrutaCartaoDebito'];
+        $data['honorariosPaylevenCredito'] = $data['receitaBrutaCartaoCredito']*0.0339;
+        $data['honorariosPaylevenDebito'] = $data['receitaBrutaCartaoDebito']*0.0269;
+        $data['honorariosPayleven'] = $data['honorariosPaylevenDebito']+$data['honorariosPaylevenCredito'];
+        $data['honorariosPedidosJa'] = 0;
+
+        $ordersFiltred = $orders->filter(function($item) {
+            if ($item->type->tipo == 'ordemCompra')
+                return $item;
+        });
+        $data['custoMercadorias'] = 0;
+        $data['custoLanches'] = 0;
+        $data['despesasGerais'] = 0;
+        $data['despesasTransporte'] = 0;
+        $data['imposto'] = 0;
+
+        foreach ($ordersFiltred as $order) {
+            foreach ($order->orderItems as $item) {
+                if ($item->cost->nome=='Mercadorias')
+                    $data['custoMercadorias'] = $data['custoMercadorias'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='Lanches')
+                    $data['custoLanches'] = $data['custoLanches'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='Despesas')
+                    $data['despesasGerais'] = $data['despesasGerais'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='Transporte')
+                    $data['despesasTransporte'] = $data['despesasTransporte'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='Impostos')
+                    $data['imposto'] = $data['imposto'] + ($item->valor_unitario*$item->quantidade);
+
+            }
+        }
+
+        $data['deducaoReceita'] = $data['honorariosPayleven']+$data['honorariosPedidosJa']+$data['imposto'];
+        $data['receitaLiquida'] = $data['receitaBruta']-$data['deducaoReceita'];
+
+        $data['custoProdutos'] = $data['custoMercadorias']+$data['custoLanches'];
+
+        $data['margem'] = $data['receitaLiquida'] - $data['custoProdutos'];
+
+        $data['despesas'] = $data['despesasGerais'] + $data['despesasTransporte'];
+
+        $data['ebitda'] = $data['margem'] - $data['despesas'];
+
+        return $data;
     }
 }
