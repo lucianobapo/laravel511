@@ -2,7 +2,7 @@
 @section('content')
     <h1 class="h1s">{{ trans('report.estoque.title') }}</h1>
     <hr>
-    <table class="table table-hover table-condensed" ng-app="myApp">
+    <table class="table table-hover table-striped table-condensed" ng-app="myApp">
         <thead>
             <tr>
                 <th>{{ trans('report.estoque.id') }}</th>

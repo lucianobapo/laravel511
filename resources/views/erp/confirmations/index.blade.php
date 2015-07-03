@@ -2,8 +2,9 @@
 @section('content')
     <h1 class="h1s">{{ trans('confirmation.title') }}</h1>
     <hr>
-    <table class="table table-hover table-condensed" ng-app="myApp">
-        <thead>
+    @if(count($orders))
+        <table class="table table-hover table-striped table-condensed" ng-app="myApp">
+            <thead>
             <tr>
                 <th>{{ trans('modelOrder.attributes.id') }}</th>
                 <th>{{ trans('modelPartner.attributes.nome') }}</th>
@@ -15,8 +16,8 @@
                 <th>{{ trans('modelOrder.attributes.status') }}</th>
                 <th>{{ trans('confirmation.actionTitle') }}</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @foreach($orders as $order)
                 <tr>
                     <td>{{ $order->id }}</td>
@@ -28,13 +29,21 @@
                     <td>{{ $order->payment->descricao }}</td>
                     <td>{{ $order->status_list }}</td>
                     <td>
-                        {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                        {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
                         'title'=>trans('confirmation.actionEditTitle'),
-                        ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
+                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+
+                        {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                        'title'=>trans('confirmation.actionConfirmTitle'),
+                        ]), '<span class="glyphicon glyphicon-flag btn btn-default btn-xs"></span>' ) !!}
                     </td>
                 </tr>
             @endforeach
-        </tbody>
-    </table>
-
+            </tbody>
+        </table>
+    @else
+        <div class="text-center">
+            <em>{{ trans('order.empty') }}</em>
+        </div>
+    @endif
 @endsection

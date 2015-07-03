@@ -9,7 +9,7 @@
         ]) !!}
     </div>
     @if(count($orders))
-        <table class="table table-hover table-condensed" ng-app="myApp">
+        <table class="table table-hover table-striped table-condensed" ng-app="myApp">
             <thead>
             <tr>
 {{--                <th>{{ trans('modelOrder.attributes.id') }}</th>--}}
@@ -41,7 +41,7 @@
                         @if(stripos($order->status_list,'Finalizado')===false)
                             {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
                             'title'=>trans('order.actionEditTitle'),
-                            ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
+                            ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
                         @endif
 
                         {!! Form::open([
@@ -54,7 +54,7 @@
                         {!! sprintf( link_to('#', '%s', [
                         'title'=>trans('order.actionDeleteTitle'),
                         'send-delete'=>$order->id,
-                        ]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}
+                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
 
                         {!! Form::close() !!}
                     </td>
@@ -81,7 +81,7 @@
         </table>
         {!! $orders->render() !!}
     @else
-        <div>
+        <div class="text-center">
             <em>{{ trans('order.empty') }}</em>
         </div>
     @endif

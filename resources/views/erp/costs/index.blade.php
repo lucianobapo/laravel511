@@ -21,8 +21,8 @@
         <tbody>
         <tr>
             {!! Form::model($costAllocate, [
-                'method'=>$method,
-                'url'=>route($route, isset($costAllocate->id)?[$host,$costAllocate->id]:$host),
+            'method'=>$method,
+            'url'=>route($route, isset($costAllocate->id)?[$host,$costAllocate->id]:$host),
             ]) !!}
             <!-- method Form Input -->
             {!! Form::hidden('method',$method) !!}
@@ -42,19 +42,19 @@
                     <td>{{ $cost->descricao }}</td>
                     <td>
                         {!! Form::open([
-                            'url'=>route('costs.destroy', [$host,$cost->id]),
-                            'id' => 'form'.$cost->id,
-                            'method' => 'DELETE',
+                        'url'=>route('costs.destroy', [$host,$cost->id]),
+                        'id' => 'form'.$cost->id,
+                        'method' => 'DELETE',
                         ]) !!}
 
                         {!! sprintf( link_to_route('costs.edit', '%s', [$cost->id]+$params, [
-                            'title'=>trans('cost.actionEditTitle'),
-                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil"></span>' ) !!}
+                        'title'=>trans('cost.actionEditTitle'),
+                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
 
                         {!! sprintf( link_to('#', '%s', [
-                            'title'=>trans('cost.actionDeleteTitle'),
-                            'send-delete'=>$cost->id,
-                        ]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}
+                        'title'=>trans('cost.actionDeleteTitle'),
+                        'send-delete'=>$cost->id,
+                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
 
                         {!! Form::close() !!}
                     </td>
@@ -62,12 +62,17 @@
             @endforeach
         @else
             <tr>
-                <td colspan="7" class="text-center"><em>{{ trans('cost.empty') }}</em></td>
+                <td colspan="5" class="text-center"><em>{{ trans('cost.empty') }}</em></td>
             </tr>
         @endif
+
+
         </tbody>
     </table>
     {!! $costs->render() !!}
+
+
+
 @endsection
 
 @section('footerScriptJs')

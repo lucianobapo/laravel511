@@ -1,4 +1,4 @@
-<table class="table table-hover table-condensed" ng-app="myApp">
+<table class="table table-hover table-striped table-condensed" ng-app="myApp">
     <thead>
     <tr>
         <th>{{ trans('report.estatOrdem.valoresMensais.mes') }}</th>

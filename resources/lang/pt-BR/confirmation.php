@@ -11,13 +11,14 @@ return array(
 	*/
 
 	'title' => 'Lista de Ordens Abertas',
-//	'empty' => 'Sem parceiros para exibir',
+	'empty' => 'Sem ordens para exibir',
 	'menuName' => 'Confirmações',
 	'actionTitle' => 'Ações',
 //	'actionAddBtn' => 'Adicionar',
 //	'actionUpdateBtn' => 'Atualizar',
 //	'actionDeleteTitle' => 'Remover',
-	'actionEditTitle' => 'Confirmar Ordem',
+	'actionEditTitle' => 'Editar Ordem',
+	'actionConfirmTitle' => 'Confirmar Ordem',
 
     'confirm' =>[
         'title' => 'Confirmar Ordem nº:ordem',

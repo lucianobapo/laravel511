@@ -6,7 +6,7 @@
     <h1 class="h1s">{{ trans('product.title') }}</h1>
     <hr>
     @include ('errors.list')
-    <table class="table table-hover table-condensed" ng-app="myApp">
+    <table class="table table-hover table-striped table-condensed" ng-app="myApp">
         <thead>
         <tr>
 {{--            <th>{{ trans('modelProduct.attributes.id') }}</th>--}}
@@ -81,13 +81,13 @@
 
                         {!! sprintf( link_to_route('products.edit', '%s', [$product->id]+$params, [
                         'title'=>trans('product.actionEditTitle'),
-                        ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
+                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
 
                         {{--{!! link_to('#','<span class="glyphicon glyphicon-remove"></span>', ['title'=>trans('product.actionDeleteTitle')]) !!}--}}
                         {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('product.actionDeleteTitle'),
                             'send-delete'=>$product->id,
-                        ]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}
+                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
                         {{--{!! sprintf( link_to_route('products.destroy', '%s', [$host,$product->id], ['title'=>trans('product.actionDeleteTitle')]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}--}}
 
                         {!! Form::close() !!}
@@ -96,7 +96,7 @@
             @endforeach
         @else
             <tr>
-                <td colspan="7" class="text-center"><em>{{ trans('product.empty') }}</em></td>
+                <td colspan="12" class="text-center"><em>{{ trans('product.empty') }}</em></td>
             </tr>
         @endif
         </tbody>

@@ -9,7 +9,7 @@
     <h1 class="h1s">{{ trans('partner.title') }}</h1>
     <hr>
     @include ('errors.list')
-    <table class="table table-hover table-condensed" ng-app="myApp">
+    <table class="table table-hover table-striped table-condensed" ng-app="myApp">
         <thead>
         <tr>
             <th>{!! link_to_route_sort_by('partners.index', 'id', trans('modelPartner.attributes.id'), $params) !!}</th>
@@ -60,7 +60,7 @@
 
                         {!! sprintf( link_to_route('partners.edit', '%s', [$partner->id]+$params, [
                         'title'=>trans('partner.actionEditTitle'),
-                        ]), '<span class="glyphicon glyphicon-pencil"></span>' ) !!}
+                        ]), '<span class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
 
                         {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('partner.actionDeleteTitle'),
