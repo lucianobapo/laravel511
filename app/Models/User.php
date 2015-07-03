@@ -70,18 +70,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public static function create(array $attributes = [], $criaPartner=true, $enviaMensagem=true)
     {
-        if (!isset($attributes['mandante'])) $attributes['mandante'] = config('app.mandante');
+        if (!isset($attributes['mandante'])) $attributes['mandante'] = config('delivery.defaultMandante');
+
         $model = new static($attributes);
         $model->save();
-//        dd($criaPartner);
 
         if ($criaPartner) static::createPartner($model);
 
-//        if ($enviaMensagem) MessagesRepository::sendUserCreated([
-//            'name'=>config('mail.from')['name'],
-//            'email'=>config('mail.from')['address'],
-//            'user'=>$model
-//        ]);
         return $model;
     }
 

@@ -84,7 +84,7 @@ class PartnersController extends Controller {
     public function store(Partner $partner, PartnerRequest $request, $host)
     {
         $attributes = $request->all();
-        $attributes['mandante'] = Auth::user()->mandante;
+//        $attributes['mandante'] = Auth::user()->mandante;
 
         $newPartner = $partner->create($attributes);
 

@@ -28,6 +28,7 @@ class ImageRepository {
     public function saveImageFile(Request $request, $nome)
     {
         $uploadedFile = $request->file('imagem');
+        if (is_null($uploadedFile)) return null;
         $tempFile = $uploadedFile->getPath(). DIRECTORY_SEPARATOR.$uploadedFile->getFilename();
 //        dd(is_file($tempFile));
         $clientOriginalName = 'imagem-de-' . $nome . '.' . $uploadedFile->getClientOriginalExtension();

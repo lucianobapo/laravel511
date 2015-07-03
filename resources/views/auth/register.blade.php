@@ -21,6 +21,19 @@
 					<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
+						{{--<div class="form-group">--}}
+							{{--<label class="col-md-4 control-label">Mandante</label>--}}
+							{{--<div class="col-md-6">--}}
+								{{--<input type="text" class="form-control" name="mandante" value="{{ old('mandante') }}">--}}
+							{{--</div>--}}
+						{{--</div>--}}
+						{{--<div class="form-group">--}}
+							{{--<label class="col-md-4 control-label">Role</label>--}}
+							{{--<div class="col-md-6">--}}
+                                {{--{!! Form::select('role_id', $roles, null, ['class'=>'form-control']) !!}--}}
+							{{--</div>--}}
+						{{--</div>--}}
+
 						<div class="form-group">
 							<label class="col-md-4 control-label">Name</label>
 							<div class="col-md-6">

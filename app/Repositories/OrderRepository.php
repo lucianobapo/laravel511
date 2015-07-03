@@ -8,7 +8,10 @@ use Carbon\Carbon;
 class OrderRepository {
     public function calculaEstoque()
     {
-        $saldo_produtos = [];
+        $saldo_produtos['estoque'] = [];
+        $saldo_produtos['custoMedio'] = [];
+        $saldo_produtos['custoMedioSubTotal'] = [];
+        $saldo_produtos['valorVenda'] = [];
         $saldo_produtos['custoTotal'] = 0;
         $saldo_produtos['valorVendaTotal'] = 0;
         $products = Product::with('itemOrders','itemOrders.order','itemOrders.order.type','itemOrders.order.status','status','groups')->get();

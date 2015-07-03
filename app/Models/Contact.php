@@ -2,10 +2,12 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Scopes\MandanteTrait;
 
 class Contact extends Model {
 
     use SoftDeletes;
+    use MandanteTrait;
 
     /**
      * Fillable fields for a Contact.
@@ -24,7 +26,7 @@ class Contact extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function partner(){
-        return $this->belongsTo('Partner');
+        return $this->belongsTo('App\Models\Partner');
     }
 
 }

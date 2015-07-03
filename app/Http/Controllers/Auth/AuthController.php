@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -58,11 +59,14 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $attributes = [
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-        ]);
+        ];
+        if (isset($data['mandante'])) $attributes['mandante'] = $data['mandante'];
+        if (isset($data['role_id'])) $attributes['role_id'] = $data['role_id'];
+        return User::create($attributes);
     }
 
     /**
@@ -82,6 +86,8 @@ class AuthController extends Controller
      */
     public function getRegister($host)
     {
-        return view('auth.register',compact('host'));
+        return view('auth.register',compact('host'))->with([
+            'roles'=> Role::lists('name','id'),
+        ]);
     }
 }

@@ -81,6 +81,7 @@ class ReportsController extends Controller
                 }
             });
 
+        if (($quocienteOrders = count($orders))==0) $quocienteOrders = 1;
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
                 'data' => [
@@ -93,13 +94,13 @@ class ReportsController extends Controller
                     'totalVendaEntregue'=>count($ordersVendaEntregue),
                 ],
                 'percentage' => [
-                    'totalOrder'=>formatPercent(count($orders)/count($orders)),
-                    'openedOrders'=>formatPercent(count($openedOrders)/count($orders)),
-                    'cancelledOrders'=>formatPercent(count($cancelledOrders)/count($orders)),
-                    'finishedOrders'=>formatPercent(count($finishedOrders)/count($orders)),
-                    'totalVenda'=>formatPercent(count($ordersVenda)/count($orders)),
-                    'totalCompra'=>formatPercent(count($ordersCompra)/count($orders)),
-                    'totalVendaEntregue'=>formatPercent(count($ordersVendaEntregue)/count($orders)),
+                    'totalOrder'=>formatPercent(count($orders)/$quocienteOrders),
+                    'openedOrders'=>formatPercent(count($openedOrders)/$quocienteOrders),
+                    'cancelledOrders'=>formatPercent(count($cancelledOrders)/$quocienteOrders),
+                    'finishedOrders'=>formatPercent(count($finishedOrders)/$quocienteOrders),
+                    'totalVenda'=>formatPercent(count($ordersVenda)/$quocienteOrders),
+                    'totalCompra'=>formatPercent(count($ordersCompra)/$quocienteOrders),
+                    'totalVendaEntregue'=>formatPercent(count($ordersVendaEntregue)/$quocienteOrders),
                 ],
             ]),
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([

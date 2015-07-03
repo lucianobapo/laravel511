@@ -107,8 +107,11 @@ class ProductsController extends Controller {
     public function store(Product $product, ProductRequest $request, $host)
     {
         $attributes = $request->all();
-        $attributes['mandante'] = Auth::user()->mandante;
-        $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
+//        $attributes['mandante'] = Auth::user()->mandante;
+
+        if (!empty($attributes['imagem'])){
+            $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
+        }
 
         $newProduct = $product->create($attributes);
 

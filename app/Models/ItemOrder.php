@@ -1,8 +1,13 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Scopes\MandanteTrait;
 
 class ItemOrder extends Model {
+
+    use SoftDeletes;
+    use MandanteTrait;
 
     /**
      * Fillable fields for an Item Order.

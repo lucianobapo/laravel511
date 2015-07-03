@@ -2,10 +2,12 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Scopes\MandanteTrait;
 
 class Address extends Model {
 
     use SoftDeletes;
+    use MandanteTrait;
 
     /**
      * Fillable fields for an Address.

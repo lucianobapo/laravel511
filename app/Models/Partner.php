@@ -4,11 +4,12 @@ use Carbon\Carbon;
 use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Scopes\MandanteTrait;
 
 class Partner extends Model {
 
     use SoftDeletes;
+    use MandanteTrait;
 
     /**
      * Fillable fields for a Partner.

@@ -79,6 +79,23 @@ class RoutesRepository{
                     ],
                 ]);
 
+                resource('costs','Erp\CostsController', [
+                    'names' => [
+                        'index'=>'costs.index',
+                        'store'=>'costs.store',
+                        'destroy'=>'costs.destroy',
+                        'edit'=>'costs.edit',
+//                        'update'=>'costs.update',
+                    ],
+                    'only'=>[
+                        'index',
+                        'store',
+                        'destroy',
+                        'edit',
+//                        'update',
+                    ],
+                ]);
+
                 get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
                 get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
                 get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);

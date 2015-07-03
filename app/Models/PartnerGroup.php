@@ -1,8 +1,11 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PartnerGroup extends Model {
+
+    use SoftDeletes;
 
     /**
      * Fillable fields for a PartnerGroup.
@@ -20,7 +23,7 @@ class PartnerGroup extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function partners() {
-        return $this->belongsToMany('Partner')->withTimestamps();
+        return $this->belongsToMany('App\Models\Partner')->withTimestamps();
     }
 
 

@@ -23,7 +23,8 @@ class ProductRequest extends Request {
 	public function rules()
 	{
         return [
-            'imagem' => 'required_if:method,POST|mimes:png',
+//            'imagem' => 'required_if:method,POST|mimes:png',
+            'imagem' => 'mimes:png',
 			'nome' => 'required|min:3',
 			'cost_id' => 'required',
             'valorUnitVenda' => 'numeric',
