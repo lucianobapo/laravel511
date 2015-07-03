@@ -60,12 +60,12 @@
 
                         {!! sprintf( link_to_route('partners.edit', '%s', [$partner->id]+$params, [
                         'title'=>trans('partner.actionEditTitle'),
-                        ]), '<span class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
 
                         {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('partner.actionDeleteTitle'),
                             'send-delete'=>$partner->id,
-                        ]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}
+                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
 
                         {!! Form::close() !!}
                     </td>
