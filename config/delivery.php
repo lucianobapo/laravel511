@@ -34,5 +34,8 @@ return [
     */
 
 //    'domain' => env('APP_DOMAIN','homestead.app'),
+//    'sitePrefix' => 'http://',
+    'siteCurrentUrl' => 'http://'.$_SERVER["HTTP_HOST"],
+
 
 ];
