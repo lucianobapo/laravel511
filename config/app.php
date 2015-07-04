@@ -168,6 +168,7 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
         GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
 
     ],
@@ -229,6 +230,7 @@ return [
         'Bernardino\EasyAuthenticator\Repositories\UserRepository' => \App\Repositories\UserRepository::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'HTMLMin'   => GrahamCampbell\HTMLMin\Facades\HTMLMin::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

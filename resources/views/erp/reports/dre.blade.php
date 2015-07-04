@@ -1,21 +1,33 @@
-@extends('erp.app')
+@extends((isset($usePdf)&&$usePdf)?'erp.appPdf':'erp.app')
 @section('content')
     <h1 class="h1s">{{ trans('report.dre.title') }}</h1>
     <hr>
     <table class="table table-hover table-striped table-condensed" ng-app="myApp">
         <thead>
             <tr>
-                <th>{{ trans('report.dre.estrutura') }}</th>
+                <th style="border: 0px"></th>
                 @foreach($periodos as $periodo)
-                    <th>{{ $periodo['title'] }}</th>
+                    <th style="border: 0px"></th>
+                @endforeach
+            </tr>
+            <tr>
+                <th style="border: 0px">{{ trans('report.dre.estrutura') }}</th>
+                @foreach($periodos as $periodo)
+                    <th style="border: 0px">{{ $periodo['title'] }}</th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ trans('report.dre.receitaBruta') }}</td>
+                <td style="border: 0px"></td>
                 @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['receitaBruta']) }}</td>
+                    <td style="border: 0px"></td>
+                @endforeach
+            </tr>
+            <tr>
+                <td style="border-top: 2px solid #dddddd;">{{ trans('report.dre.receitaBruta') }}</td>
+                @foreach($periodos as $periodo)
+                    <td style="border-top: 2px solid #dddddd;">{{ formatBRL($periodo['ordersMes']['receitaBruta']) }}</td>
                 @endforeach
             </tr>
             <tr>

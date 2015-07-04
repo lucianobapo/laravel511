@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Erp;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -111,13 +112,22 @@ class ReportsController extends Controller
 
     public function dre($host, Order $order){
         $periodos = [];
-
         $this->comporPeriodos($periodos, $order, Carbon::now());
         sort($periodos);
-//        dd($periodos);
-        return view('erp.reports.dre', compact('host'))->with([
-            'periodos' => $periodos,
-        ]);
+        return view('erp.reports.dre', compact('host','periodos'));
+    }
+
+    public function drePdf($host, Order $order){
+        $periodos = [];
+        $usePdf = true;
+        $this->comporPeriodos($periodos, $order, Carbon::now());
+        sort($periodos);
+        $pdf = \App::make('dompdf.wrapper')
+            ->loadView('erp.reports.dre', compact('host','periodos','usePdf'))
+            ->setPaper('a3')
+            ->setOrientation('landscape');
+//        return $pdf->download('invoice.pdf');
+        return $pdf->stream('dre.pdf');
     }
 
     /**

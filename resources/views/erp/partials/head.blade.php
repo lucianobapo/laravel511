@@ -5,7 +5,7 @@
 <title>Laravel</title>
 
 {{--<link href="{{ asset('/css/app.compiled.css') }}" rel="stylesheet">--}}
-<link href="{{ elixir('css/app.compiled.css') }}" rel="stylesheet">
+<link href="{{ config('delivery.siteCurrentUrl').elixir('css/app.compiled.css') }}" rel="stylesheet">
 @yield('headScriptCss')
 
 {{--<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css" rel="stylesheet" />--}}

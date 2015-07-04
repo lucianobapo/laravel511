@@ -99,6 +99,7 @@ class RoutesRepository{
                 get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
                 get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
                 get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);
+                get('reports/dre/pdf', ['as'=>'reports.drePdf', 'uses'=>'Erp\ReportsController@drePdf']);
 
                 controller('confirmations', 'Erp\OrderConfirmationsController', [
                     'getIndex'=>'confirmations.index',
