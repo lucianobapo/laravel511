@@ -38,32 +38,34 @@
                     <td>{{ $order->payment->descricao }}</td>
                     <td>{{ $order->status_list }}</td>
                     <td>
-                        @if(stripos($order->status_list,'Finalizado')===false)
-                            {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
-                            'title'=>trans('order.actionEditTitle'),
-                            ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
-                        @endif
+                        <div style="width: 90px" class="">
+                            @if(stripos($order->status_list,'Finalizado')===false)
+                                {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
+                                'title'=>trans('order.actionEditTitle'),
+                                ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
+                            @endif
 
-                        {!! Form::open([
-                        'url'=>route('orders.destroy', [$host,$order->id]),
-                        'id' => 'form'.$order->id,
-                        'method' => 'DELETE',
-                        'style' => 'display: inline;',
-                        ]) !!}
+                            {!! Form::open([
+                            'url'=>route('orders.destroy', [$host,$order->id]),
+                            'id' => 'form'.$order->id,
+                            'method' => 'DELETE',
+                            'style' => 'display: inline;',
+                            ]) !!}
 
-                        {!! sprintf( link_to('#', '%s', [
-                        'title'=>trans('order.actionDeleteTitle'),
-                        'send-delete'=>$order->id,
-                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to('#', '%s', [
+                            'title'=>trans('order.actionDeleteTitle'),
+                            'send-delete'=>$order->id,
+                            ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! Form::close() !!}
+                            {!! Form::close() !!}
+                        </div>
                     </td>
                 </tr>
                 @if(count($order->orderItems))
                     @if(!is_null($order->address))
                         <tr>
                             <td class="text-right">{{ trans('order.listaEndereco').':' }}</td>
-                            <td colspan="5">
+                            <td colspan="7">
                                 {{ $order->address->endereco }}
                             </td>
                         </tr>
@@ -71,7 +73,7 @@
 
                     <tr>
                         <td class="text-right">{{ trans('order.listaItens').':' }}</td>
-                        <td colspan="5">
+                        <td colspan="7">
                             @include('erp.orders.partials.itemOrder')
                         </td>
                     </tr>

@@ -52,22 +52,25 @@
                     <td>{{ $partner->group_list }}</td>
                     <td>{{ $partner->status_list }}</td>
                     <td>
-                        {!! Form::open([
+                        <div style="width: 90px">
+                            {!! Form::open([
                             'url'=>route('partners.destroy', [$host,$partner->id]),
                             'id' => 'form'.$partner->id,
                             'method' => 'DELETE',
-                        ]) !!}
+                            ]) !!}
 
-                        {!! sprintf( link_to_route('partners.edit', '%s', [$partner->id]+$params, [
-                        'title'=>trans('partner.actionEditTitle'),
-                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to_route('partners.edit', '%s', [$partner->id]+$params, [
+                            'title'=>trans('partner.actionEditTitle'),
+                            ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! sprintf( link_to('#', '%s', [
+                            {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('partner.actionDeleteTitle'),
                             'send-delete'=>$partner->id,
-                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
+                            ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! Form::close() !!}
+                            {!! Form::close() !!}
+                        </div>
+
                     </td>
                 </tr>
             @endforeach

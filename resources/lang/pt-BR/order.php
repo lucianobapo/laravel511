@@ -14,7 +14,7 @@ return array(
 	'empty' => 'Sem ordens para exibir',
 	'menuOrder' => 'Ordens',
 	'listaItens' => 'Lista de Itens',
-	'listaEndereco' => 'Endereço de Entrega',
+	'listaEndereco' => 'Entrega',
 	'semEndereco' => 'Sem Endereço Cadastrado',
     'actionTitle' => 'Ações',
     'actionDeleteTitle' => 'Remover',

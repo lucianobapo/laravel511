@@ -29,13 +29,16 @@
                     <td>{{ $order->payment->descricao }}</td>
                     <td>{{ $order->status_list }}</td>
                     <td>
-                        {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
-                        'title'=>trans('confirmation.actionEditTitle'),
-                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+                        <div style="width: 90px">
+                            {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
+                            'title'=>trans('confirmation.actionEditTitle'),
+                            ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
-                        'title'=>trans('confirmation.actionConfirmTitle'),
-                        ]), '<span class="glyphicon glyphicon-flag btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                            'title'=>trans('confirmation.actionConfirmTitle'),
+                            ]), '<span class="glyphicon glyphicon-flag btn btn-default btn-sm"></span>' ) !!}
+                        </div>
+
                     </td>
                 </tr>
             @endforeach

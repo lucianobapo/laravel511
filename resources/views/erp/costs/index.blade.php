@@ -41,22 +41,25 @@
                     <td>{{ $cost->numero }}</td>
                     <td>{{ $cost->descricao }}</td>
                     <td>
-                        {!! Form::open([
-                        'url'=>route('costs.destroy', [$host,$cost->id]),
-                        'id' => 'form'.$cost->id,
-                        'method' => 'DELETE',
-                        ]) !!}
+                        <div style="width: 90px">
+                            {!! Form::open([
+                            'url'=>route('costs.destroy', [$host,$cost->id]),
+                            'id' => 'form'.$cost->id,
+                            'method' => 'DELETE',
+                            ]) !!}
 
-                        {!! sprintf( link_to_route('costs.edit', '%s', [$cost->id]+$params, [
-                        'title'=>trans('cost.actionEditTitle'),
-                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to_route('costs.edit', '%s', [$cost->id]+$params, [
+                            'title'=>trans('cost.actionEditTitle'),
+                            ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! sprintf( link_to('#', '%s', [
-                        'title'=>trans('cost.actionDeleteTitle'),
-                        'send-delete'=>$cost->id,
-                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to('#', '%s', [
+                            'title'=>trans('cost.actionDeleteTitle'),
+                            'send-delete'=>$cost->id,
+                            ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
 
-                        {!! Form::close() !!}
+                            {!! Form::close() !!}
+                        </div>
+
                     </td>
                 </tr>
             @endforeach

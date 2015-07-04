@@ -73,24 +73,27 @@
                     <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:trans('modelProduct.attributes.semEstoque') }}</td>
                     <td>{{ $product->status_list }}</td>
                     <td>
-                        {!! Form::open([
+                        <div style="width: 90px">
+                            {!! Form::open([
                             'url'=>route('products.destroy', [$host,$product->id]),
                             'id' => 'form'.$product->id,
                             'method' => 'DELETE',
-                        ]) !!}
+                            ]) !!}
 
-                        {!! sprintf( link_to_route('products.edit', '%s', [$product->id]+$params, [
-                        'title'=>trans('product.actionEditTitle'),
-                        ]), '<span style="margin-right: 15px" class="glyphicon glyphicon-pencil btn btn-default btn-xs"></span>' ) !!}
+                            {!! sprintf( link_to_route('products.edit', '%s', [$product->id]+$params, [
+                            'title'=>trans('product.actionEditTitle'),
+                            ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
 
-                        {{--{!! link_to('#','<span class="glyphicon glyphicon-remove"></span>', ['title'=>trans('product.actionDeleteTitle')]) !!}--}}
-                        {!! sprintf( link_to('#', '%s', [
+                            {{--{!! link_to('#','<span class="glyphicon glyphicon-remove"></span>', ['title'=>trans('product.actionDeleteTitle')]) !!}--}}
+                            {!! sprintf( link_to('#', '%s', [
                             'title'=>trans('product.actionDeleteTitle'),
                             'send-delete'=>$product->id,
-                        ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-xs"></span>' ) !!}
-                        {{--{!! sprintf( link_to_route('products.destroy', '%s', [$host,$product->id], ['title'=>trans('product.actionDeleteTitle')]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}--}}
+                            ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
+                            {{--{!! sprintf( link_to_route('products.destroy', '%s', [$host,$product->id], ['title'=>trans('product.actionDeleteTitle')]), '<span class="glyphicon glyphicon-remove"></span>' ) !!}--}}
 
-                        {!! Form::close() !!}
+                            {!! Form::close() !!}
+                        </div>
+
                     </td>
                 </tr>
             @endforeach
