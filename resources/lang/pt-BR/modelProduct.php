@@ -18,7 +18,9 @@ return array(
     ],//values
 
     'attributes' => array(
-        'id' => 'N° do Produto',
+        'id' => 'Cod.',
+        'cod_fiscal' => 'NCM/NBS',
+        'cod_barra' => 'Cod. Barra',
         'nome' => 'Nome',
         'imagem' => 'Imagem',
         'promocao' => 'Promoção',

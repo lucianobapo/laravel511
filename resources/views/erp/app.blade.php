@@ -12,6 +12,9 @@
         @include('flash::message')
         @yield('content')
     </section>
+    <section class="container-fluid">
+        @yield('contentWide')
+    </section>
 
     @include('erp.partials.footer')
 </body>
