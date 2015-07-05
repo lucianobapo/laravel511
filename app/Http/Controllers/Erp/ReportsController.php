@@ -28,7 +28,13 @@ class ReportsController extends Controller
         $saldos = $this->orderRepository->calculaEstoque();
 
         return view('erp.reports.estoque', compact('host'))->with([
-            'products' => $product->where(['estoque'=>1])->orderBy('nome', 'asc' )->get(),
+            'products' => $product->where(['estoque'=>1])
+                ->orderBy('nome', 'asc' )
+                ->get()
+                ->filter(function($item) {
+                    if (strpos($item->status_list,'Desativado')===false)
+                        return $item;
+                }),
             'estoque' => $saldos['estoque'],
             'custoMedioEstoque' => $saldos['custoMedio'],
             'custoSubTotal' => $saldos['custoMedioSubTotal'],

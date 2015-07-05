@@ -17,7 +17,10 @@ class OrderRepository {
         $products = Product::with('itemOrders','itemOrders.order','itemOrders.order.type','itemOrders.order.status','status','groups')->get();
         foreach ($products as $product) {
             if (!$product->estoque) continue;
-            if ($product->checkStatus($product->status->toArray(),'Desativado')) continue;
+            if ($product->checkStatus($product->status->toArray(),'desativado')) {
+                continue;
+                dd($product->nome);//
+            }
             if ($product->checkGroup($product->groups->toArray(),'Estoque Produção 3')) {
 
                 $saldo_produtos['estoque'][$product->id]=3;
