@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             <tr>
-                <td colspan="4" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
+                <td colspan="5" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
                 <td>{{ formatBRL(isset($custoTotal)?$custoTotal:0) }}</td>
                 <td>{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>
             </tr>
