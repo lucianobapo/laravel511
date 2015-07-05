@@ -26,6 +26,7 @@ class Product extends Model {
         'cod_barra',
         'promocao',
         'estoque',
+        'estoque_minimo',
         'valorUnitVenda',
         'valorUnitVendaPromocao',
         'valorUnitCompra',

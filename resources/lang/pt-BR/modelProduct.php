@@ -34,6 +34,7 @@ return array(
         'valorUnitCompra' => 'Valor de Compra',
         'valorUnitCompraAbreviado' => 'Compra (R$)',
         'estoque' => 'Estoque',
+        'estoqueMinimo' => 'Estoque Mínimo',
         'semEstoque' => 'Não',
     ), // attributes
 );

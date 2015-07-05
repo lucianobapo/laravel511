@@ -8,6 +8,7 @@
                 <th>{{ trans('report.estoque.id') }}</th>
                 <th>{{ trans('report.estoque.produto') }}</th>
                 <th>{{ trans('report.estoque.estoque') }}</th>
+                <th>{{ trans('report.estoque.estoqueMinimo') }}</th>
                 <th>{{ trans('report.estoque.custoMedioUnitario') }}</th>
                 <th>{{ trans('report.estoque.custoMedioSubTotal') }}</th>
                 <th>{{ trans('report.estoque.valorVenda') }}</th>
@@ -20,10 +21,16 @@
                 <td>{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>
             </tr>
             @foreach($products as $product)
-                <tr>
+                @if(isset($estoque[$product->id])&&($product->estoque_minimo>0)&&($estoque[$product->id]<$product->estoque_minimo))
+                    <tr style="font-weight: bold;color: red">
+                @else
+                    <tr>
+                @endif
+
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->nome }}</td>
                     <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:0 }}</td>
+                    <td>{{ $product->estoque_minimo }}</td>
                     <td>{{ formatBRL(isset($custoMedioEstoque[$product->id])?$custoMedioEstoque[$product->id]:0) }}</td>
                     <td>{{ formatBRL(isset($custoSubTotal[$product->id])?$custoSubTotal[$product->id]:0) }}</td>
                     <td>{{ formatBRL(isset($valorVenda[$product->id])?$valorVenda[$product->id]:0) }}</td>

@@ -33,6 +33,7 @@ return array(
         'id' => 'Id',
         'produto' => 'Produto',
         'estoque' => 'Estoque',
+        'estoqueMinimo' => 'Estoque Mínimo',
         'total' => 'Total',
         'custoMedioUnitario' => 'Custo médio unitario',
         'custoMedioSubTotal' => 'Custo médio Subtotal',
