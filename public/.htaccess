@@ -3,10 +3,11 @@
         Options -MultiViews
     </IfModule>
 
-    Options +FollowSymLinks
-    IndexIgnore */*
+    #Options +FollowSymLinks
+    #IndexIgnore */*
+
     RewriteEngine On
-    RewriteBase /
+    #RewriteBase /
 
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
@@ -15,4 +16,13 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    SetEnvIfNoCase User-Agent .*google.* search_robot
+    #SetEnvIfNoCase User-Agent .*yahoo.* search_robot
+    #SetEnvIfNoCase User-Agent .*bot.* search_robot
+    #SetEnvIfNoCase User-Agent .*ask.* search_robot
+
+    #Order Deny,Allow
+    #Deny from All
+    Allow from env=search_robot
 </IfModule>
