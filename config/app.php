@@ -22,6 +22,7 @@ return [
     'deliveryOpen' => env('DELIVERY_OPEN', true),
     'deliveryReturn' => env('DELIVERY_RETURN', 'none'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
