@@ -86,6 +86,7 @@ class OrdersController extends Controller {
 //        dd(array_merge([''=>''],(($partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->orderBy('nome', 'asc' )->get())?$partners->lists('nome','id'):[])));
         $partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->with('groups','status','addresses')->orderBy('nome', 'asc' );
         $products = $sharedStat->where(['status'=>'ativado'])->first()->products()->orderBy('nome', 'asc' )->get();
+
         return view('erp.orders.create', compact('host','products'))->with([
             'partners' => $partners->get(),
             'order' => new Order,
@@ -98,7 +99,7 @@ class OrdersController extends Controller {
             'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
                 'product_list' => [''=>''] + (($products)?$products->lists('nome','id')->toArray():[]),
 //                'product_list' => [''=>''] + Product::lists('nome','id'),
-                'costs' => [''=>''] + (($costs = CostAllocate::get())? $costs->lists('cost','id')->toArray():[]),
+                'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
 //                'itemCount' => $this->itemCount,
                 'itemOrders' => $itemOrders,
@@ -183,7 +184,7 @@ class OrdersController extends Controller {
             'status' => SharedStat::lists('descricao','id')->toArray(),
             'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
                 'product_list' => [''=>''] + (($products)?$products->lists('nome','id')->toArray():[]),
-                'costs' => [''=>''] + (($costs = CostAllocate::get())? $costs->lists('cost','id')->toArray():[]),
+                'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
                 'itemCount' => $this->itemCount,
                 'itemOrders' => ItemOrder::where(['order_id'=>$order->id])->get(),

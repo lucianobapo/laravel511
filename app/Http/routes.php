@@ -11,6 +11,13 @@
 |
 */
 
+//App::before(function($request)
+//{
+//    $headers=array('Cache-Control'=>'no-cache, no-store, max-age=0, must-revalidate','Pragma'=>'no-cache','Expires'=>'Fri, 01 Jan 1990 00:00:00 GMT');
+//
+//    View::share('headers', $headers);
+//});
+
 Route::controller('welcome', 'WelcomeController');
 
 //Route::get('/welcome', function () {

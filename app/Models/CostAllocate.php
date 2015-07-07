@@ -33,10 +33,10 @@ class CostAllocate extends Model {
      * Get the posted_at attribute.
      * @return string
      */
-    public function getCostAttribute() {
+    public function getCostListAttribute() {
 //        dd($this);
 //        $this->attributes['cost'] = $this->nome.' - '.$this->nome;
-        return $this->attributes['numero'].' - '.$this->attributes['nome'];
+        return $this->attributes['numero'].' - '.$this->attributes['descricao'];
     }
 
 }
