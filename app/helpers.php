@@ -56,31 +56,32 @@ if ( ! function_exists('array_search_second_level')){
 
 if ( ! function_exists('setTraffic')){
     function setTraffic() {
-        Auth::guest()? $user = 'Guest' : $user = Auth::user()->toJson();
-        if (config('app.storeTraffic'))
-            \App\Models\Traffic::create([
-                'user_info' => $user,
+        if (config('delivery.storeTraffic')){
+            $serverInfo = [
+                $_SERVER['HTTP_HOST'],
+                $_SERVER['HTTP_USER_AGENT'],
+                $_SERVER['SERVER_NAME'],
+                $_SERVER['SERVER_ADDR'],
+                $_SERVER['SERVER_PORT'],
+                $_SERVER['REMOTE_PORT'],
+                $_SERVER['REQUEST_SCHEME'],
+                $_SERVER['REQUEST_METHOD'],
+                $_SERVER['QUERY_STRING'],
+                $_SERVER['REQUEST_URI'],
+                $_SERVER['SCRIPT_NAME'],
+                $_SERVER['PHP_SELF'],
+                $_SERVER['REQUEST_TIME_FLOAT'],
+                $_SERVER['REQUEST_TIME'],
+            ];
+            if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) array_push($serverInfo,$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            $attributes = [
+                'user_info' => Auth::guest() ? 'Guest' : Auth::user()->toJson(),
                 'session_id' => app('session')->getId(),
                 'remote_address' => $_SERVER['REMOTE_ADDR'],
-                'server_info' => json_encode([
-                    $_SERVER['HTTP_HOST'],
-                    $_SERVER['HTTP_USER_AGENT'],
-                    $_SERVER['HTTP_ACCEPT_LANGUAGE'],
-                    $_SERVER['SERVER_NAME'],
-                    $_SERVER['SERVER_ADDR'],
-                    $_SERVER['SERVER_PORT'],
-                    $_SERVER['REMOTE_ADDR'],
-                    $_SERVER['REMOTE_PORT'],
-                    $_SERVER['REQUEST_SCHEME'],
-                    $_SERVER['REQUEST_METHOD'],
-                    $_SERVER['QUERY_STRING'],
-                    $_SERVER['REQUEST_URI'],
-                    $_SERVER['SCRIPT_NAME'],
-                    $_SERVER['PHP_SELF'],
-                    $_SERVER['REQUEST_TIME_FLOAT'],
-                    $_SERVER['REQUEST_TIME'],
-                ]),
-            ]);
+                'server_info' => json_encode($serverInfo),
+            ];
+            \App\Models\Traffic::create($attributes);
+        }
 
     }
 }

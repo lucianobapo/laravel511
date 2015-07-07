@@ -23,10 +23,9 @@
                 </div>
             @endif
 
-            <?php $panelBlockTitle = $panelTitle ?>
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
-                    <h3 class="h3s">{{ $panelBlockTitle }}</h3>
+                    <h3 class="h3s">{{ $panelTitle }}</h3>
                 </div>
                 <div class="panel-body">
                     @if (Session::get('session'))

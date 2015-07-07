@@ -16,7 +16,7 @@ return [
 //    'debug' => env('APP_DEBUG'),
 
     // Other stuffs
-//    'storeTraffic' => env('APP_STORE_TRAFFIC', false),
+    'storeTraffic' => env('APP_STORE_TRAFFIC', false),
 //    'orderItemCountMax' => env('ORDER_ITEM_COUNT_MAX', 3),
     'defaultMandante' => env('MANDANTE', 'teste'),
 //    'deliveryOpen' => env('DELIVERY_OPEN', true),

@@ -55,6 +55,7 @@ class DeliveryController extends Controller {
     public function __construct(CacheRepository $cache, OrderRepository $orderRepository) {
 //        $this->middleware('auth',['except'=> ['index','show']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
+//        $this->middleware('after');
 
         $this->cache = $cache;
         $this->cartView = view('delivery.partials.cartVazio');
@@ -77,6 +78,7 @@ class DeliveryController extends Controller {
         }
 
 
+
         if(count($products = ProductGroup::where(['grupo'=>'Delivery'])->first()->products()->with('status')->orderBy('promocao', 'desc' )->orderBy('nome', 'asc' )->get() ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $products,
@@ -85,6 +87,7 @@ class DeliveryController extends Controller {
         } else {
             $panelBody = trans('delivery.index.semProdutos');
         }
+
         return view('delivery.index', compact(
             'host',
             'cartView',

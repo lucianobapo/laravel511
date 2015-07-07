@@ -132,6 +132,7 @@ class RoutesRepository{
         ], function(){
 
             get('/', ['as'=>'delivery.index', 'uses'=>'DeliveryController@index']);
+//            get('/', ['as'=>'delivery.index', function () { return 'foi'; } ]);
             post('/addCart', ['as'=>'delivery.addCart', 'uses'=>'DeliveryController@addCart']);
             get('/emptyCart', ['as'=>'delivery.emptyCart', 'uses'=>'DeliveryController@emptyCart']);
             get('/pedido', ['as'=>'delivery.pedido', 'uses'=>'DeliveryController@pedido']);

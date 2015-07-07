@@ -20,6 +20,8 @@
 
 Route::controller('welcome', 'WelcomeController');
 
+//Route::get('/', function () { return 'foi'; });
+
 //Route::get('/welcome', function () {
 //    return view('welcome');
 //});
