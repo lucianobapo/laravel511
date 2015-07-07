@@ -257,7 +257,7 @@ class ReportsController extends Controller
 
         $data['margem'] = $data['receitaLiquida'] - $data['custoProdutos'];
 
-        $data['despesas'] = $data['despesasGerais'] + $data['despesasTransporte'];
+        $data['despesas'] = $data['despesasGerais'] + $data['despesasMensaisFixas'] + $data['despesasTransporte'];
 
         $data['ebitda'] = $data['margem'] - $data['despesas'];
 
