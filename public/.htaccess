@@ -9,20 +9,20 @@
     RewriteEngine On
 
     #included
-    RewriteBase /
+#    RewriteBase /
 
-    SetEnvIfNoCase User-Agent .*google.* search_robot
+#    SetEnvIfNoCase User-Agent .*google.* search_robot
         #SetEnvIfNoCase User-Agent .*yahoo.* search_robot
         #SetEnvIfNoCase User-Agent .*bot.* search_robot
         #SetEnvIfNoCase User-Agent .*ask.* search_robot
 
-        Order Deny,Allow
-        Deny from All
-        Allow from env=search_robot
+#        Order Deny,Allow
+#        Deny from All
+#        Allow from env=search_robot
     #finish include
 
     # Redirect Trailing Slashes...
-    #RewriteRule ^(.*)/$ /$1 [L,R=301]
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
