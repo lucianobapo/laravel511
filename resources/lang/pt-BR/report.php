@@ -84,6 +84,7 @@ return array(
         'margem' => 'Margem de contribuição',
         'despesas' => 'Despesas Operacionais',
         'despesasGerais' => 'Gerais',
+        'despesasMensaisFixas' => 'Mensais Fixas',
         'despesasTransporte' => 'Transporte',
         'ebitda' => 'EBITDA',
         'depreciacao' => 'Depreciação',

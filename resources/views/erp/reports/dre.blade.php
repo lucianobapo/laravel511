@@ -129,6 +129,12 @@
                 @endforeach
             </tr>
             <tr>
+                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.despesasMensaisFixas') }}</td>
+                @foreach($periodos as $periodo)
+                    <td>{{ formatBRL($periodo['ordersMes']['despesasMensaisFixas']) }}</td>
+                @endforeach
+            </tr>
+            <tr>
                 <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.despesasTransporte') }}</td>
                 @foreach($periodos as $periodo)
                     <td>{{ formatBRL($periodo['ordersMes']['despesasTransporte']) }}</td>

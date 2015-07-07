@@ -228,6 +228,7 @@ class ReportsController extends Controller
         $data['custoMercadorias'] = 0;
         $data['custoLanches'] = 0;
         $data['despesasGerais'] = 0;
+        $data['despesasMensaisFixas'] = 0;
         $data['despesasTransporte'] = 0;
         $data['imposto'] = 0;
 
@@ -239,6 +240,8 @@ class ReportsController extends Controller
                     $data['custoLanches'] = $data['custoLanches'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='Despesas')
                     $data['despesasGerais'] = $data['despesasGerais'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='despesasMensaisFixas')
+                    $data['despesasMensaisFixas'] = $data['despesasMensaisFixas'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='Transporte')
                     $data['despesasTransporte'] = $data['despesasTransporte'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='Impostos')
