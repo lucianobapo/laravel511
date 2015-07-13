@@ -92,24 +92,9 @@
                     <td>{{ formatBRL($periodo['ordersMes']['receitaLiquida']) }}</td>
                 @endforeach
             </tr>
-            <tr>
-                <td>{{ trans('report.dre.custoProdutos') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['custoProdutos']) }}</td>
-                @endforeach
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.custoMercadorias') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['custoMercadorias']) }}</td>
-                @endforeach
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.custoLanches') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['custoLanches']) }}</td>
-                @endforeach
-            </tr>
+
+            @include('erp.reports.partials.dreCustoProdutos')
+
             <tr>
                 <td>{{ trans('report.dre.margem') }}</td>
                 @foreach($periodos as $periodo)
@@ -140,13 +125,13 @@
                     <td>{{ formatBRL($periodo['ordersMes']['despesasTransporte']) }}</td>
                 @endforeach
             </tr>
-            <tr>
-                <td style="font-style: italic">{{ trans('report.dre.ebitda') }}</td>
+            <tr class="h5" style="font-style: italic">
+                <td>{{ trans('report.dre.ebitda') }}</td>
                 @foreach($periodos as $periodo)
                     @if(($ebitda = $periodo['ordersMes']['ebitda'])>0)
-                        <td style="font-style: italic; color: #0000ff">{{ formatBRL($ebitda) }}</td>
+                        <td style="color: #0000ff">{{ formatBRL($ebitda) }}</td>
                     @else
-                        <td style="font-style: italic; color: red">{{ formatBRL($ebitda) }}</td>
+                        <td style="color: red">{{ formatBRL($ebitda) }}</td>
                     @endif
 
                 @endforeach
@@ -157,12 +142,16 @@
                     <td>{{ formatBRL(0) }}</td>
                 @endforeach
             </tr>
+
             <tr>
                 <td>{{ trans('report.dre.lucroAntes') }}</td>
                 @foreach($periodos as $periodo)
                     <td>{{ formatBRL(0) }}</td>
                 @endforeach
             </tr>
+
+            @include('erp.reports.partials.dreEstoque')
+
         </tbody>
     </table>
 @endsection

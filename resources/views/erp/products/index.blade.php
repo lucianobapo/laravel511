@@ -43,7 +43,7 @@
         <tbody>
         {!! Form::model($product, [
         'method'=>$method,
-        'url'=>route($route, isset($product->id)?[$host,$product->id]:$host),
+        'url'=>route($route, isset($product->id)?[$product->id]+$params:$params),
         'files' => true,
         ]) !!}
         <!-- method Form Input -->
@@ -78,7 +78,7 @@
                     <td>{{ $product->imagem }}</td>
                     <td>{{ trans('modelProduct.values.promocao.'.$product->promocao) }}</td>
                     <td>{{ $product->group_list }}</td>
-                    <td>{{ $product->cost?$product->cost->nome:'-' }}</td>
+                    <td>{{ $product->cost?$product->cost->descricao:'-' }}</td>
                     <td>{{ formatBRL($product->valorUnitVenda) }}</td>
                     <td>{{ formatBRL($product->valorUnitVendaPromocao) }}</td>
                     <td>{{ formatBRL($product->valorUnitCompra) }}</td>

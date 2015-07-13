@@ -37,7 +37,11 @@ class Partner extends Model {
      * @param $date
      */
     public function setDataNascimentoAttribute($date) {
-        $this->attributes['data_nascimento'] = Carbon::parse($date);
+        if (empty($date))
+            $this->attributes['data_nascimento'] =null;
+        else
+            $this->attributes['data_nascimento'] = Carbon::parse($date);
+
     }
 
     /**

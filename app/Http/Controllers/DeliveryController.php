@@ -77,8 +77,6 @@ class DeliveryController extends Controller {
             $cartView = view('delivery.partials.cartVazio');
         }
 
-
-
         if(count($products = ProductGroup::where(['grupo'=>'Delivery'])->first()->products()->with('status')->orderBy('promocao', 'desc' )->orderBy('nome', 'asc' )->get() ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $products,

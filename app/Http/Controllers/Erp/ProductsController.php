@@ -51,7 +51,7 @@ class ProductsController extends Controller {
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
             'group_selected' => null,
-            'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
+            'costs' => [''=>''] + CostAllocate::lists('descricao','id')->toArray(),
             'cost_selected' => null,
             'status'=> SharedStat::lists('descricao','id'),
             'status_selected' => null,
@@ -71,7 +71,7 @@ class ProductsController extends Controller {
             'params' => ['host'=>$host]+$params,
             'grupos'=> ProductGroup::lists('grupo','id'),
             'group_selected' => $product->groups()->getRelatedIds()->toArray(),
-            'costs' => [''=>''] + CostAllocate::lists('nome','id')->toArray(),
+            'costs' => [''=>''] + CostAllocate::lists('descricao','id')->toArray(),
             'cost_selected' => $product->cost_id,
             'status'=> SharedStat::lists('descricao','id'),
             'status_selected' => $product->status()->getRelatedIds()->toArray(),
@@ -96,7 +96,7 @@ class ProductsController extends Controller {
 
         flash()->overlay(trans('product.flash.productUpdated', ['produto' => $product->id]),trans('product.flash.productUpdatedTitle'));
 
-        return redirect(route('products.index', $host));
+        return redirect(route('products.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
     /**
@@ -119,7 +119,7 @@ class ProductsController extends Controller {
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 
-        return redirect(route('products.index', $host));
+        return redirect(route('products.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
     /**

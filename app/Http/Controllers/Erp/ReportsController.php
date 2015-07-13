@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Repositories\OrderRepository;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
+use DebugBar\DebugBar;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -17,15 +18,17 @@ class ReportsController extends Controller
 {
 
     private $orderRepository;
+    private $estoque;
     private $kmOrdersVendaEntregue = [];
 
     public function __construct(OrderRepository $orderRepository) {
         $this->orderRepository = $orderRepository;
+        $this->estoque = $this->orderRepository->calculaEstoque();
     }
 
     public function estoque($host, Product $product)
     {
-        $saldos = $this->orderRepository->calculaEstoque();
+        $saldos = $this->estoque;
 
         return view('erp.reports.estoque', compact('host'))->with([
             'products' => $product->where(['estoque'=>1])
@@ -118,7 +121,7 @@ class ReportsController extends Controller
 
     public function dre($host, Order $order){
         $periodos = [];
-        $this->comporPeriodos($periodos, $order, Carbon::now());
+        $this->comporPeriodos($periodos, $order, Carbon::now(), Carbon::now()->subYear(1));
         sort($periodos);
         return view('erp.reports.dre', compact('host','periodos'));
     }
@@ -189,16 +192,16 @@ class ReportsController extends Controller
                 if (strpos($item->status_list,'Finalizado')!==false)
                     return $item;
             });
-        if (count($ordersMes)>0){
+        if ( (count($ordersMes)>0) && ($finish_date>$start_date) ){
             $periodos[] = [
                 'title' => $finish_date->startOfMonth()->format('m/Y'),
-                'ordersMes' => $this->comporDre($ordersMes),
+                'ordersMes' => $this->comporDre($ordersMes, $this->estoque),
             ];
-            return $this->comporPeriodos($periodos, $order, $finish_date->subMonth());
+            return $this->comporPeriodos($periodos, $order, $finish_date->subMonth(), $start_date);
         } else return;
     }
 
-    private function comporDre($orders) {
+    private function comporDre($orders, array $estoque=[]) {
         $data = [];
         $ordersFiltred = $orders->filter(function($item) {
             if ($item->type->tipo == 'ordemVenda')
@@ -207,14 +210,28 @@ class ReportsController extends Controller
         $data['receitaBrutaDinheiro'] = 0;
         $data['receitaBrutaCartaoCredito'] = 0;
         $data['receitaBrutaCartaoDebito'] = 0;
+
+        $data['custoMedioVendas'] = 0;
         foreach ($ordersFiltred as $order) {
+            // calcula receita
             if ($order->payment->pagamento=='vistad')
                 $data['receitaBrutaDinheiro'] = $data['receitaBrutaDinheiro'] + $order->valor_total;
             if ($order->payment->pagamento=='vistacc')
                 $data['receitaBrutaCartaoCredito'] = $data['receitaBrutaCartaoCredito'] + $order->valor_total;
             if ($order->payment->pagamento=='vistacd')
                 $data['receitaBrutaCartaoDebito'] = $data['receitaBrutaCartaoDebito'] + $order->valor_total;
+
+            foreach ($order->orderItems as $item) {
+                //calcula custo médio
+                if ( isset($estoque['custoMedio'][$item->product_id]) ) {
+                    $data['custoMedioVendas'] = $data['custoMedioVendas'] + ($estoque['custoMedio'][$item->product_id]*$item->quantidade);
+                } else {
+//                    \Debugbar::info($item->product->nome);
+//                    \Debugbar::info($estoque['custoMedio']);
+                }
+            }
         }
+//        if ($data['custoMedioVendas']==0) dd($ordersFiltred->toArray());
         $data['receitaBruta'] = $data['receitaBrutaDinheiro'] + $data['receitaBrutaCartaoCredito'] + $data['receitaBrutaCartaoDebito'];
         $data['honorariosPaylevenCredito'] = $data['receitaBrutaCartaoCredito']*0.0339;
         $data['honorariosPaylevenDebito'] = $data['receitaBrutaCartaoDebito']*0.0269;
@@ -225,8 +242,12 @@ class ReportsController extends Controller
             if ($item->type->tipo == 'ordemCompra')
                 return $item;
         });
+        $data['compras'] = 0;
+        $data['saldo'] = 0;
+        $data['comprasMercadorias'] = 0;
+        $data['comprasLanches'] = 0;
         $data['custoMercadorias'] = 0;
-        $data['custoLanches'] = 0;
+//        $data['custoLanches'] = 0;
         $data['despesasGerais'] = 0;
         $data['despesasMensaisFixas'] = 0;
         $data['despesasTransporte'] = 0;
@@ -234,10 +255,12 @@ class ReportsController extends Controller
 
         foreach ($ordersFiltred as $order) {
             foreach ($order->orderItems as $item) {
+                //calcula estoque
                 if ($item->cost->nome=='Mercadorias')
-                    $data['custoMercadorias'] = $data['custoMercadorias'] + ($item->valor_unitario*$item->quantidade);
+                    $data['comprasMercadorias'] = $data['comprasMercadorias'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='Lanches')
-                    $data['custoLanches'] = $data['custoLanches'] + ($item->valor_unitario*$item->quantidade);
+                    $data['comprasLanches'] = $data['comprasLanches'] + ($item->valor_unitario*$item->quantidade);
+
                 if ($item->cost->nome=='Despesas')
                     $data['despesasGerais'] = $data['despesasGerais'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='despesasMensaisFixas')
@@ -253,11 +276,17 @@ class ReportsController extends Controller
         $data['deducaoReceita'] = $data['honorariosPayleven']+$data['honorariosPedidosJa']+$data['imposto'];
         $data['receitaLiquida'] = $data['receitaBruta']-$data['deducaoReceita'];
 
-        $data['custoProdutos'] = $data['custoMercadorias']+$data['custoLanches'];
+//        $data['custoProdutos'] = $data['custoMedioVendas'];
+        $data['custoProdutos'] = $data['custoMercadorias']+$data['comprasLanches']+$data['custoMedioVendas'];
+
+        $data['comprasEstoque'] = $data['comprasMercadorias'];//+$data['comprasLanches'];
+        $data['saldo'] = $data['comprasEstoque']-$data['custoMedioVendas'];
 
         $data['margem'] = $data['receitaLiquida'] - $data['custoProdutos'];
 
         $data['despesas'] = $data['despesasGerais'] + $data['despesasMensaisFixas'] + $data['despesasTransporte'];
+
+
 
         $data['ebitda'] = $data['margem'] - $data['despesas'];
 

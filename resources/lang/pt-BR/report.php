@@ -78,9 +78,15 @@ return array(
         'honorariosPayleven' => 'Honorários de Cartão Payleven',
         'honorariosPaylevenCredito' => 'Cartão de Crédito',
         'honorariosPaylevenDebito' => 'Cartão de Débito',
-        'custoProdutos' => 'Custo dos Produtos',
-        'custoMercadorias' => 'Mercadorias',
-        'custoLanches' => 'Lanches',
+        'custo' => [
+            'title' => 'Custo dos Produtos',
+            'consumo' => 'Consumo médio do Estoque',
+            'custoMercadorias' => 'Mercadorias',
+            'custoLanches' => 'Lanches',
+        ],
+
+
+
         'margem' => 'Margem de contribuição',
         'despesas' => 'Despesas Operacionais',
         'despesasGerais' => 'Gerais',
@@ -88,6 +94,15 @@ return array(
         'despesasTransporte' => 'Transporte',
         'ebitda' => 'EBITDA',
         'depreciacao' => 'Depreciação',
+        'estoque' => [
+            'subtotal' => 'Estoque',
+            'acumulado' => 'Acumulado',
+            'compras' => 'Compras',
+            'comprasMercadorias' => 'Mercadorias',
+            'comprasLanches' => 'Lanches',
+            'consumo' => 'Consumo médio',
+            'saldo' => 'Saldo',
+        ],
         'lucroAntes' => 'Lucro Antes do IRPJ e CSLL',
     ],
 );
