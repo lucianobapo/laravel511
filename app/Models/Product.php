@@ -4,8 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Scopes\MandanteTrait;
-use Illuminate\Cache\Repository as CacheRepository;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Model {
 
@@ -144,6 +143,21 @@ class Product extends Model {
     public function checkGroup(array $lista, $group){
         foreach($lista as $item) if ($item['grupo']==$group) return true;
         return false;
+    }
+
+    public function getProductListAttribute(){
+        return $this->with('status')
+            ->orderBy('nome', 'asc')
+            ->get()
+            ->filter(function($item) {
+                if ( (strpos($item->status_list,'Ativado')!==false) || (Auth::user()->role->name==config('delivery.rootRole')) )
+                    return $item;
+            });
+    }
+    public function getProductSelectListAttribute(){
+        return [''=>''] + $this->product_list
+            ->lists('nome','id')
+            ->toArray();
     }
 
 }

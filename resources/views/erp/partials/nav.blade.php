@@ -1,8 +1,8 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle Navigation</span>
+                <span class="sr-only">{{ trans('app.toggleNavigation') }}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -26,8 +26,21 @@
                 {{--<li><a href="{{ url('/articles/create') }}">Create an Article</a></li>--}}
 
                 {{--<li>{!! link_to_route('relatorios.index', 'Relatorios') !!}</li>--}}
-                <li>{!! link_to_route('orders.index', trans('order.menuOrder'), $host) !!}</li>
-                <li>{!! link_to_route('confirmations.index', trans('confirmation.menuName'), $host) !!}</li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('order.menu.title') }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>{!! link_to_route('orders.create', trans('order.menu.create'), $host) !!}</li>
+                        <li>{!! link_to_route('confirmations.index', trans('order.menu.confirmation'), $host) !!}</li>
+                        <li><hr></li>
+                        <li>{!! link_to_route('orders.index', trans('order.menu.allOrder'), $host) !!}</li>
+                        <li>{!! link_to_route('ordersSearch.compras', trans('order.menu.compras'), $host) !!}</li>
+                        <li>{!! link_to_route('ordersSearch.vendas', trans('order.menu.vendas'), $host) !!}</li>
+                    </ul>
+                </li>
+
+
+
                 <li>{!! link_to_route('products.index', trans('product.menuProduct'), $host) !!}</li>
                 <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
                 <li>{!! link_to_route('costs.index', trans('cost.menuName'), $host) !!}</li>

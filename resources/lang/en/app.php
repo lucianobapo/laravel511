@@ -12,7 +12,7 @@ return array(
 
 	'accessUnauthorized' => 'Acesso não autorizado',
 	'notFound' => 'Recurso não encontrado',
-	'toggleNavigation' => 'Navegação Alternativa',
+	'toggleNavigation' => 'Toggle Navigation',
 
 
     'angular' => [

@@ -7,13 +7,13 @@
 <tr>
     <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.custo.consumo') }}</td>
     @foreach($periodos as $periodo)
-        <td>{{ formatBRL($periodo['ordersMes']['custoMedioVendas']) }}</td>
+        <td>{{ formatBRL($periodo['ordersMes']['consumoMedioEstoque']) }}</td>
     @endforeach
 </tr>
 <tr>
     <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.custo.custoMercadorias') }}</td>
     @foreach($periodos as $periodo)
-        <td>{{ formatBRL($periodo['ordersMes']['custoMercadorias']) }}</td>
+        <td>{{ formatBRL($periodo['ordersMes']['comprasMercadorias']) }}</td>
     @endforeach
 </tr>
 <tr>

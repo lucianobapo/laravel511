@@ -12,7 +12,7 @@ return array(
 
 	'title' => 'Lista de Ordens',
 	'empty' => 'Sem ordens para exibir',
-	'menuOrder' => 'Ordens',
+//	'menuOrder' => 'Ordens',
 	'listaItens' => 'Lista de Itens',
 	'listaEndereco' => 'Entrega',
 	'semEndereco' => 'Sem Endereço Cadastrado',
@@ -20,6 +20,14 @@ return array(
     'actionDeleteTitle' => 'Remover',
     'actionEditTitle' => 'Editar',
 
+    'menu' => [
+        'title' => 'Ordens',
+        'allOrder' => 'Todas as Ordens',
+        'confirmation' => 'Confirmações',
+        'create' => 'Criar Ordem',
+        'compras' => 'Ordens de Compra',
+        'vendas' => 'Ordens de Venda',
+    ],
 
     'create' => [
         'createTitle' => 'Criar Ordem',

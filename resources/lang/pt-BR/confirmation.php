@@ -12,7 +12,7 @@ return array(
 
 	'title' => 'Lista de Ordens Abertas',
 	'empty' => 'Sem ordens para exibir',
-	'menuName' => 'Confirmações',
+//	'menuName' => 'Confirmações',
 	'actionTitle' => 'Ações',
 //	'actionAddBtn' => 'Adicionar',
 //	'actionUpdateBtn' => 'Atualizar',

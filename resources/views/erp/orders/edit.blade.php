@@ -7,6 +7,9 @@
 @section('content')
     <h1>{{ trans('order.update.title') }}</h1>
     <hr>
+
+    @include('erp.orders.partials.pillsNav')
+
     @include ('errors.list')
     {!! Form::model($order, ['method'=>'PATCH','url'=>route('orders.update', [$host,$order->id]),
         'ng-app'=>"myApp",

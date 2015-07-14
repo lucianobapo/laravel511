@@ -13,21 +13,21 @@
     @endforeach
 </tr>
 <tr>
-    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ trans('report.dre.estoque.comprasMercadorias') }}</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ trans('report.dre.estoque.mercadorias') }}</td>
     @foreach($periodos as $periodo)
-        <td>{{ formatBRL($periodo['ordersMes']['comprasMercadorias']) }}</td>
+        <td>{{ formatBRL($periodo['ordersMes']['estoqueMercadorias']) }}</td>
     @endforeach
 </tr>
 <tr>
-    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ trans('report.dre.estoque.comprasLanches') }}</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ trans('report.dre.estoque.lanches') }}</td>
     @foreach($periodos as $periodo)
-        <td>{{ formatBRL($periodo['ordersMes']['comprasLanches']) }}</td>
+        <td>{{ formatBRL($periodo['ordersMes']['estoqueLanches']) }}</td>
     @endforeach
 </tr>
 <tr>
     <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.estoque.consumo') }}</td>
     @foreach($periodos as $periodo)
-        <td>{{ formatBRL($periodo['ordersMes']['custoMedioVendas']) }}</td>
+        <td>{{ formatBRL($periodo['ordersMes']['consumoMedioEstoque']) }}</td>
     @endforeach
 </tr>
 <tr>

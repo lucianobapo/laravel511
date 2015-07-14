@@ -3,7 +3,7 @@
 <head>
     @include('erp.partials.head')
 </head>
-<body>
+<body style="padding-top: 70px;">
     <header>
         @include('erp.partials.nav')
     </header>

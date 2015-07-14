@@ -101,30 +101,10 @@
                     <td>{{ formatBRL($periodo['ordersMes']['margem']) }}</td>
                 @endforeach
             </tr>
-            <tr>
-                <td>{{ trans('report.dre.despesas') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['despesas']) }}</td>
-                @endforeach
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.despesasGerais') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['despesasGerais']) }}</td>
-                @endforeach
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.despesasMensaisFixas') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['despesasMensaisFixas']) }}</td>
-                @endforeach
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;{{ trans('report.dre.despesasTransporte') }}</td>
-                @foreach($periodos as $periodo)
-                    <td>{{ formatBRL($periodo['ordersMes']['despesasTransporte']) }}</td>
-                @endforeach
-            </tr>
+
+            @include('erp.reports.partials.dreDespesas')
+
+
             <tr class="h5" style="font-style: italic">
                 <td>{{ trans('report.dre.ebitda') }}</td>
                 @foreach($periodos as $periodo)

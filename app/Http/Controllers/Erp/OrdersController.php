@@ -8,12 +8,15 @@ use App\Models\Address;
 use App\Models\CostAllocate;
 use App\Models\ItemOrder;
 use App\Models\Order;
+use App\Models\Partner;
+use App\Models\Product;
 use App\Models\SharedCurrency;
 use App\Models\SharedOrderPayment;
 use App\Models\SharedOrderType;
 use App\Models\SharedStat;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
-use Illuminate\Cache\Repository as CacheRepository;
+//use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Support\Facades\Auth;
 
 class OrdersController extends Controller {
@@ -21,24 +24,27 @@ class OrdersController extends Controller {
     /**
      * @var CacheRepository
      */
-    private $cache;
+//    private $cache;
 
     /**
      * @var Integer
      */
     private $itemCount;
 
+    private $orderRepository;
+
     /**
-     * @param CacheRepository $cache
+     * @param OrderRepository $orderRepository
      */
-    public function __construct(CacheRepository $cache) {
+    public function __construct(OrderRepository $orderRepository) {
 //        $this->middleware('auth',['except'=> ['index']]);
 //        $this->middleware('roles',['administrator', 'manager']);
 //        $this->middleware('auth.roles',['middleware'=> 'role:editor', 'except'=> ['index']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 
-        $this->cache = $cache;
+//        $this->cache = $cache;
         $this->itemCount = config('app.orderItemCountMax');
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -52,17 +58,15 @@ class OrdersController extends Controller {
 	public function index(Order $order, Request $request, $host)
 	{
         $params = $request->all();
-        if ( !isset($params['direction']) ) $params['direction'] = false;
-        if ( isset($params['sortBy']) ) $order = $order->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-        else $order = $order->orderBy('posted_at', 'desc' )->orderBy('id', 'desc' );
+
+        $orderOrdered = $this->orderRepository->sorting($order, $params, 'posted_at');
 
         return view('erp.orders.index', compact('host'))->with([
-//            'orders' => $order->all(),
-            'orders' => $order->with('partner','currency','type','payment','status','address','orderItems','orderItems.product','orderItems.cost','orderItems.currency')
-                ->paginate(3)->appends($params),
+            'orders' => $orderOrdered
+                ->with('partner','currency','type','payment','status','address','orderItems','orderItems.product','orderItems.cost','orderItems.currency')
+                ->paginate(config('delivery.orderListCountMax'))
+                ->appends($params),
             'params' => ['host'=>$host]+$params,
-//            'orders' => $order->cachedAll($this->cache),
-//            'cache' => $this->cache,
         ]);
 	}
 
@@ -74,34 +78,24 @@ class OrdersController extends Controller {
      * @param Order $order
      * @return Response
      */
-	public function create($host, SharedStat $sharedStat)
+	public function create($host, Order $order, Product $product, Partner $partner)
 	{
         for($i=0;$i<$this->itemCount;$i++){
             $itemOrders[] = new ItemOrder;
         }
-//        dd(array_merge([''=>''],['1'=>'1']));
-//        dd(SharedCurrency::lists('nome_universal','id')->toArray());
-//        dd($sharedStat->where(['status'=>'ativado'])->first()->partners()->orderBy('nome', 'asc' )->get()->lists('nome','id')->toArray());
-//        dd((($partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->orderBy('nome', 'asc' )->get())?$partners->lists('nome','id'):[]));
-//        dd(array_merge([''=>''],(($partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->orderBy('nome', 'asc' )->get())?$partners->lists('nome','id'):[])));
-        $partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->with('groups','status','addresses')->orderBy('nome', 'asc' );
-        $products = $sharedStat->where(['status'=>'ativado'])->first()->products()->orderBy('nome', 'asc' )->get();
 
-        return view('erp.orders.create', compact('host','products'))->with([
-            'partners' => $partners->get(),
-            'order' => new Order,
+        return view('erp.orders.create', compact('host','order'))->with([
+            'products' => $product->product_list,
+            'partners' => $partner->partner_list,
             'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-            'partner_list' => [''=>'']+(($partners->get())?$partners->lists('nome','id')->toArray():[]),
-//            'partner_list' => [''=>''] + Partner::lists('nome','id'),
+            'partner_list' => $partner->partner_select_list,
             'order_types' => SharedOrderType::lists('descricao','id')->toArray(),
             'order_payment' => SharedOrderPayment::lists('descricao','id')->toArray(),
             'status' => SharedStat::lists('descricao','id')->toArray(),
             'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
-                'product_list' => [''=>''] + (($products)?$products->lists('nome','id')->toArray():[]),
-//                'product_list' => [''=>''] + Product::lists('nome','id'),
+                'product_list' => $product->product_select_list,
                 'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-//                'itemCount' => $this->itemCount,
                 'itemOrders' => $itemOrders,
             ]),
             'viewPagamentoForm' => view('erp.orders.partials.pagamentoForm'),
@@ -113,6 +107,43 @@ class OrdersController extends Controller {
             'viewAnexosForm' =>  view('erp.orders.partials.anexosForm'),
         ]);
 	}
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $host
+     * @param Order $order
+     * @param SharedStat $sharedStat
+     * @return Response
+     */
+    public function edit($host, Order $order, Product $product, Partner $partner)
+    {
+        return view('erp.orders.edit', compact('host','order'))->with([
+            'products' => $product->product_list,
+            'partners' => $partner->partner_list,
+            'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
+            'partner_list' => $partner->partner_select_list,
+            'order_types' => SharedOrderType::lists('descricao','id')->toArray(),
+            'order_payment' => SharedOrderPayment::lists('descricao','id')->toArray(),
+            'status' => SharedStat::lists('descricao','id')->toArray(),
+            'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
+                'product_list' => $product->product_select_list,
+                'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
+                'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
+                'itemCount' => $this->itemCount,
+                'itemOrders' => ItemOrder::where(['order_id'=>$order->id])->get(),
+            ]),
+            'viewPagamentoForm' => view('erp.orders.partials.pagamentoForm'),
+            'viewConsumoForm' =>  view('erp.orders.partials.consumoForm'),
+            'viewTransporteForm' =>  view('erp.orders.partials.transporteForm', compact('order'))->with([
+//                'addresses' => [''=>''] + (($addresses = Address::get())? $addresses->lists('endereco','id')->toArray():[]),
+//                'addresses' => [''=>''] + Address::lists('logradouro','id')->toArray(),
+                'addresses' => [''=>''] + $order->partner()->first()->addresses->lists('logradouro','id')->toArray(),
+            ]),
+            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm'),
+        ]);
+
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -161,45 +192,7 @@ class OrdersController extends Controller {
 		//
 	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $host
-     * @param Order $order
-     * @param SharedStat $sharedStat
-     * @return Response
-     */
-	public function edit($host, Order $order, SharedStat $sharedStat)
-	{
-        $partners = $sharedStat->where(['status'=>'ativado'])->first()->partners()->with('groups','status','addresses')->orderBy('nome', 'asc' );
-        $products = $sharedStat->where(['status'=>'ativado'])->first()->products()->orderBy('nome', 'asc' )->get();
 
-        return view('erp.orders.edit', compact('host','order','products'))->with([
-            'partners' => $partners->get(),
-//            'order' => new Order,
-            'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-            'partner_list' => [''=>''] + (($partners)?$partners->lists('nome','id')->toArray():[]),
-            'order_types' => SharedOrderType::lists('descricao','id')->toArray(),
-            'order_payment' => SharedOrderPayment::lists('descricao','id')->toArray(),
-            'status' => SharedStat::lists('descricao','id')->toArray(),
-            'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
-                'product_list' => [''=>''] + (($products)?$products->lists('nome','id')->toArray():[]),
-                'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
-                'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-                'itemCount' => $this->itemCount,
-                'itemOrders' => ItemOrder::where(['order_id'=>$order->id])->get(),
-            ]),
-            'viewPagamentoForm' => view('erp.orders.partials.pagamentoForm'),
-            'viewConsumoForm' =>  view('erp.orders.partials.consumoForm'),
-            'viewTransporteForm' =>  view('erp.orders.partials.transporteForm', compact('order'))->with([
-//                'addresses' => [''=>''] + (($addresses = Address::get())? $addresses->lists('endereco','id')->toArray():[]),
-//                'addresses' => [''=>''] + Address::lists('logradouro','id')->toArray(),
-                'addresses' => [''=>''] + $order->partner()->first()->addresses->lists('logradouro','id')->toArray(),
-            ]),
-            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm'),
-        ]);
-
-	}
 
     /**
      * Update the specified resource in storage.

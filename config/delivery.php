@@ -21,6 +21,8 @@ return [
     'defaultMandante' => env('MANDANTE', 'teste'),
 //    'deliveryOpen' => env('DELIVERY_OPEN', true),
 //    'deliveryReturn' => env('DELIVERY_RETURN', 'none'),
+    'orderListCountMax' => env('ORDER_LIST_COUNT_MAX', 3),
+    'rootRole' => env('ROOT_ROLE', 'Root'),
 
     /*
     |--------------------------------------------------------------------------

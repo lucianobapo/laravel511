@@ -2,12 +2,8 @@
 @section('content')
     <h1 class="h1s">{{ trans('order.title') }}</h1>
     <hr>
-    <div class="pull-right">
-        {!! link_to_route('orders.create', trans('order.create.createOrderBtn'), $host, [
-            'class'=>'btn btn-primary form-control',
-            'style' => ''
-        ]) !!}
-    </div>
+    @include('erp.orders.partials.pillsNav')
+
     @if(count($orders))
         <table class="table table-hover table-striped table-condensed" ng-app="myApp">
             <thead>
@@ -39,7 +35,7 @@
                     <td>{{ $order->status_list }}</td>
                     <td>
                         <div style="width: 90px" class="">
-                            @if(stripos($order->status_list,'Finalizado')===false)
+                            @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
                                 {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
                                 'title'=>trans('order.actionEditTitle'),
                                 ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}

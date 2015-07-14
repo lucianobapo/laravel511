@@ -4,6 +4,7 @@ use App\Models\ItemOrder;
 use App\Models\Product;
 use App\Models\SharedOrderType;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderRepository {
     public function calculaEstoque()
@@ -61,5 +62,20 @@ class OrderRepository {
             }
         }
         return $saldo_produtos;
+    }
+
+    /**
+     * Sort Models
+     *
+     * @param Model $model
+     * @param $params
+     * @return array
+     */
+    public function sorting(Model $model, &$params, $defaultColumn='id', $defaultDirection=false)
+    {
+        if (!isset($params['direction'])) $params['direction'] = $defaultDirection;
+        if (!isset($params['sortBy'])) $params['sortBy'] = $defaultColumn;
+
+        return $model->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
     }
 }

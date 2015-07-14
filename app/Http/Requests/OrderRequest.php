@@ -2,6 +2,7 @@
 
 use App\Http\Requests\Request;
 use App\Repositories\LangValidatorRepository;
+use Illuminate\Support\Facades\Auth;
 
 class OrderRequest extends Request {
 
@@ -23,6 +24,7 @@ class OrderRequest extends Request {
 //        }
 //        dd(!count($this->route('orders')->status()->where('status', 'finalizado')->get()));
         if(is_null($this->route('orders'))) return true;
+        if(Auth::user()->role->name==config('delivery.rootRole')) return true;
         return !count($this->route('orders')->status()->where('status', 'finalizado')->get());
 	}
 

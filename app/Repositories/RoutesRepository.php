@@ -45,6 +45,12 @@ class RoutesRepository{
                     ],
                 ]);
 
+                controller('ordersSearch', 'Erp\OrdersSearchController', [
+                    'getCompras'=>'ordersSearch.compras',
+                    'getVendas'=>'ordersSearch.vendas',
+//                    'postConfirm'=>'confirmations.postConfirm',
+                ]);
+
                 resource('products','Erp\ProductsController', [
                     'names' => [
                         'index'=>'products.index',

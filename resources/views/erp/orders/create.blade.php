@@ -7,6 +7,9 @@
 @section('content')
     <h1>{{ trans('order.create.createTitle') }}</h1>
     <hr>
+
+    @include('erp.orders.partials.pillsNav')
+
     @include ('errors.list')
     {!! Form::model($order, ['url'=>route('orders.store', $host),
         'ng-app'=>"myApp",

@@ -39,7 +39,7 @@ class ProductsController extends Controller {
     public function index(Product $product, Request $request, $host)
     {
         $params = $request->all();
-        $productOrdered = $this->sorting($product, $params);
+        $productOrdered = $this->orderRepository->sorting($product, $params);
 //        if ( !isset($params['direction']) ) $params['direction'] = false;
 //        if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
 //        else $product = $product->orderBy('nome', 'asc' );
@@ -62,7 +62,7 @@ class ProductsController extends Controller {
 
     public function edit($host, Product $product, Request $request){
         $params = $request->all();
-        $productOrdered = $this->sorting($product, $params);
+        $productOrdered = $this->orderRepository->sorting($product, $params);
 
         return view('erp.products.index', compact('host','product'))->with([
             'method' => 'PATCH',
@@ -178,17 +178,4 @@ class ProductsController extends Controller {
         else $this->syncStatus($product, $attributes['status']);
     }
 
-    /**
-     * @param Product $product
-     * @param $params
-     * @return array
-     */
-    private function sorting(Product $product, &$params)
-    {
-        if (!isset($params['direction'])) $params['direction'] = false;
-        if (isset($params['sortBy']))
-            return $product->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
-        else
-            return $product->orderBy('nome', 'asc');
-    }
 }

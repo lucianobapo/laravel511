@@ -211,7 +211,7 @@ class ReportsController extends Controller
         $data['receitaBrutaCartaoCredito'] = 0;
         $data['receitaBrutaCartaoDebito'] = 0;
 
-        $data['custoMedioVendas'] = 0;
+        $data['consumoMedioEstoque'] = 0;
         foreach ($ordersFiltred as $order) {
             // calcula receita
             if ($order->payment->pagamento=='vistad')
@@ -223,8 +223,8 @@ class ReportsController extends Controller
 
             foreach ($order->orderItems as $item) {
                 //calcula custo médio
-                if ( isset($estoque['custoMedio'][$item->product_id]) ) {
-                    $data['custoMedioVendas'] = $data['custoMedioVendas'] + ($estoque['custoMedio'][$item->product_id]*$item->quantidade);
+                if ( ($item->cost->nome=='estoqueMercadorias')&&( isset($estoque['custoMedio'][$item->product_id]) ) ) {
+                    $data['consumoMedioEstoque'] = $data['consumoMedioEstoque'] + ($estoque['custoMedio'][$item->product_id]*$item->quantidade);
                 } else {
 //                    \Debugbar::info($item->product->nome);
 //                    \Debugbar::info($estoque['custoMedio']);
@@ -244,9 +244,14 @@ class ReportsController extends Controller
         });
         $data['compras'] = 0;
         $data['saldo'] = 0;
+
+        $data['estoqueMercadorias'] = 0;
+        $data['estoqueLanches'] = 0;
+
         $data['comprasMercadorias'] = 0;
         $data['comprasLanches'] = 0;
-        $data['custoMercadorias'] = 0;
+
+//        $data['custoMercadorias'] = 0;
 //        $data['custoLanches'] = 0;
         $data['despesasGerais'] = 0;
         $data['despesasMensaisFixas'] = 0;
@@ -256,6 +261,12 @@ class ReportsController extends Controller
         foreach ($ordersFiltred as $order) {
             foreach ($order->orderItems as $item) {
                 //calcula estoque
+                if ($item->cost->nome=='estoqueMercadorias')
+                    $data['estoqueMercadorias'] = $data['estoqueMercadorias'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='estoqueLanches')
+                    $data['estoqueLanches'] = $data['estoqueLanches'] + ($item->valor_unitario*$item->quantidade);
+
+                //calcula custo
                 if ($item->cost->nome=='Mercadorias')
                     $data['comprasMercadorias'] = $data['comprasMercadorias'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='Lanches')
@@ -277,10 +288,10 @@ class ReportsController extends Controller
         $data['receitaLiquida'] = $data['receitaBruta']-$data['deducaoReceita'];
 
 //        $data['custoProdutos'] = $data['custoMedioVendas'];
-        $data['custoProdutos'] = $data['custoMercadorias']+$data['comprasLanches']+$data['custoMedioVendas'];
+        $data['custoProdutos'] = $data['comprasMercadorias']+$data['comprasLanches']+$data['consumoMedioEstoque'];
 
-        $data['comprasEstoque'] = $data['comprasMercadorias'];//+$data['comprasLanches'];
-        $data['saldo'] = $data['comprasEstoque']-$data['custoMedioVendas'];
+        $data['comprasEstoque'] = $data['estoqueMercadorias']+$data['estoqueLanches'];
+        $data['saldo'] = $data['comprasEstoque']-$data['consumoMedioEstoque'];
 
         $data['margem'] = $data['receitaLiquida'] - $data['custoProdutos'];
 
