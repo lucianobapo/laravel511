@@ -113,7 +113,7 @@ class DeliveryController extends Controller {
                 'cart' => Cart::content()->toArray(),
             ])->render(),
             'total' => formatBRL(Cart::total()),
-            'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success tooltipsted2']),
+            'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']),
         ]);
         else return redirect(route('delivery.index', $host));
     }

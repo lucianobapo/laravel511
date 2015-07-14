@@ -2,6 +2,9 @@
 @section('content')
     <h1 class="h1s">{{ trans('confirmation.title') }}</h1>
     <hr>
+
+    @include('erp.orders.partials.pillsNav')
+
     @if(count($orders))
         <table class="table table-hover table-striped table-condensed" ng-app="myApp">
             <thead>

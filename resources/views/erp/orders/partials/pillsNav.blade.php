@@ -1,6 +1,12 @@
 <ul class="nav nav-pills nav-media-stacked" style=" margin-bottom: 10px">
     <li class="{{ Route::currentRouteName()=='orders.create'?'active':'' }}">
-        {!! link_to_route('orders.create', trans('order.create.createOrderBtn'), $host, [
+        {!! link_to_route('orders.create', trans('order.menu.create'), $host, [
+        'class'=>'',
+        'style' => ''
+        ]) !!}
+    </li>
+    <li class="{{ Route::currentRouteName()=='confirmations.index'?'active':'' }}">
+        {!! link_to_route('confirmations.index', trans('order.menu.confirmation'), $host, [
         'class'=>'',
         'style' => ''
         ]) !!}

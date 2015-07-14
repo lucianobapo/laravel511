@@ -5,6 +5,7 @@
     @include('erp.orders.partials.pillsNav')
 
     @if(count($orders))
+        {!! $orders->render() !!}
         <table class="table table-hover table-striped table-condensed" ng-app="myApp">
             <thead>
             <tr>

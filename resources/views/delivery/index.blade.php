@@ -38,7 +38,7 @@
                     @endif
                     <div class="text-right" id="btnPedido" style="margin: 10px 0px;">
                         @if(Session::has('cart'))
-                            {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success tooltipsted2']) !!}
+                            {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']) !!}
                         @endif
                     </div>
                     {!! $panelBody !!}
@@ -110,15 +110,6 @@
                                 });
                                 $('#tooltipsted').tooltip('show');
                                 $('#tooltipsted').on('shown.bs.tooltip', function(){setTimeout(function () {$('#tooltipsted').tooltip('destroy');}, 1500);});
-
-                                $('.tooltipsted2').tooltip({
-                                    animation: true,
-                                    placement: 'left',
-                                    title: "{{ trans('delivery.productBlock.tooltip') }}",
-                                    trigger: 'manual'
-                                });
-                                $('.tooltipsted2').tooltip('show');
-                                $('.tooltipsted2').on('shown.bs.tooltip', function(){setTimeout(function () {$('.tooltipsted2').tooltip('destroy');}, 1500);});
 
                                 //resetting the form
                                 $('#form-add-setting').each (function(){

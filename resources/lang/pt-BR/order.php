@@ -31,7 +31,7 @@ return array(
 
     'create' => [
         'createTitle' => 'Criar Ordem',
-        'createOrderBtn' => 'Criar Ordem',
+//        'createOrderBtn' => 'Criar Ordem',
         'selecioneParceiro' => 'Selecione um '.trans('modelOrder.attributes.partner_id'),
         'selecioneProduto' => 'Selecione um '.trans('modelItemOrder.attributes.product_id'),
         'selecioneCusto' => 'Selecione um '.trans('modelItemOrder.attributes.cost_id'),
