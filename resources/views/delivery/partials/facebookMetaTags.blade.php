@@ -1,4 +1,4 @@
-<meta property="og:url" content="website"/>
+<meta property="og:url" content="{{ config('delivery.siteCurrentUrl') }}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{{ trans('delivery.head.title') }}"/>
 <meta property="og:image" content="{{ config('delivery.siteCurrentUrl').'/img/logo.png' }}"/>
