@@ -261,13 +261,13 @@ class DeliveryController extends Controller {
 
         //Adicionando os itens do pedido
         foreach ($attributes['quantidade'] as $key => $quantidade) {
-            $addedItemOrder = $this->getAddedItemOrder($quantidade, $attributes['valor_unitario'][$key]);
+            $productFound = $product->find($key);
+            $addedItemOrder = $this->getAddedItemOrder($quantidade, $attributes['valor_unitario'][$key], $productFound->cost_id);
 
-            $costAllocate->firstOrCreate(['nome'=>'Mercadorias'])->itemOrders()->save($addedItemOrder);
+//            $costAllocate->firstOrCreate(['nome'=>'Mercadorias'])->itemOrders()->save($addedItemOrder);
             $sharedCurrency->firstOrCreate(['nome_universal'=>'BRL'])->itemOrders()->save($addedItemOrder);
-//            dd($costAllocate->firstOrCreate(['nome'=>'Mercadorias'])->itemOrders());
             $addedOrder->orderItems()->save($addedItemOrder);
-            $product->find($key)->itemOrders()->save($addedItemOrder);
+            $productFound->itemOrders()->save($addedItemOrder);
         }
 
         MessagesRepository::sendOrderCreated([
@@ -363,10 +363,11 @@ class DeliveryController extends Controller {
      * @param $valor
      * @return \Illuminate\Database\Eloquent\Model
      */
-    private function getAddedItemOrder($quantidade, $valor)
+    private function getAddedItemOrder($quantidade, $valor, $cost)
     {
         $itemOrderAttribute = [
             'mandante' => Auth::check()?Auth::user()->mandante:config('app.mandante'),
+            'cost_id' => $cost,
             'quantidade' => $quantidade,
             'valor_unitario' => $valor,
         ];
