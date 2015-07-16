@@ -24,7 +24,7 @@
                     <td style="border: 0px"></td>
                 @endforeach
             </tr>
-            <tr>
+            <tr class="h5">
                 <td style="border-top: 2px solid #dddddd;">{{ trans('report.dre.receitaBruta') }}</td>
                 @foreach($periodos as $periodo)
                     <td style="border-top: 2px solid #dddddd;">{{ formatBRL($periodo['ordersMes']['receitaBruta']) }}</td>

@@ -85,13 +85,16 @@ return array(
             'custoLanches' => 'Lanches',
         ],
 
-
-
         'margem' => 'Margem de contribuição',
-        'despesas' => 'Despesas Operacionais',
-        'despesasGerais' => 'Gerais',
-        'despesasMensaisFixas' => 'Mensais Fixas',
-        'despesasTransporte' => 'Transporte',
+
+        'despesas' => [
+            'title' => 'Despesas Operacionais',
+            'despesasGerais' => 'Gerais',
+            'despesasMensaisFixas' => 'Mensais Fixas',
+            'despesasMarketingPropaganda' => 'Marketing e Propaganda',
+            'despesasTransporte' => 'Transporte',
+        ],
+
         'ebitda' => 'EBITDA',
         'depreciacao' => 'Depreciação',
         'estoque' => [
