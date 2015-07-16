@@ -24,6 +24,8 @@ return [
     'orderListCountMax' => env('ORDER_LIST_COUNT_MAX', 3),
     'rootRole' => env('ROOT_ROLE', 'Root'),
 
+    'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
