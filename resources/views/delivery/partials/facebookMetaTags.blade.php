@@ -1,3 +1,4 @@
+<meta property="fb:app_id" content="1581785262035600" />
 <meta property="og:url" content="{{ config('delivery.siteCurrentUrl') }}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{{ trans('delivery.head.title') }}"/>
