@@ -28,7 +28,7 @@
         <tr>
             {!! Form::model($partner, [
                 'method'=>$method,
-                'url'=>route($route, isset($partner->id)?[$host,$partner->id]:$host),
+                'url'=>route($route, isset($partner->id)?[$partner->id]+$params:$params),
                 'files' => true,
             ]) !!}
             <!-- method Form Input -->

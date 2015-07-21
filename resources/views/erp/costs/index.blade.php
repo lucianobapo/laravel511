@@ -22,7 +22,7 @@
         <tr>
             {!! Form::model($costAllocate, [
             'method'=>$method,
-            'url'=>route($route, isset($costAllocate->id)?[$host,$costAllocate->id]:$host),
+            'url'=>route($route, isset($costAllocate->id)?[$costAllocate->id]+$params:$params),
             ]) !!}
             <!-- method Form Input -->
             {!! Form::hidden('method',$method) !!}
