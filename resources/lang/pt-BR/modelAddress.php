@@ -4,7 +4,7 @@ return array(
 
   /*
 	|--------------------------------------------------------------------------
-	| CostAllocate Language Lines
+	| Address Language Lines
 	|--------------------------------------------------------------------------
 	|
 	|
@@ -14,8 +14,15 @@ return array(
 
     'attributes' => array(
         'id' => 'ID',
-        'nome' => 'Nome',
+        'partner_id' => 'Parceiro',
+        'cep' => 'CEP',
+        'logradouro' => 'Logradouro',
         'numero' => 'Número',
-        'descricao' => 'Descrição',
+        'complemento' => 'Complemento',
+        'bairro' => 'Bairro',
+        'cidade' => 'Cidade',
+        'estado' => 'Estado',
+//        'pais',
+        'obs' => 'Observação',
     ), // attributes
 );

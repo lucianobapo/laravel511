@@ -99,7 +99,6 @@ class CostsController extends Controller
         return redirect(route('costs.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
-
     /**
      * Remove the specified resource from storage.
      *

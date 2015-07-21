@@ -32,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('products', 'App\Models\Product');
         $router->model('partners', 'App\Models\Partner');
         $router->model('costs', 'App\Models\CostAllocate');
+        $router->model('addresses', 'App\Models\Address');
 
 //        $router->bind('orders',function($id){
 //            return \App\Models\Order::findOrFail($id)->with('partner');

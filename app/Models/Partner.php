@@ -189,6 +189,7 @@ class Partner extends Model {
                     return $item;
             });
     }
+
     public function getPartnerSelectListAttribute(){
         return [''=>''] + $this->partner_list
             ->lists('nome','id')
