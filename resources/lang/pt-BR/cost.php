@@ -15,16 +15,16 @@ return array(
 	'menuName' => 'Custos',
 	'actionTitle' => 'Ações',
 	'actionAddBtn' => 'Adicionar',
-//	'actionUpdateBtn' => 'Atualizar',
+	'actionUpdateBtn' => 'Atualizar',
 	'actionDeleteTitle' => 'Remover',
 	'actionEditTitle' => 'Editar',
 //
     'flash' => [
         'created' => 'Objeto de Custo/Receita criado com sucesso!',
         'createdTitle' => 'Objeto criado',
-//        'updated' => 'Parceiro :nome atualizado com sucesso!',
-//        'updatedTitle' => 'Parceiro atualizado',
-//        'deleted' => 'Parceiro :nome removido com sucesso!',
-//        'deletedTitle' => 'Parceiro removido',
+        'updated' => 'Objeto :nome atualizado com sucesso!',
+        'updatedTitle' => 'Objeto atualizado',
+        'deleted' => 'Objeto :nome removido com sucesso!',
+        'deletedTitle' => 'Objeto removido',
     ], // flash
 );

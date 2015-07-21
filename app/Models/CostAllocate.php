@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Models\Scopes\GridSortingTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Scopes\MandanteTrait;
@@ -8,6 +9,7 @@ class CostAllocate extends Model {
 
     use SoftDeletes;
     use MandanteTrait;
+    use GridSortingTrait;
 
     /**
      * Fillable fields for a CostAllocate.

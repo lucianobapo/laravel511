@@ -1,5 +1,7 @@
 <?php namespace App\Models;
 
+use App\Models\Scopes\GridSortingTrait;
+use App\Models\Scopes\SyncItemsTrait;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +13,8 @@ class Partner extends Model {
 
     use SoftDeletes;
     use MandanteTrait;
+    use GridSortingTrait;
+    use SyncItemsTrait;
 
     /**
      * Fillable fields for a Partner.

@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
-use Carbon\Carbon;
+use App\Models\Scopes\GridSortingTrait;
+use App\Models\Scopes\SyncItemsTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Scopes\MandanteTrait;
@@ -10,6 +11,8 @@ class Product extends Model {
 
     use SoftDeletes;
     use MandanteTrait;
+    use GridSortingTrait;
+    use SyncItemsTrait;
 
     /**
      * Fillable fields for a Product.

@@ -91,14 +91,14 @@ class RoutesRepository{
                         'store'=>'costs.store',
                         'destroy'=>'costs.destroy',
                         'edit'=>'costs.edit',
-//                        'update'=>'costs.update',
+                        'update'=>'costs.update',
                     ],
                     'only'=>[
                         'index',
                         'store',
                         'destroy',
                         'edit',
-//                        'update',
+                        'update',
                     ],
                 ]);
 

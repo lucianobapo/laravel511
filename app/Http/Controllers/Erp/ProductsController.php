@@ -1,20 +1,17 @@
 <?php namespace App\Http\Controllers\Erp;
 
 use App\Http\Requests;
+use Exception;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\CostAllocate;
 use App\Models\Product;
 use App\Models\ProductGroup;
-use App\Models\SharedOrderType;
 use App\Models\SharedStat;
 use App\Repositories\ImageRepository;
 use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 
 class ProductsController extends Controller {
@@ -39,10 +36,7 @@ class ProductsController extends Controller {
     public function index(Product $product, Request $request, $host)
     {
         $params = $request->all();
-        $productOrdered = $this->orderRepository->sorting($product, $params);
-//        if ( !isset($params['direction']) ) $params['direction'] = false;
-//        if ( isset($params['sortBy']) ) $product = $product->orderBy($params['sortBy'], ($params['direction']?'asc':'desc') );
-//        else $product = $product->orderBy('nome', 'asc' );
+        $productOrdered = $product->sorting($params);
 
         return view('erp.products.index', compact('host','product'))->with([
             'method' => 'POST',
@@ -60,9 +54,17 @@ class ProductsController extends Controller {
         ]);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $host
+     * @param Product $product
+     * @param Request $request
+     * @return Response
+     */
     public function edit($host, Product $product, Request $request){
         $params = $request->all();
-        $productOrdered = $this->orderRepository->sorting($product, $params);
+        $productOrdered = $product->sorting($params);
 
         return view('erp.products.index', compact('host','product'))->with([
             'method' => 'PATCH',
@@ -80,6 +82,14 @@ class ProductsController extends Controller {
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $host
+     * @param Product $product
+     * @param ProductRequest $request
+     * @return Response
+     */
     public function update($host, Product $product, ProductRequest $request){
         $attributes = $request->all();
 
@@ -90,9 +100,9 @@ class ProductsController extends Controller {
         if(!isset($attributes['estoque'])) $attributes['estoque']=false;
         if(!isset($attributes['promocao'])) $attributes['promocao']=false;
 
-        $updatedProduct = $product->update($attributes);
+        $product->update($attributes);
 
-        $this->syncItems($product, $attributes);
+        $product->syncItems($attributes);
 
         flash()->overlay(trans('product.flash.productUpdated', ['produto' => $product->id]),trans('product.flash.productUpdatedTitle'));
 
@@ -107,15 +117,14 @@ class ProductsController extends Controller {
     public function store(Product $product, ProductRequest $request, $host)
     {
         $attributes = $request->all();
-//        $attributes['mandante'] = Auth::user()->mandante;
 
         if (!empty($attributes['imagem'])){
             $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
         }
 
-        $newProduct = $product->create($attributes);
+        $product->create($attributes);
 
-        $this->syncItems($newProduct, $attributes);
+        $product->syncItems($attributes);
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 
@@ -129,7 +138,7 @@ class ProductsController extends Controller {
      * @param $host
      * @param Product $product
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Request $request, $host, Product $product)
     {
@@ -137,45 +146,7 @@ class ProductsController extends Controller {
             $product->delete();
             flash()->overlay(trans('product.productDeleted'),trans('product.productDeletedTitle'));
 
-            return redirect(route('products.index', $host));
-        }
+            return redirect(route('products.index', [$host]+$request->only('direction','sortBy','page')));
+        } else throw new Exception(trans('app.errors.method'));
     }
-
-    /**
-     * Sync up a list of groups in the database.
-     *
-     * @param Product $product
-     * @param array $group
-     */
-    private function syncGroups(Product $product, $group)
-    {
-        $product->groups()->sync(is_null($group)?[]:$group);
-    }
-
-    /**
-     * Sync up a list of status in the database.
-     *
-     * @param Product $product
-     * @param array $status
-     */
-    private function syncStatus(Product $product, $status)
-    {
-        $product->status()->sync(is_null($status)?[]:$status);
-    }
-
-    /**
-     * @param Product $product
-     * @param $attributes
-     */
-    private function syncItems(Product $product, $attributes)
-    {
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($product, []);
-        else $this->syncGroups($product, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($product, []);
-        else $this->syncStatus($product, $attributes['status']);
-    }
-
 }

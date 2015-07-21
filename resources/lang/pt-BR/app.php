@@ -14,6 +14,10 @@ return array(
 	'notFound' => 'Recurso não encontrado',
 	'toggleNavigation' => 'Navegação Alternativa',
 
+    'errors' => [
+        'method' => 'Método da requisição inválida.',
+    ],
+
 
     'angular' => [
         'numbersOnly' => 'Digite somente números',

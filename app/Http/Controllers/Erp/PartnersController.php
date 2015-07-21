@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Erp;
 
 use App\Http\Requests;
+use Exception;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\PartnerRequest;
@@ -8,7 +9,6 @@ use App\Models\Partner;
 use App\Models\PartnerGroup;
 use App\Models\SharedStat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PartnersController extends Controller {
 
@@ -19,10 +19,10 @@ class PartnersController extends Controller {
      * @param $host
      * @return Response
      */
-    public function index(Partner $partner, Request $request, $host)
+    public function index($host, Partner $partner, Request $request)
     {
         $params = $request->all();
-        $partnerOrdered = $this->sorting($partner, $params);
+        $partnerOrdered = $partner->sorting($params);
 
         return view('erp.partners.index', compact('host','partner'))->with([
             'method' => 'POST',
@@ -37,9 +37,17 @@ class PartnersController extends Controller {
         ]);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $host
+     * @param Partner $partner
+     * @param Request $request
+     * @return Response
+     */
     public function edit($host, Partner $partner, Request $request){
         $params = $request->all();
-        $partnerOrdered = $this->sorting($partner, $params);
+        $partnerOrdered = $partner->sorting($params);
 
         return view('erp.partners.index', compact('host','partner'))->with([
             'method' => 'PATCH',
@@ -55,28 +63,6 @@ class PartnersController extends Controller {
     }
 
     /**
-     * Sync up a list of groups in the database.
-     *
-     * @param Partner $partner
-     * @param array $group
-     */
-    private function syncGroups(Partner $partner, $group)
-    {
-        $partner->groups()->sync(is_null($group)?[]:$group);
-    }
-
-    /**
-     * Sync up a list of status in the database.
-     *
-     * @param Partner $partner
-     * @param array $status
-     */
-    private function syncStatus(Partner $partner, $status)
-    {
-        $partner->status()->sync(is_null($status)?[]:$status);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return Response
@@ -84,29 +70,45 @@ class PartnersController extends Controller {
     public function store(Partner $partner, PartnerRequest $request, $host)
     {
         $attributes = $request->all();
-//        $attributes['mandante'] = Auth::user()->mandante;
 
-        $newPartner = $partner->create($attributes);
+        $partner->create($attributes);
 
-        $this->syncItems($newPartner, $attributes);
+        $partner->syncItems($attributes);
 
         flash()->overlay(trans('partner.flash.created'),trans('partner.flash.createdTitle'));
 
-        return redirect(route('partners.index', $host));
+        return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $host
+     * @param Partner $partner
+     * @param PartnerRequest $request
+     * @return Response
+     */
     public function update($host, Partner $partner, PartnerRequest $request){
         $attributes = $request->all();
 
-        $updatedPartner = $partner->update($attributes);
+        $partner->update($attributes);
 
-        $this->syncItems($partner, $attributes);
+        $partner->syncItems($attributes);
 
         flash()->overlay(trans('partner.flash.updated', ['nome' => $partner->nome]),trans('partner.flash.updatedTitle'));
 
-        return redirect(route('partners.index', $host));
+        return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request
+     * @param $host
+     * @param Partner $partner
+     * @return Response
+     * @throws Exception
+     */
     public function destroy(Request $request, $host, Partner $partner)
     {
         if ($request->method()==='DELETE'){
@@ -114,37 +116,7 @@ class PartnersController extends Controller {
             if ($partner->delete())
                 flash()->overlay(trans('partner.flash.deleted', ['nome' => $nome]),trans('partner.flash.deletedTitle'));
 
-            return redirect(route('partners.index', $host));
-        }
+            return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
+        } else throw new Exception(trans('app.errors.method'));
     }
-
-    /**
-     * @param Partner $partner
-     * @param $params
-     * @return array
-     */
-    private function sorting(Partner $partner, &$params)
-    {
-        if (!isset($params['direction'])) $params['direction'] = false;
-        if (isset($params['sortBy']))
-            return $partner->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
-        else
-            return $partner->orderBy('nome', 'asc');
-    }
-
-    /**
-     * @param Partner $partner
-     * @param $attributes
-     */
-    private function syncItems(Partner $partner, $attributes)
-    {
-        //Adicionando Grupos
-        if (empty($attributes['grupos'])) $this->syncGroups($partner, []);
-        else $this->syncGroups($partner, $attributes['grupos']);
-
-        //Adicionando Status
-        if (empty($attributes['status'])) $this->syncStatus($partner, []);
-        else $this->syncStatus($partner, $attributes['status']);
-    }
-
 }

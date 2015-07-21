@@ -6,8 +6,8 @@ use App\Models\CostAllocate;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Exception;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class CostsController extends Controller
 {
@@ -15,13 +15,14 @@ class CostsController extends Controller
      * Display a listing of the resource.
      *
      * @param CostAllocate $costAllocate
+     * @param Request $request
      * @param $host
      * @return Response
      */
-    public function index(CostAllocate $costAllocate, Request $request, $host)
+    public function index($host, CostAllocate $costAllocate, Request $request)
     {
         $params = $request->all();
-        $costAllocateOrdered = $this->sorting($costAllocate, $params);
+        $costAllocateOrdered = $costAllocate->sorting($params, 'numero', true);
 
         return view('erp.costs.index', compact('host','costAllocate'))->with([
             'method' => 'POST',
@@ -37,8 +38,36 @@ class CostsController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $host
+     * @param CostAllocate $costAllocate
+     * @param Request $request
+     * @return Response
+     */
+    public function edit($host, CostAllocate $costAllocate, Request $request){
+        $params = $request->all();
+        $costAllocateOrdered = $costAllocate->sorting($params, 'numero', true);
+
+        return view('erp.costs.index', compact('host','costAllocate'))->with([
+            'method' => 'PATCH',
+            'route' => 'costs.update',
+            'costs' => $costAllocateOrdered->with('itemOrders')->paginate(10)->appends($params),
+            'params' => ['host'=>$host]+$params,
+//            'grupos'=> PartnerGroup::lists('grupo','id'),
+//            'group_selected' => $partner->groups()->getRelatedIds()->toArray(),
+//            'status'=> SharedStat::lists('descricao','id'),
+//            'status_selected' => $partner->status()->getRelatedIds()->toArray(),
+            'submitButtonText' => trans('cost.actionUpdateBtn'),
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
+     * @param CostAllocate $costAllocate
+     * @param Request $request
+     * @param $host
      * @return Response
      */
     public function store(CostAllocate $costAllocate, Request $request, $host)
@@ -49,24 +78,43 @@ class CostsController extends Controller
 
         flash()->overlay(trans('cost.flash.created'),trans('cost.flash.createdTitle'));
 
-        return redirect(route('costs.index', $host));
+        return redirect(route('costs.index', [$host]+$request->only('direction','sortBy','page')));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $host
+     * @param CostAllocate $costAllocate
+     * @param Request $request
+     * @return Response
+     */
+    public function update($host, CostAllocate $costAllocate, Request $request){
+        $attributes = $request->all();
+
+        $costAllocate->update($attributes);
+
+        flash()->overlay(trans('cost.flash.updated', ['nome' => $costAllocate->descricao]),trans('cost.flash.updatedTitle'));
+
+        return redirect(route('costs.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
 
     /**
-     * Grid table Sorting data
+     * Remove the specified resource from storage.
      *
+     * @param Request $request
+     * @param $host
      * @param CostAllocate $costAllocate
-     * @param $params
-     * @return array
-     * @internal param CostAllocate $partner
+     * @return Response
+     * @throws Exception
      */
-    private function sorting(CostAllocate $costAllocate, &$params)
+    public function destroy($host, Request $request, CostAllocate $costAllocate)
     {
-        if (!isset($params['direction'])) $params['direction'] = false;
-        if (isset($params['sortBy']))
-            return $costAllocate->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
-        else
-            return $costAllocate->orderBy('numero', 'asc');
+        if ($request->method()==='DELETE'){
+            $costAllocate->delete();
+            flash()->overlay(trans('cost.flash.deleted', ['nome' => $costAllocate->descricao]),trans('cost.flash.deletedTitle'));
+            return redirect(route('costs.index', [$host]+$request->only('direction','sortBy','page')));
+        } else throw new Exception(trans('app.errors.method'));
     }
 }
