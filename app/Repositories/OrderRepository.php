@@ -1,8 +1,6 @@
 <?php namespace App\Repositories;
 
-use App\Models\ItemOrder;
 use App\Models\Product;
-use App\Models\SharedOrderType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 

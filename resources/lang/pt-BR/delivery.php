@@ -27,7 +27,7 @@ return array(
         'cartBtn' => 'Fechar o Pedido',
         'logoAlt' => 'Logomarca do site',
 //        'logoTitle' => 'SeuBoteco.com',
-        'logoTitle' => 'delivery.ilhanet.com',
+        'logoTitle' => config('delivery.siteCurrentUrl'),//'delivery.ilhanet.com',
     ],
 
     'head' => [

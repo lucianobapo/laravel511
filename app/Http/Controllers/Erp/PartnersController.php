@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Erp;
 
 use App\Http\Requests;
+use App\Repositories\WidgetsRepository;
 use Exception;
 use App\Http\Controllers\Controller;
 
@@ -12,6 +13,15 @@ use Illuminate\Http\Request;
 
 class PartnersController extends Controller {
 
+    private $widgetsRepository;
+
+    public function __construct(WidgetsRepository $widgetsRepository) {
+//        $this->middleware('auth',['except'=> ['index','show']]);
+//        $this->middleware('guest',['only'=> ['index','show']]);
+//        $this->middleware('after');
+        $this->widgetsRepository = $widgetsRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,20 +31,21 @@ class PartnersController extends Controller {
      */
     public function index($host, Partner $partner, Request $request)
     {
-        $params = $request->all();
-        $partnerOrdered = $partner->sorting($params);
-
-        return view('erp.partners.index', compact('host','partner'))->with([
-            'method' => 'POST',
-            'route' => 'partners.store',
-            'partners' => $partnerOrdered->with('groups','status')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-            'grupos'=> PartnerGroup::lists('grupo','id'),
-            'group_selected' => null,
-            'status' => SharedStat::lists('descricao','id'),
-            'status_selected' => null,
-            'submitButtonText' => trans('partner.actionAddBtn'),
-        ]);
+        return $this->getGrid('index', $host, $partner, $request);
+//        $params = $request->all();
+//        $partnerOrdered = $partner->sorting($params);
+//
+//        return view('erp.partners.index', compact('host','partner'))->with([
+//            'method' => 'POST',
+//            'route' => 'partners.store',
+//            'partners' => $partnerOrdered->with('groups','status')->paginate(10)->appends($params),
+//            'params' => ['host'=>$host]+$params,
+//            'grupos'=> PartnerGroup::lists('grupo','id'),
+//            'group_selected' => null,
+//            'status' => SharedStat::lists('descricao','id'),
+//            'status_selected' => null,
+//            'submitButtonText' => trans('partner.actionAddBtn'),
+//        ]);
     }
 
     /**
@@ -46,20 +57,21 @@ class PartnersController extends Controller {
      * @return Response
      */
     public function edit($host, Partner $partner, Request $request){
-        $params = $request->all();
-        $partnerOrdered = $partner->sorting($params);
-
-        return view('erp.partners.index', compact('host','partner'))->with([
-            'method' => 'PATCH',
-            'route' => 'partners.update',
-            'partners' => $partnerOrdered->with('groups','status')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-            'grupos'=> PartnerGroup::lists('grupo','id'),
-            'group_selected' => $partner->groups()->getRelatedIds()->toArray(),
-            'status'=> SharedStat::lists('descricao','id'),
-            'status_selected' => $partner->status()->getRelatedIds()->toArray(),
-            'submitButtonText' => trans('partner.actionUpdateBtn'),
-        ]);
+        return $this->getGrid('edit', $host, $partner, $request);
+//        $params = $request->all();
+//        $partnerOrdered = $partner->sorting($params);
+//
+//        return view('erp.partners.index', compact('host','partner'))->with([
+//            'method' => 'PATCH',
+//            'route' => 'partners.update',
+//            'partners' => $partnerOrdered->with('groups','status')->paginate(10)->appends($params),
+//            'params' => ['host'=>$host]+$params,
+//            'grupos'=> PartnerGroup::lists('grupo','id'),
+//            'group_selected' => $partner->groups()->getRelatedIds()->toArray(),
+//            'status'=> SharedStat::lists('descricao','id'),
+//            'status_selected' => $partner->status()->getRelatedIds()->toArray(),
+//            'submitButtonText' => trans('partner.actionUpdateBtn'),
+//        ]);
     }
 
     /**
@@ -70,13 +82,9 @@ class PartnersController extends Controller {
     public function store(Partner $partner, PartnerRequest $request, $host)
     {
         $attributes = $request->all();
-
         $partner->create($attributes);
-
         $partner->syncItems($attributes);
-
         flash()->overlay(trans('partner.flash.created'),trans('partner.flash.createdTitle'));
-
         return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
@@ -90,13 +98,9 @@ class PartnersController extends Controller {
      */
     public function update($host, Partner $partner, PartnerRequest $request){
         $attributes = $request->all();
-
         $partner->update($attributes);
-
         $partner->syncItems($attributes);
-
         flash()->overlay(trans('partner.flash.updated', ['nome' => $partner->nome]),trans('partner.flash.updatedTitle'));
-
         return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
     }
 
@@ -115,8 +119,57 @@ class PartnersController extends Controller {
             $nome = $partner->nome;
             if ($partner->delete())
                 flash()->overlay(trans('partner.flash.deleted', ['nome' => $nome]),trans('partner.flash.deletedTitle'));
-
             return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
         } else throw new Exception(trans('app.errors.method'));
+    }
+
+    public function getGrid($tipo, &$host, Partner &$partner, Request &$request){
+        return $this->widgetsRepository->showGrid($partner, [
+            'host' => $host,
+            'method' => $tipo=='index'?'POST':'PATCH',
+            'route' => [
+                'form' => $tipo=='index'?'partners.store':'partners.update',
+                'destroy' => 'partners.destroy',
+                'edit' => 'partners.edit',
+                'index' => 'partners.index',
+            ],
+            'modelTrans' => 'modelPartner.attributes.',
+            'gridTitle' => trans('partner.title'),
+            'submitButtonText' => trans($tipo=='index'?'widget.grid.actionAddBtn':'widget.grid.actionUpdateBtn'),
+            'with' => ['groups','status'],
+            'itemCount' => 20,
+            'gridType' => 'content',
+//            'sortColumn' => 'numero',
+//            'sortDirection' => true,
+            'columns' =>[
+                [ 'name' => 'id', 'inputDisabled' => true, ],
+                [ 'name' => 'nome', 'attributes' => ['class'=>'form-control', 'required'], ],
+                [ 'name' => 'data_nascimento', ],
+                [ 'name' => 'observacao', ],
+                [
+                    'name' => 'grupos[]',
+//                    'sub' => 'partner',
+                    'column' => 'group_list',
+                    'inputType' => 'select',
+                    'selectList' => PartnerGroup::lists('grupo','id'),
+                    'selectedItem' => $tipo=='index'?null:$partner->groups()->getRelatedIds()->toArray(),
+                    'attributes' => ['class'=>'form-control select2tag', 'multiple'],
+                    'sort' => false,
+                    'customTitle' => 'modelPartner.attributes.grupos',
+                ],
+                [
+                    'name' => 'status[]',
+//                    'sub' => 'partner',
+                    'column' => 'status_list',
+                    'inputType' => 'select',
+                    'selectList' => SharedStat::lists('descricao','id'),
+                    'selectedItem' => $tipo=='index'?null:$partner->status()->getRelatedIds()->toArray(),
+                    'attributes' => ['class'=>'form-control select2tag', 'multiple'],
+                    'sort' => false,
+                    'customTitle' => 'modelPartner.attributes.status',
+                ],
+
+            ],
+        ], $request->all());
     }
 }

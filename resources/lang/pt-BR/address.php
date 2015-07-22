@@ -11,13 +11,13 @@ return array(
 	*/
 
 	'title' => 'Lista de Endereços',
-	'empty' => 'Sem itens para exibir',
+//	'empty' => 'Sem itens para exibir',
 	'menuName' => 'Endereços',
-	'actionTitle' => 'Ações',
-	'actionAddBtn' => 'Adicionar',
-	'actionUpdateBtn' => 'Atualizar',
-	'actionDeleteTitle' => 'Remover',
-	'actionEditTitle' => 'Editar',
+//	'actionTitle' => 'Ações',
+//	'actionAddBtn' => 'Adicionar',
+//	'actionUpdateBtn' => 'Atualizar',
+//	'actionDeleteTitle' => 'Remover',
+//	'actionEditTitle' => 'Editar',
 
     'flash' => [
         'created' => 'Endereço criado com sucesso!',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Erp;
 
 use App\Models\CostAllocate;
+use App\Repositories\WidgetsRepository;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,6 +12,15 @@ use App\Http\Controllers\Controller;
 
 class CostsController extends Controller
 {
+    private $widgetsRepository;
+
+    public function __construct(WidgetsRepository $widgetsRepository) {
+//        $this->middleware('auth',['except'=> ['index','show']]);
+//        $this->middleware('guest',['only'=> ['index','show']]);
+//        $this->middleware('after');
+        $this->widgetsRepository = $widgetsRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,20 +31,7 @@ class CostsController extends Controller
      */
     public function index($host, CostAllocate $costAllocate, Request $request)
     {
-        $params = $request->all();
-        $costAllocateOrdered = $costAllocate->sorting($params, 'numero', true);
-
-        return view('erp.costs.index', compact('host','costAllocate'))->with([
-            'method' => 'POST',
-            'route' => 'costs.store',
-            'costs' => $costAllocateOrdered->with('itemOrders')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-//            'grupos'=> PartnerGroup::lists('grupo','id'),
-//            'group_selected' => null,
-//            'status' => SharedStat::lists('descricao','id'),
-//            'status_selected' => null,
-            'submitButtonText' => trans('cost.actionAddBtn'),
-        ]);
+        return $this->getGrid('index', $host, $costAllocate, $request);
     }
 
     /**
@@ -46,20 +43,7 @@ class CostsController extends Controller
      * @return Response
      */
     public function edit($host, CostAllocate $costAllocate, Request $request){
-        $params = $request->all();
-        $costAllocateOrdered = $costAllocate->sorting($params, 'numero', true);
-
-        return view('erp.costs.index', compact('host','costAllocate'))->with([
-            'method' => 'PATCH',
-            'route' => 'costs.update',
-            'costs' => $costAllocateOrdered->with('itemOrders')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-//            'grupos'=> PartnerGroup::lists('grupo','id'),
-//            'group_selected' => $partner->groups()->getRelatedIds()->toArray(),
-//            'status'=> SharedStat::lists('descricao','id'),
-//            'status_selected' => $partner->status()->getRelatedIds()->toArray(),
-            'submitButtonText' => trans('cost.actionUpdateBtn'),
-        ]);
+        return $this->getGrid('edit', $host, $costAllocate, $request);
     }
 
     /**
@@ -115,5 +99,32 @@ class CostsController extends Controller
             flash()->overlay(trans('cost.flash.deleted', ['nome' => $costAllocate->descricao]),trans('cost.flash.deletedTitle'));
             return redirect(route('costs.index', [$host]+$request->only('direction','sortBy','page')));
         } else throw new Exception(trans('app.errors.method'));
+    }
+
+    public function getGrid($tipo, &$host, CostAllocate &$costAllocate, Request &$request){
+        return $this->widgetsRepository->showGrid($costAllocate, [
+            'host' => $host,
+            'method' => $tipo=='index'?'POST':'PATCH',
+            'route' => [
+                'form' => $tipo=='index'?'costs.store':'costs.update',
+                'destroy' => 'costs.destroy',
+                'edit' => 'costs.edit',
+                'index' => 'costs.index',
+            ],
+            'modelTrans' => 'modelCostAllocate.attributes.',
+            'gridTitle' => trans('cost.title'),
+            'submitButtonText' => trans($tipo=='index'?'widget.grid.actionAddBtn':'widget.grid.actionUpdateBtn'),
+            'with' => 'itemOrders',
+            'itemCount' => 20,
+            'gridType' => 'content',
+            'sortColumn' => 'numero',
+            'sortDirection' => true,
+            'columns' =>[
+                [ 'name' => 'id', 'inputDisabled' => true, ],
+                [ 'name' => 'nome', 'attributes' => ['class'=>'form-control', 'required'], ],
+                [ 'name' => 'numero', 'attributes' => ['class'=>'form-control', 'required'], ],
+                [ 'name' => 'descricao', 'attributes' => ['class'=>'form-control', 'required'], ],
+            ],
+        ], $request->all());
     }
 }

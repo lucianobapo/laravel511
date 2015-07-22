@@ -7,6 +7,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <a class="navbar-brand" href="{{ config('delivery.siteCurrentUrl') }}" style="padding: 0px 15px;">
+                {!! app('html')->image('/img/logo-ilhanet.png', trans('delivery.nav.logoAlt'), [
+                    'title'=>trans('delivery.nav.logoTitle'),
+                    'style'=>'max-height: 100%;']) !!}
+            </a>
             {{--<a class="navbar-brand" href="#">Laravel</a>--}}
 {{--            {{ App::getLocale() }}--}}
 {{--            {{ Request::server('HTTP_ACCEPT_LANGUAGE') }}--}}

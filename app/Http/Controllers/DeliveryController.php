@@ -42,11 +42,13 @@ class DeliveryController extends Controller {
      * @var integer
      */
     private $totalCart = 0;
+
     /**
      * CartView
      * @var \Illuminate\View\View
      */
     private $cartView;
+
     private $orderRepository;
 
     /**
@@ -198,7 +200,6 @@ class DeliveryController extends Controller {
     }
 
     public function addOrder(DeliveryRequest $request, $host,
-                             ItemOrder $itemOrder, CostAllocate $costAllocate,
                              Product $product, SharedOrderType $sharedOrderType,
                              SharedOrderPayment $sharedOrderPayment, SharedCurrency $sharedCurrency){
 

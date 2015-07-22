@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Erp;
 
 use App\Models\Address;
 use App\Models\Partner;
+use App\Repositories\WidgetsRepository;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -12,6 +13,15 @@ use App\Http\Controllers\Controller;
 
 class AddressesController extends Controller
 {
+    private $widgetsRepository;
+
+    public function __construct(WidgetsRepository $widgetsRepository) {
+//        $this->middleware('auth',['except'=> ['index','show']]);
+//        $this->middleware('guest',['only'=> ['index','show']]);
+//        $this->middleware('after');
+        $this->widgetsRepository = $widgetsRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,18 +32,20 @@ class AddressesController extends Controller
      */
     public function index($host, Address $address, Request $request, Partner $partner)
     {
-        $params = $request->all();
-        $addressOrdered = $address->sorting($params);
+        return $this->getGrid('index', $host, $address, $request, $partner);
 
-        return view('erp.addresses.index', compact('host','address'))->with([
-            'method' => 'POST',
-            'route' => 'addresses.store',
-            'addresses' => $addressOrdered->with('partner')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-            'submitButtonText' => trans('address.actionAddBtn'),
-            'partners' => $partner->partner_select_list,
-            'partner_selected' => null,
-        ]);
+//        $params = $request->all();
+//        $addressOrdered = $address->sorting($params);
+//
+//        return view('erp.addresses.index', compact('host','address'))->with([
+//            'method' => 'POST',
+//            'route' => 'addresses.store',
+//            'addresses' => $addressOrdered->with('partner')->paginate(10)->appends($params),
+//            'params' => ['host'=>$host]+$params,
+//            'submitButtonText' => trans('address.actionAddBtn'),
+//            'partners' => $partner->partner_select_list,
+//            'partner_selected' => null,
+//        ]);
     }
 
     /**
@@ -45,18 +57,20 @@ class AddressesController extends Controller
      * @return Response
      */
     public function edit($host, Address $address, Request $request, Partner $partner){
-        $params = $request->all();
-        $addressOrdered = $address->sorting($params);
+        return $this->getGrid('edit', $host, $address, $request, $partner);
 
-        return view('erp.addresses.index', compact('host','address'))->with([
-            'method' => 'PATCH',
-            'route' => 'addresses.update',
-            'addresses' => $addressOrdered->with('partner')->paginate(10)->appends($params),
-            'params' => ['host'=>$host]+$params,
-            'submitButtonText' => trans('address.actionUpdateBtn'),
-            'partners' => $partner->partner_select_list,
-            'partner_selected' => $partner->partner_id,
-        ]);
+//        $params = $request->all();
+//        $addressOrdered = $address->sorting($params);
+//
+//        return view('erp.addresses.index', compact('host','address'))->with([
+//            'method' => 'PATCH',
+//            'route' => 'addresses.update',
+//            'addresses' => $addressOrdered->with('partner')->paginate(10)->appends($params),
+//            'params' => ['host'=>$host]+$params,
+//            'submitButtonText' => trans('address.actionUpdateBtn'),
+//            'partners' => $partner->partner_select_list,
+//            'partner_selected' => $partner->partner_id,
+//        ]);
     }
 
     /**
@@ -106,5 +120,50 @@ class AddressesController extends Controller
             flash()->overlay(trans('address.flash.deleted', ['nome' => $address->endereco]),trans('address.flash.deletedTitle'));
             return redirect(route('addresses.index', [$host]+$request->only('direction','sortBy','page')));
         } else throw new Exception(trans('app.errors.method'));
+    }
+
+    public function getGrid($tipo, &$host, Address &$address, Request &$request, Partner &$partner){
+        return $this->widgetsRepository->showGrid($address, [
+            'host' => $host,
+            'method' => $tipo=='index'?'POST':'PATCH',
+            'route' => [
+                'form' => $tipo=='index'?'addresses.store':'addresses.update',
+                'destroy' => 'addresses.destroy',
+                'edit' => 'addresses.edit',
+                'index' => 'addresses.index',
+            ],
+            'modelTrans' => 'modelAddress.attributes.',
+            'gridTitle' => trans('address.title'),
+            'submitButtonText' => trans($tipo=='index'?'widget.grid.actionAddBtn':'widget.grid.actionUpdateBtn'),
+            'with' => 'partner',
+            'itemCount' => 20,
+            'gridType' => 'contentWide',
+            'columns' =>[
+                [ 'name' => 'id', 'inputDisabled' => true, ],
+                [
+                    'name' => 'partner_id',
+                    'sub' => 'partner',
+                    'column' => 'nome',
+                    'inputType' => 'select',
+                    'selectList' => $partner->partner_select_list,
+                    'selectedItem' => $tipo=='index'?null:$partner->partner_id,
+                ],
+                [
+                    'name' => 'cep',
+                    'thClass' => 'col-sm-1',
+                    'attributes' => ['maxlength'=>8, 'class'=>'form-control numbersOnly cep', 'required'],
+                ],
+                [ 'name' => 'logradouro', 'thClass' => 'col-sm-2', ],
+                [
+                    'name' => 'numero',
+                    'attributes' => ['size'=>5, 'class'=>'form-control', 'required'],
+                ],
+                [ 'name' => 'complemento', 'thClass' => 'col-sm-1', ],
+                'bairro',
+                'cidade',
+                [ 'name' => 'estado', 'attributes' => ['size'=>5, 'class'=>'form-control'], ],
+                [ 'name' => 'obs', 'thClass' => 'col-sm-2', ],
+            ],
+        ], $request->all());
     }
 }
