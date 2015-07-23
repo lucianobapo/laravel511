@@ -133,7 +133,7 @@ class ReportsController extends Controller
         sort($periodos);
         $pdf = \App::make('dompdf.wrapper')
             ->loadView('erp.reports.dre', compact('host','periodos','usePdf'))
-            ->setPaper('a3')
+            ->setPaper('a2')
             ->setOrientation('landscape');
 //        return $pdf->download('invoice.pdf');
         return $pdf->stream('dre.pdf');
