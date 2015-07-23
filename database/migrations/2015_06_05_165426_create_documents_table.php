@@ -27,13 +27,7 @@ class CreateDocumentsTable extends Migration {
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
 
-            $table->enum('document_type', [
-                'cpf',
-                'cnpj',
-                'ie',
-                'im',
-                'rg',
-            ]);
+            $table->enum('document_type', array_keys(config('delivery.document_types')));
             $table->string('document_data');
 		});
         echo get_class($this)." is up\n";

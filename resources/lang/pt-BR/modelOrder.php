@@ -19,6 +19,7 @@ return array(
         'shared_order_type_id' => 'Tipo de Ordem',
         'shared_order_payment_id' => 'Tipo de Pagamento',
         'valor_total' => 'Valor Total',
+        'troco' => 'Troco',
         'posted_at' => 'Data do Movimento',
         'referencia' => 'Referência',
         'descricao' => 'Descrição da Ordem',

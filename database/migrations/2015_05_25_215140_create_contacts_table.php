@@ -27,11 +27,7 @@ class CreateContactsTable extends Migration {
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
 
-            $table->enum('contact_type', [
-                'email',
-                'telefone',
-                'whatsapp',
-            ]);
+            $table->enum('contact_type', array_keys(config('delivery.contact_types')));
             $table->string('contact_data');
 		});
         echo get_class($this)." is up\n";

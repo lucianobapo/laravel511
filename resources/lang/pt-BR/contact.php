@@ -4,15 +4,15 @@ return array(
 
   /*
 	|--------------------------------------------------------------------------
-	| Address Language Lines
+	| Contact Language Lines
 	|--------------------------------------------------------------------------
 	|
 	|
 	*/
 
-	'title' => 'Lista de Endereços',
+	'title' => 'Lista de Contatos',
 //	'empty' => 'Sem itens para exibir',
-	'menuName' => 'Endereços',
+	'menuName' => 'Contatos',
 //	'actionTitle' => 'Ações',
 //	'actionAddBtn' => 'Adicionar',
 //	'actionUpdateBtn' => 'Atualizar',
@@ -20,11 +20,11 @@ return array(
 //	'actionEditTitle' => 'Editar',
 
     'flash' => [
-        'created' => 'Endereço criado com sucesso!',
-        'createdTitle' => 'Endereço criado',
-        'updated' => 'Endereço ":nome" atualizado com sucesso!',
-        'updatedTitle' => 'Endereço atualizado',
-        'deleted' => 'Endereço ":nome" removido com sucesso!',
-        'deletedTitle' => 'Endereço removido',
+        'created' => 'Contato criado com sucesso!',
+        'createdTitle' => 'Contato criado',
+        'updated' => 'Contato ":nome" atualizado com sucesso!',
+        'updatedTitle' => 'Contato atualizado',
+        'deleted' => 'Contato ":nome" removido com sucesso!',
+        'deletedTitle' => 'Contato removido',
     ], // flash
 );

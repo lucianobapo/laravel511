@@ -172,20 +172,14 @@ class Order extends Model {
     /**
      * Get the posted_at attribute.
      *
-     * @param $date
      * @return string
      */
-    public function getPostedAtAttribute($date) {
-//        return Carbon::parse($date)->timezone('America/Sao_Paulo')->format('Y-m-d\TH:i');
-//        return Carbon::parse($date)->format('d/m/Y');
-            return Carbon::parse($date)->format('d/m/Y H:i');
-//        return Carbon::parse($date)->format('d/m/Y H:i');
+    public function getPostedAtAttribute() {
+            return Carbon::parse($this->attributes['posted_at'])->format('d/m/Y H:i');
     }
 
     /**
      * Get the posted_at attribute.
-     *
-     * @param $date
      * @return string
      */
     public function getPostedAtForFieldAttribute() {

@@ -26,6 +26,19 @@ return [
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
 
+    'document_types' => [
+        'cpf' => "CPF",
+        'cnpj' => "CNPJ",
+        'ie' => "IE",
+        'im' => "IM",
+        'rg' => "RG",
+    ],
+    'contact_types' => [
+        'email' => "E-mail",
+        'telefone' => "Telefone",
+        'whatsapp' => "WhatsApp",
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

@@ -122,9 +122,9 @@ class ProductsController extends Controller {
             $attributes['imagem'] = $this->imageRepository->saveImageFile($request, str_slug($request->nome));
         }
 
-        $product->create($attributes);
+        $productCreated = $product->create($attributes);
 
-        $product->syncItems($attributes);
+        $productCreated->syncItems($attributes);
 
         flash()->overlay(trans('product.productCreated'),trans('product.productCreatedTitle'));
 

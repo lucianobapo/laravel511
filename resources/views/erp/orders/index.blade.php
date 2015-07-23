@@ -16,6 +16,7 @@
                 <th>{!! link_to_route_sort_by('orders.index', 'posted_at', trans('modelOrder.attributes.posted_at'), $params) !!}</th>
                 {{--<th>{{ trans('modelOrder.attributes.valor_total') }}</th>--}}
                 <th>{!! link_to_route_sort_by('orders.index', 'valor_total', trans('modelOrder.attributes.valor_total'), $params) !!}</th>
+                <th>{!! link_to_route_sort_by('orders.index', 'troco', trans('modelOrder.attributes.troco'), $params) !!}</th>
                 <th>{{ trans('modelOrder.attributes.currency') }}</th>
                 <th>{{ trans('modelOrder.attributes.shared_order_type_id') }}</th>
                 <th>{{ trans('modelOrder.attributes.shared_order_payment_id') }}</th>
@@ -30,6 +31,7 @@
                     <td>{{ $order->partner->nome }}</td>
                     <td>{{ $order->posted_at }}</td>
                     <td>{{ formatBRL($order->valor_total) }}</td>
+                    <td>{{ formatBRL($order->troco) }}</td>
                     <td>{{ $order->currency->nome_universal }}</td>
                     <td>{{ $order->type->descricao }}</td>
                     <td>{{ $order->payment->descricao }}</td>

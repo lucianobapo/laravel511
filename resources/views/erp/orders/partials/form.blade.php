@@ -45,7 +45,7 @@
     </div>
 
     <!-- shared_order_payment_id Form Input -->
-    <div class="form-group col-sm-3">
+    <div class="form-group col-sm-2">
         <div>
             {!! Form::label('payment_id',trans('modelOrder.attributes.shared_order_payment_id')) !!}
         </div>
@@ -53,7 +53,7 @@
     </div>
 
     <!-- status Form Input -->
-    <div class="form-group col-sm-3">
+    <div class="form-group col-sm-2">
         <div>
             {!! Form::label('status',trans('modelOrder.attributes.status')) !!}
         </div>
@@ -61,6 +61,12 @@
             'class'=>'form-control '.$select2tagStatus,
             'multiple'
         ]) !!}
+    </div>
+
+    <!-- troco Form Input -->
+    <div class="form-group col-sm-2">
+        {!! Form::label('troco',trans('modelOrder.attributes.troco')) !!}
+        {!! Form::text('troco',$order->troco,['class'=>'form-control']) !!}
     </div>
 
     <!-- Referencia Form Input -->

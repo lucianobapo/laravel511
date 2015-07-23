@@ -18,6 +18,7 @@ return array(
         'actionDeleteTitle' => 'Remover',
         'actionEditTitle' => 'Editar',
         'empty' => 'Sem itens para exibir',
+        'selecione' => 'Selecione um :valor',
     ), // grid
 
 );

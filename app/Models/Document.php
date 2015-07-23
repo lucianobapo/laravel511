@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Models\Scopes\GridSortingTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Scopes\MandanteTrait;
@@ -8,6 +9,7 @@ class Document extends Model {
 
     use SoftDeletes;
     use MandanteTrait;
+    use GridSortingTrait;
 
     /**
      * Fillable fields for a Document.
@@ -27,5 +29,10 @@ class Document extends Model {
      */
     public function partner(){
         return $this->belongsTo('App\Models\Partner');
+    }
+
+    public function getDocumentTypeNameAttribute(){
+        if (isset($this->attributes['document_type']))
+            return config('delivery.document_types')[$this->attributes['document_type']];
     }
 }

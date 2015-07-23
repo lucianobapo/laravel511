@@ -43,7 +43,7 @@ class Partner extends Model {
      */
     public function setDataNascimentoAttribute($date) {
         if (empty($date))
-            $this->attributes['data_nascimento'] =null;
+            $this->attributes['data_nascimento'] = null;
         else
             $this->attributes['data_nascimento'] = Carbon::parse($date);
 
@@ -52,14 +52,28 @@ class Partner extends Model {
     /**
      * Get the data_nascimento attribute.
      *
-     * @param $date
      * @return string
      */
-    public function getDataNascimentoAttribute($date) {
-        if (empty($date))
-            return '';
+    public function getDataNascimentoAttribute() {
+        if (empty($this->attributes['data_nascimento'])) return '';
+        else return Carbon::parse($this->attributes['data_nascimento'])->format('d/m/Y');
+    }
+
+    /**
+     * Get the posted_at attribute.
+     * @return string
+     */
+    public function getDataNascimentoForFieldAttribute() {
+        if (empty($this->attributes['data_nascimento'])) return '';
+        else return Carbon::parse($this->attributes['data_nascimento'])->format('Y-m-d');
+    }
+
+
+    public function setUserIdAttribute($id) {
+        if (empty($id))
+            $this->attributes['user_id'] = null;
         else
-            return Carbon::parse($date)->format('d/m/Y');
+            $this->attributes['user_id'] = $id;
     }
 
     /**

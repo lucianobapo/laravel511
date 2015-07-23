@@ -310,7 +310,7 @@ class OrdersController extends Controller {
      */
     private function syncStatus(Order $order, $status)
     {
-//        dd($order->id);
+//        dd($status);
         $order->status()->sync(is_null($status)?[]:$status);
     }
 

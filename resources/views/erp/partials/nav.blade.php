@@ -44,12 +44,12 @@
                     </ul>
                 </li>
 
-
-
                 <li>{!! link_to_route('products.index', trans('product.menuProduct'), $host) !!}</li>
-                <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
                 <li>{!! link_to_route('costs.index', trans('cost.menuName'), $host) !!}</li>
+                <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
                 <li>{!! link_to_route('addresses.index', trans('address.menuName'), $host) !!}</li>
+                <li>{!! link_to_route('contacts.index', trans('contact.menuName'), $host) !!}</li>
+                <li>{!! link_to_route('documents.index', trans('document.menuName'), $host) !!}</li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('report.menu.topName') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">

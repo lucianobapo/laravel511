@@ -11,13 +11,13 @@ return array(
 	*/
 
 	'title' => 'Lista de Parceiros',
-	'empty' => 'Sem parceiros para exibir',
+//	'empty' => 'Sem parceiros para exibir',
 	'menuName' => 'Parceiros',
-	'actionTitle' => 'Ações',
-	'actionAddBtn' => 'Adicionar',
-	'actionUpdateBtn' => 'Atualizar',
-	'actionDeleteTitle' => 'Remover',
-	'actionEditTitle' => 'Editar',
+//	'actionTitle' => 'Ações',
+//	'actionAddBtn' => 'Adicionar',
+//	'actionUpdateBtn' => 'Atualizar',
+//	'actionDeleteTitle' => 'Remover',
+//	'actionEditTitle' => 'Editar',
 
     'flash' => [
         'created' => 'Parceiro criado com sucesso!',

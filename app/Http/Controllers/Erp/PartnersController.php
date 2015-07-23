@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Erp;
 
 use App\Http\Requests;
+use App\Models\User;
 use App\Repositories\WidgetsRepository;
 use Exception;
 use App\Http\Controllers\Controller;
@@ -29,9 +30,9 @@ class PartnersController extends Controller {
      * @param $host
      * @return Response
      */
-    public function index($host, Partner $partner, Request $request)
+    public function index($host, Partner $partner, Request $request, User $user)
     {
-        return $this->getGrid('index', $host, $partner, $request);
+        return $this->getGrid('index', $host, $partner, $request, $user);
 //        $params = $request->all();
 //        $partnerOrdered = $partner->sorting($params);
 //
@@ -56,8 +57,8 @@ class PartnersController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function edit($host, Partner $partner, Request $request){
-        return $this->getGrid('edit', $host, $partner, $request);
+    public function edit($host, Partner $partner, Request $request, User $user){
+        return $this->getGrid('edit', $host, $partner, $request, $user);
 //        $params = $request->all();
 //        $partnerOrdered = $partner->sorting($params);
 //
@@ -82,8 +83,8 @@ class PartnersController extends Controller {
     public function store(Partner $partner, PartnerRequest $request, $host)
     {
         $attributes = $request->all();
-        $partner->create($attributes);
-        $partner->syncItems($attributes);
+        $partnerCreated = $partner->create($attributes);
+        $partnerCreated->syncItems($attributes);
         flash()->overlay(trans('partner.flash.created'),trans('partner.flash.createdTitle'));
         return redirect(route('partners.index', [$host]+$request->only('direction','sortBy','page')));
     }
@@ -123,7 +124,7 @@ class PartnersController extends Controller {
         } else throw new Exception(trans('app.errors.method'));
     }
 
-    public function getGrid($tipo, &$host, Partner &$partner, Request &$request){
+    public function getGrid($tipo, &$host, Partner &$partner, Request &$request, User &$user){
         return $this->widgetsRepository->showGrid($partner, [
             'host' => $host,
             'method' => $tipo=='index'?'POST':'PATCH',
@@ -136,18 +137,29 @@ class PartnersController extends Controller {
             'modelTrans' => 'modelPartner.attributes.',
             'gridTitle' => trans('partner.title'),
             'submitButtonText' => trans($tipo=='index'?'widget.grid.actionAddBtn':'widget.grid.actionUpdateBtn'),
-            'with' => ['groups','status'],
+            'with' => ['groups','status','user'],
             'itemCount' => 20,
-            'gridType' => 'content',
+            'gridType' => 'contentWide',
 //            'sortColumn' => 'numero',
 //            'sortDirection' => true,
             'columns' =>[
                 [ 'name' => 'id', 'inputDisabled' => true, ],
-                [ 'name' => 'nome', 'attributes' => ['class'=>'form-control', 'required'], ],
-                [ 'name' => 'data_nascimento', ],
+                [
+                    'name' => 'user_id',
+                    'thClass' => 'col-sm-3',
+                    'sub' => 'user',
+                    'column' => 'user_provider',
+                    'inputType' => 'select',
+                    'selectList' => $user->user_select_list,
+                    'selectedItem' => $tipo=='index'?null:$user->user_id,
+                    'attributes' => ['class'=>'form-control', 'select2'=>trans('widget.grid.selecione',['valor'=>trans('modelPartner.attributes.user_id')])],
+                ],
+                [ 'name' => 'nome', 'thClass' => 'col-sm-3', 'attributes' => ['class'=>'form-control', 'required'], ],
+                [ 'name' => 'data_nascimento', 'thClass' => 'col-sm-1', 'inputType' => 'date', 'inputDefault' => 'data_nascimento_for_field', ],
                 [ 'name' => 'observacao', ],
                 [
                     'name' => 'grupos[]',
+                    'thClass' => 'col-sm-1',
 //                    'sub' => 'partner',
                     'column' => 'group_list',
                     'inputType' => 'select',
@@ -159,6 +171,7 @@ class PartnersController extends Controller {
                 ],
                 [
                     'name' => 'status[]',
+                    'thClass' => 'col-sm-1',
 //                    'sub' => 'partner',
                     'column' => 'status_list',
                     'inputType' => 'select',

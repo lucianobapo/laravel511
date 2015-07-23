@@ -40,6 +40,8 @@
             @foreach($columns as $column)
                 @if(is_array($column) && isset($column['inputDisabled']) && $column['inputDisabled'])
                     <td></td>
+                @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='date') )
+                    <td>{!! Form::input('date',$column['name'], isset($column['inputDefault'])?$model->$column['inputDefault']:null, isset($column['attributes'])?$column['attributes']:['class'=>'form-control']) !!}</td>
                 @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='select') )
                     <td>{!! Form::select($column['name'], $column['selectList'], $column['selectedItem'], isset($column['attributes'])?$column['attributes']:['class'=>'form-control select2']) !!}</td>
                 @elseif(is_array($column))
@@ -56,7 +58,7 @@
                 <tr>
                     @foreach($columns as $column)
                         @if(is_array($column))
-                            <td>{{ isset($column['sub'])?$item->$column['sub']->$column['column']:(isset($column['column'])?$item->$column['column']:$item->$column['name']) }}</td>
+                            <td>{{ isset($column['sub'])?(isset($item->$column['sub'])?$item->$column['sub']->$column['column']:''):(isset($column['column'])?$item->$column['column']:$item->$column['name']) }}</td>
                         @else
                             <td>{{ $item->$column }}</td>
                         @endif

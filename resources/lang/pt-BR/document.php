@@ -4,15 +4,15 @@ return array(
 
   /*
 	|--------------------------------------------------------------------------
-	| Address Language Lines
+	| Document Language Lines
 	|--------------------------------------------------------------------------
 	|
 	|
 	*/
 
-	'title' => 'Lista de Endereços',
+	'title' => 'Lista de Documentos',
 //	'empty' => 'Sem itens para exibir',
-	'menuName' => 'Endereços',
+	'menuName' => 'Documentos',
 //	'actionTitle' => 'Ações',
 //	'actionAddBtn' => 'Adicionar',
 //	'actionUpdateBtn' => 'Atualizar',
@@ -20,11 +20,11 @@ return array(
 //	'actionEditTitle' => 'Editar',
 
     'flash' => [
-        'created' => 'Endereço criado com sucesso!',
-        'createdTitle' => 'Endereço criado',
-        'updated' => 'Endereço ":nome" atualizado com sucesso!',
-        'updatedTitle' => 'Endereço atualizado',
-        'deleted' => 'Endereço ":nome" removido com sucesso!',
-        'deletedTitle' => 'Endereço removido',
+        'created' => 'Documento criado com sucesso!',
+        'createdTitle' => 'Documento criado',
+        'updated' => 'Documento ":nome" atualizado com sucesso!',
+        'updatedTitle' => 'Documento atualizado',
+        'deleted' => 'Documento ":nome" removido com sucesso!',
+        'deletedTitle' => 'Documento removido',
     ], // flash
 );

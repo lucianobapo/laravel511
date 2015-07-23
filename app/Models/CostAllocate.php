@@ -36,8 +36,6 @@ class CostAllocate extends Model {
      * @return string
      */
     public function getCostListAttribute() {
-//        dd($this);
-//        $this->attributes['cost'] = $this->nome.' - '.$this->nome;
         return $this->attributes['numero'].' - '.$this->attributes['descricao'];
     }
 

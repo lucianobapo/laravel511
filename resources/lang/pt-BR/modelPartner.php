@@ -14,6 +14,7 @@ return array(
 
     'attributes' => array(
         'id' => 'N° do Parceiro',
+        'user_id' => 'Usuário',
         'nome' => 'Nome',
         'data_nascimento' => 'Data de Nascimento',
         'tax_id' => 'CPF',

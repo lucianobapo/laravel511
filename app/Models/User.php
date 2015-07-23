@@ -145,4 +145,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return is_null($this->have_role)?false:(strtolower($need_role)==strtolower($this->have_role->name)) ? true : false;
     }
 
+    public function getUserProviderAttribute(){
+        return ucfirst($this->attributes['provider']).': '.$this->attributes['email'];
+    }
+
+    public function getUserListAttribute(){
+        return $this
+            ->orderBy('email', 'asc')
+            ->get();
+    }
+
+    public function getUserSelectListAttribute(){
+        return [''=>''] + $this->user_list
+            ->lists('user_provider','id')
+            ->toArray();
+    }
+
 }
