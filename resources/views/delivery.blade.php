@@ -3,7 +3,7 @@
 <head>
     @include('delivery.partials.head')
 </head>
-<body style="padding-top: 70px;">
+<body class="paddingTop">
     <header>
         @include('delivery.partials.nav')
     </header>

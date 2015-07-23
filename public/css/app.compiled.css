@@ -6256,6 +6256,9 @@ label,
     margin-top: 2px;
     margin-left: 0;
   }
+  .paddingTop {
+    padding-top: 120px;
+  }
 }
 h1 {
   font-family: 'Architects Daughter', cursive, "Roboto", Helvetica, Arial, sans-serif;
@@ -6277,6 +6280,9 @@ span.select2-selection__arrow {
 }
 span.select2-selection--single {
   height: 34px !important;
+}
+body {
+  padding-top: 70px;
 }
 
 /*# sourceMappingURL=app.css.map */
