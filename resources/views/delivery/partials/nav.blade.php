@@ -1,14 +1,14 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <div class="navbar-header">
+        {{--<div class="navbar-header">--}}
 
-            <div class="navbar-brand" style="padding: 0px 15px;">
-                {!! $brand !!}
-            </div>
+            {{--<div class="navbar-brand" style="padding: 0px 15px;">--}}
+                {{--{!! $brand !!}--}}
+            {{--</div>--}}
             {{--<a class="navbar-brand" href="#">Laravel</a>--}}
             {{--{{ App::getLocale() }}--}}
 {{--            {{ Request::server('HTTP_ACCEPT_LANGUAGE') }}--}}
-        </div>
+        {{--</div>--}}
 
         <ul class="nav navbar-nav navbar-right">
             @if (Auth::guest() )
