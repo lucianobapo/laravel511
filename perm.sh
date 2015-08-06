@@ -4,6 +4,9 @@ chmod -R g+w storage/
 chmod -R u+w storage/
 chmod -R o-w ./
 
+chmod -R o+r public/
+setfacl -dR -m o::r public/
+
 find storage/ -type f -exec chmod u-x {} \;
 find storage/ -type d -exec chmod u+x {} \;
 

@@ -120,6 +120,14 @@ class Order extends Model {
         return $this->hasMany('App\Models\OrderConfirmation');
     }
 
+    /**
+     * Order can have many attachments.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments(){
+        return $this->hasMany('App\Models\Attachment');
+    }
+
     public function hasConfirmation($type){
         $confirmations = $this->confirmations->toArray();
         foreach($confirmations as $confirmation)
@@ -180,10 +188,35 @@ class Order extends Model {
 
     /**
      * Get the posted_at attribute.
+     *
+     * @return string
+     */
+    public function getPostedAtDataAttribute() {
+        return Carbon::parse($this->attributes['posted_at'])->format('d/m/Y');
+    }
+
+    /**
+     * Get the posted_at attribute.
      * @return string
      */
     public function getPostedAtForFieldAttribute() {
             return Carbon::parse($this->attributes['posted_at'])->format('Y-m-d\TH:i');
+    }
+
+    /**
+     * Get the posted_at attribute.
+     * @return string
+     */
+    public function getPostedAtTimestampAttribute() {
+            return Carbon::parse($this->attributes['posted_at'])->timestamp;
+    }
+
+    /**
+     * Get the posted_at attribute.
+     * @return string
+     */
+    public function getPostedAtCarbonAttribute() {
+            return Carbon::parse($this->attributes['posted_at']);
     }
 
     /**

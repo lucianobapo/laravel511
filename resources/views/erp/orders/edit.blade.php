@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h1>{{ trans('order.update.title') }}</h1>
+    <h1>{{ trans('order.update.title', ['numero'=>$order->id]) }}</h1>
     <hr>
 
     @include('erp.orders.partials.pillsNav')
@@ -14,6 +14,7 @@
     {!! Form::model($order, ['method'=>'PATCH','url'=>route('orders.update', [$host,$order->id]),
         'ng-app'=>"myApp",
         'ng-controller'=>"myCtrl",
+        'files' => true,
     ]) !!}
         @include ('erp.orders.partials.form', ['submitButtonText'=>trans('order.update.orderBtn'),
             'select2tagStatus'=>'select2tag',

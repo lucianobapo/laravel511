@@ -38,7 +38,7 @@ return array(
         'selecioneEndereco' => 'Selecione um '.trans('modelOrder.attributes.address_id'),
     ],
     'update' => [
-        'title' => 'Atualizar Ordem',
+        'title' => 'Atualizar Ordem nº:numero',
         'orderBtn' => 'Atualizar Ordem',
 //        'selecioneParceiro' => 'Selecione um '.trans('modelOrder.attributes.partner_id'),
 //        'selecioneProduto' => 'Selecione um '.trans('modelItemOrder.attributes.product_id'),

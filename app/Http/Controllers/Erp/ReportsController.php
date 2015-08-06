@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Erp;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
+use App\Repositories\ReportRepository;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
@@ -18,11 +19,13 @@ class ReportsController extends Controller
 {
 
     private $orderRepository;
+    private $reportRepository;
     private $estoque;
     private $kmOrdersVendaEntregue = [];
 
-    public function __construct(OrderRepository $orderRepository) {
+    public function __construct(OrderRepository $orderRepository, ReportRepository $reportRepository) {
         $this->orderRepository = $orderRepository;
+        $this->reportRepository = $reportRepository;
         $this->estoque = $this->orderRepository->calculaEstoque();
     }
 
@@ -307,5 +310,22 @@ class ReportsController extends Controller
         $data['ebitda'] = $data['margem'] - $data['despesas'];
 
         return $data;
+    }
+
+    public function diarioGeral($host, Order $order){
+        $orders = $order
+            ->with(['type','status','orderItems','orderItems.cost','orderItems.product'])
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
+//        dd($this->reportRepository->preparaReceitaVendas($orders));
+        return view('erp.reports.diarioGeral',compact('host'))->with([
+            'viewTableOrdens' => view('erp.reports.partials.diarioGeralTableOrdens')->with([
+//                'orders' => $orders,
+                'diario' => $this->reportRepository->preparaReceitaVendas($orders),
+            ]),
+        ]);
     }
 }

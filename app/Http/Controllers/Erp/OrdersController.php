@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\OrderRequest;
 use App\Models\Address;
+use App\Models\Attachment;
 use App\Models\CostAllocate;
 use App\Models\ItemOrder;
 use App\Models\Order;
@@ -14,7 +15,9 @@ use App\Models\SharedCurrency;
 use App\Models\SharedOrderPayment;
 use App\Models\SharedOrderType;
 use App\Models\SharedStat;
+use App\Repositories\ImageRepository;
 use App\Repositories\OrderRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 //use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Support\Facades\Auth;
@@ -30,21 +33,25 @@ class OrdersController extends Controller {
      * @var Integer
      */
     private $itemCount;
+    private $attachmentCount;
 
     private $orderRepository;
+    private $imageRepository;
 
     /**
      * @param OrderRepository $orderRepository
      */
-    public function __construct(OrderRepository $orderRepository) {
+    public function __construct(OrderRepository $orderRepository, ImageRepository $imageRepository) {
 //        $this->middleware('auth',['except'=> ['index']]);
 //        $this->middleware('roles',['administrator', 'manager']);
 //        $this->middleware('auth.roles',['middleware'=> 'role:editor', 'except'=> ['index']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 
 //        $this->cache = $cache;
-        $this->itemCount = config('app.orderItemCountMax');
+        $this->itemCount = config('delivery.orderItemCountMax');
+        $this->attachmentCount = config('delivery.orderAttachmentCountMax');
         $this->orderRepository = $orderRepository;
+        $this->imageRepository = $imageRepository;
     }
 
     /**
@@ -84,6 +91,10 @@ class OrdersController extends Controller {
             $itemOrders[] = new ItemOrder;
         }
 
+        for($i=0;$i<$this->attachmentCount;$i++){
+            $attachments[] = new Attachment;
+        }
+
         return view('erp.orders.create', compact('host','order'))->with([
             'products' => $product->product_list,
             'partners' => $partner->partner_list,
@@ -104,7 +115,9 @@ class OrdersController extends Controller {
                 'order' => new Order,
                 'addresses' => [''=>''] + (($addresses = Address::get())? $addresses->lists('logradouro','id')->toArray():[]),
             ]),
-            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm'),
+            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm', compact('host'))->with([
+                'attachments' => $attachments,
+            ]),
         ]);
 	}
 
@@ -118,6 +131,11 @@ class OrdersController extends Controller {
      */
     public function edit($host, Order $order, Product $product, Partner $partner)
     {
+        $attachments = Attachment::where(['order_id'=>$order->id])->get();
+        for($i=count($attachments);$i<$this->attachmentCount;$i++){
+            $attachments[] = new Attachment;
+        }
+//        dd($attachments);
         return view('erp.orders.edit', compact('host','order'))->with([
             'products' => $product->product_list,
             'partners' => $partner->partner_list,
@@ -140,7 +158,9 @@ class OrdersController extends Controller {
 //                'addresses' => [''=>''] + Address::lists('logradouro','id')->toArray(),
                 'addresses' => [''=>''] + $order->partner()->first()->addresses->lists('logradouro','id')->toArray(),
             ]),
-            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm'),
+            'viewAnexosForm' =>  view('erp.orders.partials.anexosForm', compact('host'))->with([
+                'attachments' => $attachments,
+            ]),
         ]);
 
     }
@@ -171,7 +191,17 @@ class OrdersController extends Controller {
         $addedOrder->valor_total=$somaTotal;
         $addedOrder->save();
 
-//        dd($addedOrder->id);
+        //Adicionando os anexos
+        for($i=0;$i<$this->attachmentCount;$i++){
+            if (isset($attributes['file'.($i+1)]) && !is_null($newFile = $this->imageRepository->saveAttachment($request, 'file'.($i+1), $addedOrder->id.'-'.Carbon::now()->timestamp) ) ) {
+                if (!empty($attributes['file'.($i+1)])){
+                    $attributes['file'.($i+1)] = $newFile;
+                    $addedAttachment = $this->getAddedAttachment($attributes,($i+1));
+                    $addedOrder->attachments()->save($addedAttachment);
+                }
+            }
+        }
+
         //Adicionando Status
         $this->syncStatus($addedOrder, $attributes['status']);
 
@@ -252,6 +282,17 @@ class OrdersController extends Controller {
             $somaTotal = $somaTotal+($attributes['quantidade'.$i]*$attributes['valor_unitario'.$i]);
         }
 
+        //Adicionando os anexos
+        for($i=0;$i<$this->attachmentCount;$i++){
+            if (isset($attributes['file'.($i+1)]) && !is_null($newFile = $this->imageRepository->saveAttachment($request, 'file'.($i+1), $order->id.'-'.Carbon::now()->timestamp) ) ) {
+                if (!empty($attributes['file'.($i+1)])){
+                    $attributes['file'.($i+1)] = $newFile;
+                    $addedAttachment = $this->getAddedAttachment($attributes,($i+1));
+                    $order->attachments()->save($addedAttachment);
+                }
+            }
+        }
+
         $order->valor_total=$somaTotal;
         $order->save();
 
@@ -328,6 +369,16 @@ class OrdersController extends Controller {
         if (!empty($attributes['currency_id'.$key])) $orderAttribute['currency_id'] = $attributes['currency_id'.$key];
 //        dd($itemOrderAttribute);
         return new ItemOrder($itemOrderAttribute);
+    }
+
+    private function getAddedAttachment($attributes, $key)
+    {
+        $itemAttribute = [
+            'mandante' => Auth::user()->mandante,
+            'file' => $attributes['file'.$key],
+        ];
+
+        return new Attachment($itemAttribute);
     }
 
 }

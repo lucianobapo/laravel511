@@ -26,5 +26,8 @@ Route::controller('welcome', 'WelcomeController');
 //    return view('welcome');
 //});
 
+//get('/gallery', ['as'=>'gallery.index', 'uses'=>'GalleryController@index']);
+
 RoutesRepository::erpRoutes();
 RoutesRepository::deliveryRoutes();
+RoutesRepository::galleryRoutes();

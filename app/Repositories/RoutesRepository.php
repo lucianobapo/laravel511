@@ -10,8 +10,6 @@ class RoutesRepository{
 //            'prefix' => 'delivery',
             'where' => ['host' => 'laravel'],
         ], function(){
-
-
             Route::controllers([
                 'auth' => 'Auth\AuthController',
                 'password' => 'Auth\PasswordController',
@@ -157,6 +155,9 @@ class RoutesRepository{
                 get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
                 get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);
                 get('reports/dre/pdf', ['as'=>'reports.drePdf', 'uses'=>'Erp\ReportsController@drePdf']);
+                get('reports/diarioGeral', ['as'=>'reports.diarioGeral', 'uses'=>'Erp\ReportsController@diarioGeral']);
+
+                get('attachment/{file}', ['as'=>'attachment', 'uses'=>'FileController@showAttachment']);
 
                 controller('confirmations', 'Erp\OrderConfirmationsController', [
                     'getIndex'=>'confirmations.index',
@@ -195,7 +196,22 @@ class RoutesRepository{
             get('/pedido', ['as'=>'delivery.pedido', 'uses'=>'DeliveryController@pedido']);
             post('/addOrder', ['as'=>'delivery.addOrder', 'uses'=>'DeliveryController@addOrder']);
 
-            get('images/{file}', ['as'=>'images', 'uses'=>'ImageController@show']);
+            get('images/{file}', ['as'=>'images', 'uses'=>'FileController@showImage']);
+        });
+    }
+
+    public static function galleryRoutes(){
+        // Gallery
+        Route::group([
+            'domain' => '{host}.'.config('app.domain'),
+//            'prefix' => 'delivery',
+            'where' => ['host' => 'gallery'],
+        ], function(){
+
+            get('/gallery', ['as'=>'gallery.index', 'uses'=>'GalleryController@index']);
+//            controller('/', 'GalleryController', [
+//                'getIndex'=>'gallery.index',
+//            ]);
         });
     }
 }

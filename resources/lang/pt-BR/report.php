@@ -26,6 +26,7 @@ return array(
         'estoque' => 'Estoque',
         'estatOrdem' => 'Estatística de Ordens',
         'dre' => 'DRE',
+        'diarioGeral' => 'Diário Geral',
     ],
 
     'estoque' => [
@@ -107,5 +108,13 @@ return array(
             'saldo' => 'Saldo',
         ],
         'lucroAntes' => 'Lucro Antes do IRPJ e CSLL',
+    ],
+    'diarioGeral' => [
+        'title' => 'Diário Geral',
+        'data' => 'Data',
+        'contaDebitada' => 'Conta Debitada',
+        'contaCreditada' => 'Conta Creditada',
+        'valor' => 'Valor',
+        'transacao' => 'Transação',
     ],
 );

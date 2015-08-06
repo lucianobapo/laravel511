@@ -14,6 +14,7 @@
     {!! Form::model($order, ['url'=>route('orders.store', $host),
         'ng-app'=>"myApp",
         'ng-controller'=>"myCtrl",
+        'files' => true,
     ]) !!}
         @include ('erp.orders.partials.form', [
             'submitButtonText'=>trans('order.create.createOrderBtn'),

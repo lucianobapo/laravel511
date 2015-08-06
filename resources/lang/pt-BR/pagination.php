@@ -14,7 +14,8 @@ return array(
 	*/
 
 	'previous' => '&laquo; Anterior',
-
 	'next'     => 'Próxima &raquo;',
+	'previousText' => 'Anterior',
+	'nextText'     => 'Próxima',
 
 );

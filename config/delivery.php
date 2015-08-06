@@ -17,12 +17,16 @@ return [
 
     // Other stuffs
     'storeTraffic' => env('APP_STORE_TRAFFIC', false),
-//    'orderItemCountMax' => env('ORDER_ITEM_COUNT_MAX', 3),
+    'orderItemCountMax' => env('ORDER_ITEM_COUNT_MAX', 3),
+    'orderAttachmentCountMax' => env('ORDER_ATTACHMENT_COUNT_MAX', 3),
     'defaultMandante' => env('MANDANTE', 'teste'),
 //    'deliveryOpen' => env('DELIVERY_OPEN', true),
 //    'deliveryReturn' => env('DELIVERY_RETURN', 'none'),
     'orderListCountMax' => env('ORDER_LIST_COUNT_MAX', 3),
     'rootRole' => env('ROOT_ROLE', 'Root'),
+
+    'imageLocation' => 'images',
+    'attachmentLocation' => 'attachments',
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
 

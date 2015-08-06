@@ -59,6 +59,29 @@ class ImageRepository {
         return $this->saveImageFile($request,str_slug($newFileName));
     }
 
+    public function saveAttachment(Request $request, $campo, $key)
+    {
+        $uploadedFile = $request->file($campo);
+        if (is_null($uploadedFile)) return null;
+        $tempFile = $uploadedFile->getPath(). DIRECTORY_SEPARATOR.$uploadedFile->getFilename();
+        $clientOriginalName = $key . '-' . str_slug(substr($uploadedFile->getClientOriginalName(),0,-4)) . '.' . $uploadedFile->getClientOriginalExtension();
+        // checking file is valid.
+        if ($uploadedFile->isValid()) {
+            $fileDir = config('delivery.attachmentLocation') . DIRECTORY_SEPARATOR;
+            if (!Storage::exists($fileDir)) Storage::makeDirectory($fileDir);
+//            $this->load($tempFile);
+//            $this->resizeToHeight(150);
+//            $this->save($tempFile,IMAGETYPE_PNG);
+            Storage::put($fileDir . $clientOriginalName, file_get_contents($tempFile));
+        } else {
+            dd($clientOriginalName);
+//                // sending back with error message.
+//                Session::flash('error', 'uploaded file is not valid');
+//                return redirect(route('products.index', $host));
+        }
+        return $clientOriginalName;
+    }
+
 
 
     function load($filename) {
