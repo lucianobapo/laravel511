@@ -27,7 +27,7 @@ if ( ! function_exists('link_to_delivery_logo')){
     function link_to_delivery_logo($img, array $params=array(), array $attributes = array()){
         $body = app('html')->image($img, trans('delivery.nav.logoAlt'), [
             'title'=>trans('delivery.nav.logoTitle'),
-            'style'=>'max-height: 100%;']);
+            'style'=>'width: 150px; max-height: 100%;']);
 //        return link_to_route('delivery.index', $body, $params, $attributes);
         return sprintf(  link_to_route('delivery.index', '%s', $params, $attributes), $body );
     }
