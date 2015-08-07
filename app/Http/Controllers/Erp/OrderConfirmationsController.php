@@ -75,6 +75,7 @@ class OrderConfirmationsController extends Controller
                     'user'=>is_null($order->partner->user)?null:$order->partner->user,
                     'partner'=>$order->partner,
                     'order'=>$order,
+                    'host'=>$host,
                     'msg' => $attributes['mensagem'],
                 ]);
 

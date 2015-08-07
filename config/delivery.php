@@ -28,6 +28,8 @@ return [
     'imageLocation' => 'images',
     'attachmentLocation' => 'attachments',
 
+    'newOrderEmailAlert' => env('NEW_ORDER_EMAIL_ALERT', false),
+
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
 
     'document_types' => [

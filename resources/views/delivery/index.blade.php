@@ -7,7 +7,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row text-center">
-            {!! Html::image('/img/logo.png', trans('delivery.nav.logoAlt'), [
+            {!! Html::image('/img/logo-delivery.png', trans('delivery.nav.logoAlt'), [
             'title'=>trans('delivery.nav.logoTitle'),
             'class'=>'img-responsive container-fluid']) !!}
             {{--<h1 class="h2s">{{ trans('delivery.index.subTitle') }}</h1>--}}

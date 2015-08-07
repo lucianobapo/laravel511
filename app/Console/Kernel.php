@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
                 });
 
             foreach ($orders as $order) {
-                if (count($order->confirmations)==0){
+                if ( (count($order->confirmations)==0)&&(config('delivery.newOrderEmailAlert')) ){
                     MessagesRepository::sendOrderCreated([
                         'name'=>config('mail.from.name'),
                         'email'=>config('mail.from.address'),
