@@ -156,6 +156,8 @@ class RoutesRepository{
                 get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);
                 get('reports/dre/pdf', ['as'=>'reports.drePdf', 'uses'=>'Erp\ReportsController@drePdf']);
                 get('reports/diarioGeral', ['as'=>'reports.diarioGeral', 'uses'=>'Erp\ReportsController@diarioGeral']);
+                get('reports/cardapio', ['as'=>'reports.cardapio', 'uses'=>'Erp\ReportsController@cardapio']);
+                get('reports/cardapio/pdf', ['as'=>'reports.cardapioPdf', 'uses'=>'Erp\ReportsController@cardapioPdf']);
 
                 get('attachment/{file}', ['as'=>'attachment', 'uses'=>'FileController@showAttachment']);
 

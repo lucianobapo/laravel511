@@ -55,6 +55,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li>{!! link_to_route('reports.estoque', trans('report.menu.estoque'), $host) !!}</li>
                         <li>{!! link_to_route('reports.estatOrdem', trans('report.menu.estatOrdem'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.cardapio', trans('report.menu.cardapio'), $host) !!}</li>
                         <li>{!! link_to_route('reports.dre', trans('report.menu.dre'), $host) !!}</li>
                         <li>{!! link_to_route('reports.diarioGeral', trans('report.menu.diarioGeral'), $host) !!}</li>
                     </ul>

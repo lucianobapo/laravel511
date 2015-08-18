@@ -4,10 +4,11 @@
     @include('erp.partials.head')
 </head>
 <body>
-    <header>
+    <header class="text-right">
 {{--        @include('erp.partials.nav')--}}
-        <img src="{{ config('delivery.siteCurrentUrl') }}/img/logo.png">
+        <img width="200px" src="{{ config('delivery.siteCurrentUrl') }}/img/logo-delivery2.png">
     </header>
+
     <section class="container">
         @include('flash::message')
         @yield('content')

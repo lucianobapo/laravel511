@@ -27,6 +27,7 @@ return array(
         'estatOrdem' => 'Estatística de Ordens',
         'dre' => 'DRE',
         'diarioGeral' => 'Diário Geral',
+        'cardapio' => 'Cardápio',
     ],
 
     'estoque' => [
@@ -40,6 +41,15 @@ return array(
         'custoMedioSubTotal' => 'Custo médio Subtotal',
         'valorVenda' => 'Valor de venda',
     ],
+
+    'cardapio' => [
+        'title' => 'Cardápio',
+        'reportTime' => 'Relatorio de :tempo',
+        'id' => 'Número',
+        'produto' => 'Produto',
+        'valorVenda' => 'Valor',
+    ],
+
     'estatOrdem' => [
         'title' => 'Estatística de Ordens',
         'titleFinishedOrders' => 'Valores de Ordens Finalizadas',

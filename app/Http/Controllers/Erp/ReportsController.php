@@ -328,4 +328,21 @@ class ReportsController extends Controller
             ]),
         ]);
     }
+
+    public function cardapio($host){
+        return view('erp.reports.cardapio',compact('host'))->with([
+            'products' => $this->orderRepository->getProductsDelivery(),
+        ]);
+    }
+
+    public function cardapioPdf($host){
+        $usePdf = true;
+        $products = $this->orderRepository->getProductsDelivery();
+        $pdf = \App::make('dompdf.wrapper')
+            ->loadView('erp.reports.cardapio', compact('host','products','usePdf'))
+            ->setPaper('a3')
+            ->setOrientation('portrait');
+//        return $pdf->download('invoice.pdf');
+        return $pdf->stream('cardapio.pdf');
+    }
 }

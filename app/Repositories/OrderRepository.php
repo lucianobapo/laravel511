@@ -1,6 +1,7 @@
 <?php namespace App\Repositories;
 
 use App\Models\Product;
+use App\Models\ProductGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,4 +76,34 @@ class OrderRepository {
 
         return $model->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
     }
+
+    public function getProductsDelivery()
+    {
+//        $produtos = ProductGroup::where(['grupo'=>'Delivery'])
+//            ->first()
+//            ->products()
+//            ->with('status')
+//            ->orderBy('promocao', 'desc' )
+//            ->orderBy('nome', 'asc' )
+//            ->get();
+
+        $produtos2 = Product::with('status','groups')
+            ->orderBy('promocao', 'desc' )
+            ->orderBy('nome', 'asc' )
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Ativado')!==false)
+                    return $item;
+            })
+            ->filter(function($item) {
+                if (strpos($item->group_list,'Delivery')!==false)
+                    return $item;
+            });
+//        dd($produtos);
+        return $produtos2;
+
+
+    }
+
+
 }
