@@ -8,8 +8,14 @@
         @include('delivery.partials.nav')
     </header>
 
+
     <section class="container">
         @include('flash::message')
+    </section>
+    <section class="container-fluid">
+        @yield('contentWide')
+    </section>
+    <section class="container">
         @yield('content')
     </section>
 
