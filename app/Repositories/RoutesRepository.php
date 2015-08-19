@@ -21,7 +21,7 @@ class RoutesRepository{
             Route::group([
 //                'errorRedirect' => '/',//return redirect(route('orders.index', $host));
 //                'host' => '{host}',
-                'middleware' => ['auth', 'roles', 'secure'],
+                'middleware' => ['auth', 'roles'],
                 'roles' => ['Root', 'Administrator']
             ], function() {
                 resource('orders','Erp\OrdersController', [
