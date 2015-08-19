@@ -1,6 +1,6 @@
 @include ('errors.list')
 {!! Form::open([
-    'url'=>route('delivery.addOrder', $host),
+    'url'=>secure_route('delivery.addOrder', $host),
     'id'=>'form-add-setting',
     'data-toggle'=>"validator",
     'ng-app'=>"myApp",

@@ -58,7 +58,7 @@ return [
 
 //    'domain' => env('APP_DOMAIN','homestead.app'),
 //    'sitePrefix' => 'http://',
-    'siteCurrentUrl' => 'http://'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
+    'siteCurrentUrl' => 'https://'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
 
 
 ];

@@ -1,4 +1,4 @@
-{!! Form::model($products, ['url'=>route('delivery.addCart', $host), 'id'=>'form-add-setting']) !!}
+{!! Form::model($products, ['url'=>secure_route('delivery.addCart', $host), 'id'=>'form-add-setting']) !!}
 <div style="list-style-type: none; padding: 0px;">
     @foreach($products as $product)
         @if( array_search_second_level($product->status->toArray(),'status','ativado') && isset($estoque[$product->id])&&($estoque[$product->id]>0) )

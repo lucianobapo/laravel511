@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class DeliveryController extends Controller {
 

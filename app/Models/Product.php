@@ -74,6 +74,17 @@ class Product extends Model {
         return substr($lista, 0, -2);
     }
 
+    public function getCategoriaListAttribute(){
+        $groups = $this->groups->toArray();
+        $lista = '';
+        foreach($groups as $group){
+//            dd(strpos($group['grupo'],'Categoria:'));
+            if (strpos($group['grupo'],'Categoria:')!==false)
+            $lista = $lista . substr($group['grupo'],11).', ';
+        }
+        return substr($lista, 0, -2);
+    }
+
 //    public function filtraCachedGroup($filtro, CacheRepository $cache) {
 //        $this->filtro=$filtro;
 //        $cacheKey = 'getCachedFiltraGrupo234'.str_slug($filtro).md5($this->select(DB::raw('max(updated_at), count(id)'))->first()->toJson());

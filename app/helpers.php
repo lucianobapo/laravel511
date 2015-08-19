@@ -15,6 +15,23 @@ if (!function_exists('controller')) {
     }
 }
 
+if (! function_exists('secure_route')) {
+    /**
+     * Generate a URL to a named route.
+     *
+     * @param  string  $name
+     * @param  array   $parameters
+     * @param  bool    $absolute
+     * @param  \Illuminate\Routing\Route  $route
+     * @return string
+     */
+    function secure_route($name, $parameters = [], $route = null)
+    {
+//        dd(secure_url(app('url')->route($name, $parameters, false, $route)));
+        return secure_url(app('url')->route($name, $parameters, false, $route));
+    }
+}
+
 if ( ! function_exists('link_to_route_sort_by')){
     function link_to_route_sort_by($route, $column, $body, array $params=array(), array $attributes = array()){
         $params['sortBy']=$column;

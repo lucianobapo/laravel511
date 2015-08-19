@@ -47,6 +47,7 @@ return array(
         'reportTime' => 'Relatorio de :tempo',
         'id' => 'Número',
         'produto' => 'Produto',
+        'categoria' => 'Categoria',
         'valorVenda' => 'Valor',
     ],
 

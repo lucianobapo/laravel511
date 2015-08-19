@@ -80,12 +80,16 @@ class OrderRepository {
     public function getProductsDelivery()
     {
 //        $produtos = ProductGroup::where(['grupo'=>'Delivery'])
+//            ->orderBy('grupo', 'desc' )
 //            ->first()
 //            ->products()
 //            ->with('status')
-//            ->orderBy('promocao', 'desc' )
-//            ->orderBy('nome', 'asc' )
-//            ->get();
+//            ->get()
+//            ->filter(function($item) {
+//                if (strpos($item->status_list,'Ativado')!==false)
+//                    return $item;
+//            });
+
 
         $produtos2 = Product::with('status','groups')
             ->orderBy('promocao', 'desc' )
@@ -99,7 +103,7 @@ class OrderRepository {
                 if (strpos($item->group_list,'Delivery')!==false)
                     return $item;
             });
-//        dd($produtos);
+//        dd($produtos2->toArray());
         return $produtos2;
 
 

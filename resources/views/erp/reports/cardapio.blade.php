@@ -49,6 +49,7 @@
             <tr>
                 <th style="border: 0px;">{{ trans('report.cardapio.id') }}</th>
                 <th style="border: 0px;">{{ trans('report.cardapio.produto') }}</th>
+                <th style="border: 0px;">{{ trans('report.cardapio.categoria') }}</th>
                 <th style="border: 0px;">{{ trans('report.cardapio.valorVenda') }}</th>
             </tr>
         </thead>
@@ -62,6 +63,7 @@
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->nome }}</td>
+                    <td>{{ $product->categoria_list }}</td>
                     <td>
                         @if($product->promocao)
                             <del style="color: red;">{{ formatBRL($product->valorUnitVenda) }}</del>

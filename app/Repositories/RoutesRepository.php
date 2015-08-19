@@ -21,7 +21,7 @@ class RoutesRepository{
             Route::group([
 //                'errorRedirect' => '/',//return redirect(route('orders.index', $host));
 //                'host' => '{host}',
-                'middleware' => ['auth', 'roles'],
+                'middleware' => ['auth', 'roles', 'secure'],
                 'roles' => ['Root', 'Administrator']
             ], function() {
                 resource('orders','Erp\OrdersController', [
@@ -184,21 +184,29 @@ class RoutesRepository{
     }
 
     public static function deliveryRoutes(){
-        // Delivery
+        // Delivery routes
+
         Route::group([
             'domain' => '{host}.'.config('app.domain'),
+            'middleware' => ['secure'],
 //            'prefix' => 'delivery',
             'where' => ['host' => 'delivery'],
         ], function(){
-
             get('/', ['as'=>'delivery.index', 'uses'=>'DeliveryController@index']);
-//            get('/', ['as'=>'delivery.index', function () { return 'foi'; } ]);
+            get('images/{file}', ['as'=>'images', 'uses'=>'FileController@showImage']);
+
             post('/addCart', ['as'=>'delivery.addCart', 'uses'=>'DeliveryController@addCart']);
             get('/emptyCart', ['as'=>'delivery.emptyCart', 'uses'=>'DeliveryController@emptyCart']);
             get('/pedido', ['as'=>'delivery.pedido', 'uses'=>'DeliveryController@pedido']);
             post('/addOrder', ['as'=>'delivery.addOrder', 'uses'=>'DeliveryController@addOrder']);
+        });
 
-            get('images/{file}', ['as'=>'images', 'uses'=>'FileController@showImage']);
+        Route::group([
+            'domain' => '{host}.'.config('app.domain'),
+            'where' => ['host' => 'delivery'],
+        ], function(){
+//            get('/', ['as'=>'delivery.index', 'uses'=>'DeliveryController@index']);
+//            get('images/{file}', ['as'=>'images', 'uses'=>'FileController@showImage']);
         });
     }
 
