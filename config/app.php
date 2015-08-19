@@ -35,7 +35,7 @@ return [
     */
 
 //    'url' => 'http://localhost',
-    'url' => 'http://'.env('APP_DOMAIN','homestead.app'),
+    'url' => '//'.env('APP_DOMAIN','homestead.app'),
     'domain' => env('APP_DOMAIN','homestead.app'),
 
     /*
