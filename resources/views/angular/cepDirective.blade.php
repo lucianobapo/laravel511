@@ -29,7 +29,7 @@
                             $('input[name=estado]').attr("disabled","true");
 
                             $('#cep_loading').attr("class","form-control-feedback ng-show");
-                            $.get('http://viacep.com.br/ws/'+element.val()+'/json/', function (endereco){
+                            $.get('//viacep.com.br/ws/'+element.val()+'/json/', function (endereco){
                                 if (endereco['erro']) {
                                     element.tooltip({
                                         animation: true,//'fade',
