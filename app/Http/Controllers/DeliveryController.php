@@ -90,7 +90,7 @@ class DeliveryController extends Controller {
                 'cervejas' => $this->productRepository->getProductsCervejas(),
                 'vinhos' => $this->productRepository->getProductsVinhos(),
                 'destilados' => $this->productRepository->getProductsDestilados(),
-                'refrigerantes' => $this->productRepository->getProductsDestilados(),
+                'refrigerantes' => $this->productRepository->getProductsRefrigerantes(),
                 'energeticos' => $this->productRepository->getProductsEnergeticos(),
                 'tabacaria' => $this->productRepository->getProductsTabacaria(),
                 'sucos' => $this->productRepository->getProductsSucos(),
