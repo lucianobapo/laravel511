@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG', false),
 
     // Other stuffs
 //    'storeTraffic' => env('APP_STORE_TRAFFIC', false),
@@ -171,6 +171,9 @@ return [
         GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
+        LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
+        LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
+
 
     ],
 
@@ -232,6 +235,8 @@ return [
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'HTMLMin'   => GrahamCampbell\HTMLMin\Facades\HTMLMin::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
+        'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
     ],
 
 ];

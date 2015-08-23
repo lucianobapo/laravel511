@@ -39,6 +39,13 @@ class Product extends Model {
      */
     private $filtro;
 
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['categoria_list'] = $this->categoria_list;
+        return $array;
+    }
+
     /**
      * A Product belongs to a CostAllocate.
      *
@@ -82,7 +89,7 @@ class Product extends Model {
             if (strpos($group['grupo'],'Categoria:')!==false)
             $lista = $lista . substr($group['grupo'],11).', ';
         }
-        return substr($lista, 0, -2);
+        return $lista == ''?'':substr($lista, 0, -2);
     }
 
 //    public function filtraCachedGroup($filtro, CacheRepository $cache) {

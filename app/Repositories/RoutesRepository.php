@@ -1,15 +1,40 @@
 <?php namespace App\Repositories;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class RoutesRepository{
+
+    public static function oAuth2Routes(){
+        post('/oauth/access_token', function(){
+            return Response::json(Authorizer::issueAccessToken());
+        });
+        get('/angularTemplates/login',  ['as'=>'angularTemplates.login', 'uses'=>'Angular\TemplatesController@login']);
+        get('/angularTemplates/productsCardapio',  ['as'=>'angularTemplates.productsCardapio', 'uses'=>'Angular\TemplatesController@productsCardapio']);
+
+        Route::group([
+//            'domain' => '{host}.'.config('app.domain'),
+//            'prefix' => 'delivery',
+//            'where' => ['host' => 'laravel'],
+            'middleware' => 'oauth',
+        ],
+            function(){
+                get('/oauth/productsCardapio', ['as'=>'oauth.productsCardapio', 'uses'=>'OAuth2\DataController@productsCardapio']);
+            }
+        );
+    }
+
     public static function erpRoutes(){
+
         // ERP
         Route::group([
             'domain' => '{host}.'.config('app.domain'),
 //            'prefix' => 'delivery',
             'where' => ['host' => 'laravel'],
-        ], function(){
+            'middleware' => 'csrf',
+        ],
+            function(){
             Route::controllers([
                 'auth' => 'Auth\AuthController',
                 'password' => 'Auth\PasswordController',
@@ -181,6 +206,8 @@ class RoutesRepository{
 //                ],
 //            ]);
         });
+
+
     }
 
     public static function deliveryRoutes(){

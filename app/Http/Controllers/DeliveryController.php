@@ -19,6 +19,7 @@ use App\Models\SharedOrderType;
 use App\Models\SharedStat;
 use App\Repositories\MessagesRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ProductRepository;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Cache\Repository as CacheRepository;
@@ -51,11 +52,12 @@ class DeliveryController extends Controller {
     private $cartView;
 
     private $orderRepository;
+    private $productRepository;
 
     /**
      * @param CacheRepository $cache
      */
-    public function __construct(CacheRepository $cache, OrderRepository $orderRepository) {
+    public function __construct(CacheRepository $cache, OrderRepository $orderRepository, ProductRepository $productRepository) {
 //        $this->middleware('auth',['except'=> ['index','show']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 //        $this->middleware('after');
@@ -63,6 +65,7 @@ class DeliveryController extends Controller {
         $this->cache = $cache;
         $this->cartView = view('delivery.partials.cartVazio');
         $this->orderRepository = $orderRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -80,10 +83,20 @@ class DeliveryController extends Controller {
             $cartView = view('delivery.partials.cartVazio');
         }
 
-        if(count($products = $this->orderRepository->getProductsDelivery() ) ) {
+        if(count($products = $this->productRepository->getProductsDelivery() ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
-                'products' => $products,
-                'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
+                'products' => $product,
+                'porcoes' => $this->productRepository->getProductsPorcoes(),
+                'cervejas' => $this->productRepository->getProductsCervejas(),
+                'vinhos' => $this->productRepository->getProductsVinhos(),
+                'destilados' => $this->productRepository->getProductsDestilados(),
+                'refrigerantes' => $this->productRepository->getProductsDestilados(),
+                'energeticos' => $this->productRepository->getProductsEnergeticos(),
+                'tabacaria' => $this->productRepository->getProductsTabacaria(),
+                'sucos' => $this->productRepository->getProductsSucos(),
+                'outros' => $this->productRepository->getProductsOutros(),
+//                'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
+                'estoque' => $this->productRepository->estoque,
             ]);
         } else {
             $panelBody = trans('delivery.index.semProdutos');
@@ -95,7 +108,7 @@ class DeliveryController extends Controller {
             'totalCart',
             'panelBody'
         ))->with([
-            'panelTitle' => trans('delivery.index.panelTitle'),
+//            'panelTitle' => trans('delivery.index.panelTitle'),
             'brand'=>'',
         ]);
 	}

@@ -33,6 +33,7 @@ elixir(function(mix) {
         'libs/bootstrap.min.js'
         //'libs/select2.min.js'
     ], 'public/js/app.compiled.js');
+
     mix.scripts([
         'libs/jquery.blueimp-gallery.min.js',
         'libs/bootstrap-image-gallery.min.js',
@@ -40,12 +41,19 @@ elixir(function(mix) {
         'libs/jquery.easing.min.js'
     ], 'public/js/gallery.compiled.js');
 
+    mix.scripts([
+        'clientSideApp.js',
+        'clientSideAppController.js'
+    ], 'public/js/clientSideApp.compiled.js');
+
     mix.version([
         'public/css/app.compiled.css',
         'public/js/app.compiled.js',
 
         'public/css/gallery.compiled.css',
-        'public/js/gallery.compiled.js'
+        'public/js/gallery.compiled.js',
+
+        'public/js/clientSideApp.compiled.js'
     ]);
     //mix.version('public/js/app.compiled.js');
 

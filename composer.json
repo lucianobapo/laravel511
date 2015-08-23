@@ -14,7 +14,8 @@
         "league/flysystem-aws-s3-v3": "^1.0@dev",
         "spatie/laravel-backup": "dev-master",
         "graham-campbell/htmlmin": "^3.1@dev",
-        "barryvdh/laravel-dompdf": "0.6.*@dev"
+        "barryvdh/laravel-dompdf": "0.6.*@dev",
+        "lucadegasperi/oauth2-server-laravel": "^5.0@dev"
 
     },
     "require-dev": {
