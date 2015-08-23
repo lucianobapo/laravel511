@@ -197,7 +197,7 @@ class ProductRepository {
     public function getProductsOutros() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='')
+                if ($item->categoria_list=='Outros')
                     return $item;
             });
 //        dd($aux);

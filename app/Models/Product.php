@@ -89,7 +89,7 @@ class Product extends Model {
             if (strpos($group['grupo'],'Categoria:')!==false)
             $lista = $lista . substr($group['grupo'],11).', ';
         }
-        return $lista == ''?'':substr($lista, 0, -2);
+        return $lista == ''?'Outros':substr($lista, 0, -2);
     }
 
 //    public function filtraCachedGroup($filtro, CacheRepository $cache) {

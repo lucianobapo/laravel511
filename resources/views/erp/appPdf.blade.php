@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
-    @include('erp.partials.head')
+    @include('erp.partials.headPdf')
 </head>
 <body>
     <header class="text-right">
 {{--        @include('erp.partials.nav')--}}
-        <img width="200px" src="{{ config('delivery.siteCurrentUrl') }}/img/logo-delivery2.png">
+        <img width="200px" src="http:{{ config('delivery.siteCurrentUrl') }}/img/logo-delivery2.png">
     </header>
 
     <section class="container">
