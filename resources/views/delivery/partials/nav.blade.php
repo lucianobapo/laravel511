@@ -14,7 +14,11 @@
             @if (Auth::guest() )
                 {{--<li id="willChange">{!! link_to_route('social.login', '+Google', 'google', $host) !!}</li>--}}
                 {{--<li id="willChange">{!! link_to('/easyAuth/github', 'Github', $host) !!}</li>--}}
-                <li id="willChange">{!! link_to('/easyAuth/facebook', trans('delivery.nav.loginFacebook'), $host) !!}</li>
+                <li id="willChange">
+                    <div style="padding: 8px;">
+                        {!! link_to_route_social_button('easy.provider', '<i class="fa fa-facebook"></i>'.trans('delivery.nav.loginFacebook'), ['facebook'], ['class' => 'btn btn-block btn-social btn-facebook']) !!}
+                    </div>
+                </li>
                 {{--<li id="willChange">{!! link_to('/easyAuth/google', 'Google', $host) !!}</li>--}}
                 {{--<li><a href="{{ url('/auth/login') }}"><i class="glyphicon glyphicon-log-in"></i> {{ trans('delivery.nav.login') }}</a></li>--}}
                 {{--<li><a href="{{ url('/auth/register') }}"><i class="glyphicon glyphicon-user"></i> {{ trans('delivery.nav.register') }}</a></li>--}}

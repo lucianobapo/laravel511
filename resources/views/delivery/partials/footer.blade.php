@@ -29,7 +29,6 @@
     ga('require', 'linkid', 'linkid.js');
     ga('require', 'displayfeatures');
     ga('send', 'pageview');
-
 </script>
 <script>
 //    idleTimer = null;

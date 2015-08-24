@@ -8,8 +8,6 @@
         @include('delivery.partials.nav')
     </header>
 
-
-
     <section class="container-fluid">
         @yield('contentWide')
     </section>

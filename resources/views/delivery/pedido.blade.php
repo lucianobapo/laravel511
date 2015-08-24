@@ -14,26 +14,27 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    <h3 class="h3s">{{ $panelTitle }}</h3>
 
-                </div>
-                <div class="panel-body">
-                    {!! $panelBody !!}
-                </div>
-            </div>
-        </div>
         {!! $panelGuest !!}
         <div class="row">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
-                    <h3 class="h3s">{{ trans('delivery.pedidos.panelEntregaTitle') }}</h3>
+                    <h3 class="h3s text-left">{{ trans('delivery.pedidos.panelEntregaTitle') }}</h3>
                 </div>
                 <div class="panel-body">
                     {{--@include('delivery.partials.pedidoForm')--}}
                     {!! $panelFormBody !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h3 class="h3s text-left">{{ $panelTitle }}</h3>
+                </div>
+                <div class="panel-body">
+                    {!! $panelBody !!}
                 </div>
             </div>
         </div>

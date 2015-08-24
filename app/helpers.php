@@ -50,6 +50,12 @@ if ( ! function_exists('link_to_delivery_logo')){
     }
 }
 
+if ( ! function_exists('link_to_route_social_button')){
+    function link_to_route_social_button($route, $body, array $params=array(), array $attributes = array()){
+        return sprintf(link_to_route($route, '%s', $params, $attributes), $body );
+    }
+}
+
 if ( ! function_exists('labelEx')){
     function labelEx($name, $value = null, $options = array()){
         return sprintf( app('form')->label($name, '%s', $options), $value );

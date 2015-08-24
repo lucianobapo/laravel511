@@ -64,7 +64,7 @@ return array(
     'pedidos' => [
 //        'title' => 'Delivery Rio das Ostras 24 horas',
         'subTitle' => 'Confira seu pedido e solicite a entrega',
-        'panelTitle' => 'Carrinho de compras',
+        'panelTitle' => 'Resumo das compras',
         'panelEntregaTitle' => 'Dados de entrega',
         'panelGuestTitle' => 'Ainda não possui cadastro?',
         'cartEmpty' => 'Carrinho vazio.',

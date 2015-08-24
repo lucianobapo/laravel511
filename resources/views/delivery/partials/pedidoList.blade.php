@@ -1,4 +1,7 @@
 <div class="" style="list-style-type: none; padding: 0px;">
+    <div>
+        <h4>{!! trans('delivery.pedidos.valorTotal').': <strong>'.$totalCart.'</strong>' !!}</h4>
+    </div>
     @foreach($cart as $row)
         @if($product = $product->where(['id' => $row['id']])->first())
             <div class="col-sm-2 well" style="min-width: 200px;
@@ -12,10 +15,6 @@
             </div>
         @endif
     @endforeach
-    <div>
-        <h3>{!! trans('delivery.pedidos.valorTotal').': <strong>'.$totalCart.'</strong>' !!}</h3>
-    </div>
-
 </div>
 <div class="row">
     <div class="col-sm-3" style="margin: 20px 0px">
