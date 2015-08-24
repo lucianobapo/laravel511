@@ -19,7 +19,7 @@ return array(
 
     'nav' => [
         'login' => 'Entrar',
-        'loginFacebook' => 'Entrar com Facebook',
+        'loginFacebook' => 'Acessar com Facebook',
         'register' => 'Registrar',
         'cartHeader' => 'Carrinho de Compras',
         'cartEmpty' => 'Carrinho vazio.',
