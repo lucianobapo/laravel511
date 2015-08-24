@@ -97,7 +97,7 @@ if ( ! function_exists('setTraffic')){
                 $_SERVER['SERVER_ADDR'],
                 $_SERVER['SERVER_PORT'],
                 $_SERVER['REMOTE_PORT'],
-                $_SERVER['REQUEST_SCHEME'],
+//                $_SERVER['REQUEST_SCHEME'],
                 $_SERVER['REQUEST_METHOD'],
                 $_SERVER['QUERY_STRING'],
                 $_SERVER['REQUEST_URI'],
