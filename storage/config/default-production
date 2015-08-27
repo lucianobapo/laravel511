@@ -147,7 +147,7 @@ server {
     rewrite_log on;
 
     # The location of our projects public directory.
-    root /home/luciano/Code/laravel51/public;
+    root /home/ubuntu/laravel511/public;
 
     # Point index to the Laravel front controller.
     index index.php;
