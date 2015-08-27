@@ -393,7 +393,7 @@ class ReportsController extends Controller
         foreach($ordensFiltradas as $order){
             $indexSemana = $order->posted_at_carbon->format('l');
             $semana[$indexSemana] = $semana[$indexSemana]+1;
-            if ($order->posted_at_carbon->format('H:i')!='01:00'){
+            if (($order->posted_at_carbon->format('H:i')!='01:00')||($order->posted_at_carbon->format('H:i')!='00:00')){
                 $indexHora = $order->posted_at_carbon->format('H');
                 $hora[$indexHora] = $hora[$indexHora]+1;
             }
