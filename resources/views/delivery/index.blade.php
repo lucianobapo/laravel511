@@ -100,8 +100,9 @@
 
                                 $('#tooltipsted').tooltip({
                                     animation: true,
-                                    placement: 'left',
-                                    title: "{{ trans('delivery.productBlock.tooltip') }}",
+                                    html: true,
+                                    placement: 'bottom',
+                                    title: "<h4>{{ trans('delivery.productBlock.tooltip') }}</h4>",
                                     trigger: 'manual'
                                 });
                                 $('#tooltipsted').tooltip('show');

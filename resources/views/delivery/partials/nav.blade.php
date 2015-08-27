@@ -41,7 +41,7 @@
                 </li>
             @endif
 
-            <li id="tooltipsted">
+            <li id="tooltipsted" class="text-right">
                 <a href="#"
                    id="cartPopover"
                    data-placement="bottom"

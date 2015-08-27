@@ -1,8 +1,8 @@
 /**
  * Created by luciano on 22/08/15.
  */
-var objectModule = angular.module('clientSideApp', ['appControllers', 'ngRoute']);
-objectModule.config(function($routeProvider){
+var modApp = angular.module('clientSideApp', ['appControllers', 'appFactories', 'ngRoute']);
+modApp.config(function($routeProvider){
     $routeProvider.when('/login', {
         templateUrl: '/angularTemplates/login',
         controller: 'LoginController'
@@ -16,9 +16,9 @@ objectModule.config(function($routeProvider){
 /**
  * Created by luciano on 22/08/15.
  */
-var objectModule = angular.module('appControllers', []);
+var modControllers = angular.module('appControllers', []);
 
-objectModule.controller('LoginController', ['$scope', '$http', '$rootScope', '$location', function($scope, $http, $rootScope, $location){
+modControllers.controller('LoginController', ['$scope', '$http', '$rootScope', '$location', function($scope, $http, $rootScope, $location){
     $scope.email = "";
     $scope.password = "";
     $scope.error = {
@@ -26,29 +26,32 @@ objectModule.controller('LoginController', ['$scope', '$http', '$rootScope', '$l
         message: ""
     };
     $scope.login = function(){
-        $http.post('/oauth/access_token', {
+        $scope.loading = true;
+        TokenApi.get_token({
             username: $scope.email,
-            password: $scope.password,
-            client_id: 1,
-            client_secret: 'secret',
-            grant_type: 'password'
+            password: $scope.password
         })
             .success(function(data){
+                $scope.loading = false;
                 if(typeof data.access_token != 'undefined' && data.access_token != '') {
-                    $scope.error.valid = false;
-                    $rootScope.token = data.access_token;
-                    $location.path('productsCardapio');
-                }
-            })
+                        $scope.error.valid = false;
+                        $rootScope.token = data.access_token;
+                        $scope.$digest();
+                        $location.path('productsCardapio');
+                    }                
+            });
+
             .error(function(data){
+                $scope.loading = false;
                 $scope.error.valid = true;
                 $scope.error.message = data.error_description;
+                $scope.$digest();
             });
         return false;
     };
 }]);
 
-objectModule.controller('ProductsCardapioController', ['$scope', '$http', '$rootScope', '$location', function($scope, $http, $rootScope, $location){
+modControllers.controller('ProductsCardapioController', ['$scope', '$http', '$rootScope', '$location', function($scope, $http, $rootScope, $location){
     $scope.products = [];
 
     $scope.error = {
@@ -57,26 +60,22 @@ objectModule.controller('ProductsCardapioController', ['$scope', '$http', '$root
     };
 
     if(typeof $rootScope.token != 'undefined' && $rootScope.token != '') {
-        httpOptions = {
-            method: 'GET',
-            url: '/oauth/productsCardapio',
-            params: {access_token: $rootScope.token}
-            //headers: {
-            //    Authorization: 'Bearer ' + $rootScope.token
-            //}
-        };
-
-        $http(httpOptions)
+        $scope.loading = true;    
+        GetApi('/oauth/productsCardapio')
             .success(function(data){
+                $scope.loading = false;
                 $scope.products = data;
+                $scope.$digest();
             })
             .error(function(data){
+                $scope.loading = false;
                 console.log(httpOptions);
                 console.log($scope);
                 console.log(data);
                 $scope.error.valid = true;
                 $scope.error.message = data.error_description;
-                $location.path('login');
+                $scope.$digest();
+                $location.path('login');                
             });
     }else $location.path('login');
 }]);
