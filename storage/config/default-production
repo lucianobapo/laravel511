@@ -83,22 +83,15 @@ server {
         listen 80;
         listen 443 ssl;
         ssl on;
-        #ssl_certificate /etc/apache2/ssl/apache.crt;
-	#ssl_certificate /etc/apache2/ssl/9f9a2fccb75a98ac.crt;
-	#ssl_certificate /etc/apache2/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate /etc/apache2/ssl/delivery.ilhanet.com.chained.crt;
 	ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
-        #ssl_certificate /etc/nginx/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate_key /etc/apache2/ssl/apache.key;
-	#ssl_certificate_key /etc/apache2/ssl/delivery.ilhanet.com.key;
 	ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+	#ssl_certificate /etc/apache2/ssl/apache.crt;
+	#ssl_certificate_key /etc/apache2/ssl/apache.key;
 
     # Host that will serve this project.
     server_name delivery.ilhanet.com;
 
     # Useful logs for debug.
-    access_log /home/ubuntu/laravel511/storage/logs/access.log;
-    error_log /home/ubuntu/laravel511/storage/logs/error.log;
     rewrite_log on;
 
     # The location of our projects public directory.
@@ -141,26 +134,20 @@ server {
         listen 80;
         listen 443 ssl;
         ssl on;
-        #ssl_certificate /etc/apache2/ssl/apache.crt;
-	#ssl_certificate /etc/apache2/ssl/9f9a2fccb75a98ac.crt;
-	#ssl_certificate /etc/apache2/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate /etc/apache2/ssl/delivery.ilhanet.com.chained.crt;
+
 	ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
-        #ssl_certificate /etc/nginx/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate_key /etc/apache2/ssl/apache.key;
-	#ssl_certificate_key /etc/apache2/ssl/delivery.ilhanet.com.key;
 	ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+	#ssl_certificate /etc/apache2/ssl/apache.crt;
+	#ssl_certificate_key /etc/apache2/ssl/apache.key;
 
     # Host that will serve this project.
     server_name laravel.ilhanet.com;
 
     # Useful logs for debug.
-    access_log /home/ubuntu/laravel511/storage/logs/access.log;
-    error_log /home/ubuntu/laravel511/storage/logs/error.log;
     rewrite_log on;
 
     # The location of our projects public directory.
-    root /home/ubuntu/laravel511/public;
+    root /home/luciano/Code/laravel51/public;
 
     # Point index to the Laravel front controller.
     index index.php;
@@ -194,28 +181,19 @@ server {
 server {
     # Port that the web server will listen on.
         listen 80;
-        listen 443 ssl;
-        ssl on;
-        #ssl_certificate /etc/apache2/ssl/apache.crt;
-	#ssl_certificate /etc/apache2/ssl/9f9a2fccb75a98ac.crt;
-	#ssl_certificate /etc/apache2/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate /etc/apache2/ssl/delivery.ilhanet.com.chained.crt;
-	ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
-        #ssl_certificate /etc/nginx/ssl/gd_bundle-g2-g1.crt;
-        #ssl_certificate_key /etc/apache2/ssl/apache.key;
-	#ssl_certificate_key /etc/apache2/ssl/delivery.ilhanet.com.key;
-	ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+        #listen 443 ssl;
+        #ssl on;
+	#ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
+	#ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
 
     # Host that will serve this project.
     server_name pma.ilhanet.com;
 
     # Useful logs for debug.
-    #access_log /home/ubuntu/laravel511/storage/logs/access.log;
-    #error_log /home/ubuntu/laravel511/storage/logs/error.log;
     rewrite_log on;
 
     # The location of our projects public directory.
-    root /var/www/pma443;
+    root /var/www/pma4312;
 
     # Point index to the Laravel front controller.
     index index.php;
@@ -224,11 +202,6 @@ server {
         # URLs to attempt, including pretty ones.
         try_files $uri $uri/ /index.php?$query_string;
     }
-
-    # Remove trailing slash to please routing system.
-    #if (!-d $request_filename) {
-    #    rewrite ^/(.+)/$ /$1 permanent;
-    #}
 
     # PHP FPM configuration.
     location ~ \.php$ {

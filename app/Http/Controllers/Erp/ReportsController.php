@@ -345,4 +345,89 @@ class ReportsController extends Controller
 //        return $pdf->download('invoice.pdf');
         return $pdf->stream('cardapio.pdf');
     }
+
+    public function estatOrdemFinalizadas() {
+
+        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished();
+//        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished()
+//            ->filter(function($item) {
+//                if ($item->posted_at_carbon->format('H:i')!='01:00')
+//                    return $item;
+//            });
+
+        $semana = [
+            "Monday" => 0,
+            "Tuesday" => 0,
+            "Wednesday" => 0,
+            "Thursday" => 0,
+            "Friday" => 0,
+            "Saturday" => 0,
+            "Sunday" => 0,
+        ];
+        $hora = [
+            '00' => 0,
+            '01' => 0,
+            '02' => 0,
+            '03' => 0,
+            '04' => 0,
+            '05' => 0,
+            '06' => 0,
+            '07' => 0,
+            '08' => 0,
+            '09' => 0,
+            '10' => 0,
+            '11' => 0,
+            '12' => 0,
+            '13' => 0,
+            '14' => 0,
+            '15' => 0,
+            '16' => 0,
+            '17' => 0,
+            '18' => 0,
+            '19' => 0,
+            '20' => 0,
+            '21' => 0,
+            '22' => 0,
+            '23' => 0,
+        ];
+        foreach($ordensFiltradas as $order){
+            $indexSemana = $order->posted_at_carbon->format('l');
+            $semana[$indexSemana] = $semana[$indexSemana]+1;
+            if ($order->posted_at_carbon->format('H:i')!='01:00'){
+                $indexHora = $order->posted_at_carbon->format('H');
+                $hora[$indexHora] = $hora[$indexHora]+1;
+            }
+//            $indexUsuario = $order->partner->nome;
+//            $usuario[$indexUsuario] = isset($usuario[$indexUsuario])?$usuario[$indexUsuario]+1:1;
+//            if ($order->posted_at_carbon<=Carbon::now()->subMonth()){
+//                $indexUsuarioDesativado = $order->partner->nome;
+//                $usuarioDesativado[$indexUsuarioDesativado] = isset($usuarioDesativado[$indexUsuarioDesativado])?$usuarioDesativado[$indexUsuarioDesativado]+1:1;
+//            }
+        }
+//        asort($semana);
+//        ksort($hora);
+//        arsort($usuario);
+//        arsort($usuarioDesativado);
+        dd([
+            '$semana'=>$semana,
+            'somaa'=>array_sum($semana),
+            '$hora'=>$hora,
+            'somab'=>array_sum($hora),
+//            '$usuario'=>$usuario,
+//            'somac'=>array_sum($usuario),
+//            '$usuarioDesativado'=>$usuarioDesativado,
+//            'somad'=>array_sum($usuarioDesativado),
+
+        ]);
+
+        foreach($semana as $key => $value){
+
+//            $retorno[]
+        }
+        return $semana;
+    }
+
+    public function estatUsuarios() {
+        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished();
+    }
 }

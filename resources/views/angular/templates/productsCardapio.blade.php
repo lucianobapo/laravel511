@@ -1,6 +1,9 @@
 <h1 class="h1s">{{ trans('report.cardapio.title') }}</h1>
 <h3>{{ trans('report.cardapio.reportTime',['tempo'=>Carbon\Carbon::now()->format('d/m/Y H:i')]) }}</h3>
 <hr>
+
+<div class="text-center" ng-show="loading"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+
 <table style="" class="table table-hover table-striped table-condensed" ng-app="myApp">
     <thead style="">
     <tr>

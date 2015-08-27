@@ -1,11 +1,27 @@
 <?php namespace App\Repositories;
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRepository {
+
+    /**
+     * @var Order $order
+     */
+    private $order;
+//    private $orderRepository;
+    public $estoque;
+
+    /**
+     * @param Order $order
+     */
+    public function __construct(Order $order) {
+        $this->order = $order;
+    }
+
     public function calculaEstoque()
     {
         $saldo_produtos['estoque'] = [];
@@ -108,5 +124,29 @@ class OrderRepository {
 
 
     }
+
+    public function getSalesOrdersFinished() {
+        return $this->getOrdersFinished()
+            ->filter(function($item) {
+            if ($item->type->tipo=='ordemVenda')
+                return $item;
+        });
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersFinished() {
+        return $this->order
+            ->with('status','type')
+            ->orderBy('posted_at', 'desc' )
+            ->orderBy('id', 'desc' )
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
+    }
+
 
 }

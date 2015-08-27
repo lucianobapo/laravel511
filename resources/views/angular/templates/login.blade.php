@@ -7,6 +7,7 @@
                     <div class="alert alert-danger" ng-show="error.valid">
                         <strong>Whoops!</strong> @{{ error.message }}
                     </div>
+                    <div class="text-center" ng-show="loading"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
                     <form class="form-horizontal" role="form" ng-submit="login()">
                         <div class="form-group">
                             <label class="col-md-4 control-label">E-Mail Address</label>

@@ -48,7 +48,8 @@ class RoutesRepository{
 //                'host' => '{host}',
                 'middleware' => ['auth', 'roles'],
                 'roles' => ['Root', 'Administrator']
-            ], function() {
+            ],
+                function() {
                 resource('orders','Erp\OrdersController', [
                     'names' => [
                         'index'=>'orders.index',
@@ -176,14 +177,6 @@ class RoutesRepository{
                     ],
                 ]);
 
-                get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
-                get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
-                get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);
-                get('reports/dre/pdf', ['as'=>'reports.drePdf', 'uses'=>'Erp\ReportsController@drePdf']);
-                get('reports/diarioGeral', ['as'=>'reports.diarioGeral', 'uses'=>'Erp\ReportsController@diarioGeral']);
-                get('reports/cardapio', ['as'=>'reports.cardapio', 'uses'=>'Erp\ReportsController@cardapio']);
-                get('reports/cardapio/pdf', ['as'=>'reports.cardapioPdf', 'uses'=>'Erp\ReportsController@cardapioPdf']);
-
                 get('attachment/{file}', ['as'=>'attachment', 'uses'=>'FileController@showAttachment']);
 
                 controller('confirmations', 'Erp\OrderConfirmationsController', [
@@ -193,6 +186,21 @@ class RoutesRepository{
                 ]);
             });
 
+                Route::group([
+//                    'middleware' => ['auth', 'roles'],
+                    'roles' => ['Root', 'Administrator']
+                ],
+                    function() {
+                        get('reports/estoque', ['as'=>'reports.estoque', 'uses'=>'Erp\ReportsController@estoque']);
+                        get('reports/estatOrdem', ['as'=>'reports.estatOrdem', 'uses'=>'Erp\ReportsController@estatOrdem']);
+                        get('reports/estatOrdemFinalizadas', ['as'=>'reports.estatOrdemFinalizadas', 'uses'=>'Erp\ReportsController@estatOrdemFinalizadas']);
+                        get('reports/dre', ['as'=>'reports.dre', 'uses'=>'Erp\ReportsController@dre']);
+                        get('reports/dre/pdf', ['as'=>'reports.drePdf', 'uses'=>'Erp\ReportsController@drePdf']);
+                        get('reports/diarioGeral', ['as'=>'reports.diarioGeral', 'uses'=>'Erp\ReportsController@diarioGeral']);
+                        get('reports/cardapio', ['as'=>'reports.cardapio', 'uses'=>'Erp\ReportsController@cardapio']);
+                        get('reports/cardapio/pdf', ['as'=>'reports.cardapioPdf', 'uses'=>'Erp\ReportsController@cardapioPdf']);
+
+                    });
 
 //
 //            resource('sharedCurrencies','Erp\SharedCurrenciesController', [
