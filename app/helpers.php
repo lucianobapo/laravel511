@@ -28,8 +28,10 @@ if (! function_exists('secure_route')) {
     function secure_route($name, $parameters = [], $route = null)
     {
 //        dd(config('delivery.forceSiteSSL'));
-//        dd(url(app('url')->route($name, $parameters, false, $route), config('delivery.forceSiteSSL')));
-        return url(app('url')->route($name, $parameters, false, $route), config('delivery.forceSiteSSL'));
+        if (config('delivery.forceSiteSSL'))
+            return secure_url(app('url')->route($name, $parameters, false, $route));
+        else
+            return url(app('url')->route($name, $parameters, false, $route));
     }
 }
 
