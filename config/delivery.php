@@ -32,6 +32,8 @@ return [
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
 
+    'forceSiteSSL' => env('FORCE_SITE_SSL', false),
+
     'document_types' => [
         'cpf' => "CPF",
         'cnpj' => "CNPJ",

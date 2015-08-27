@@ -28,7 +28,7 @@ if (! function_exists('secure_route')) {
     function secure_route($name, $parameters = [], $route = null)
     {
 //        dd(secure_url(app('url')->route($name, $parameters, false, $route)));
-        return secure_url(app('url')->route($name, $parameters, false, $route));
+        return secure_url(app('url')->route($name, $parameters, false, $route), config('delivery.forceSiteSSL'));
     }
 }
 

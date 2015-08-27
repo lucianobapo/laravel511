@@ -223,7 +223,7 @@ class RoutesRepository{
 
         Route::group([
             'domain' => '{host}.'.config('app.domain'),
-//            'middleware' => ['secure'],
+            'middleware' => config('delivery.forceSiteSSL')?['secure']:[],
 //            'prefix' => 'delivery',
             'where' => ['host' => 'delivery'],
         ], function(){
