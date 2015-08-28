@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Erp;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
+use App\Repositories\PartnerRepository;
 use App\Repositories\ReportRepository;
+use App\Repositories\UserRepository;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
@@ -19,12 +21,14 @@ class ReportsController extends Controller
 {
 
     private $orderRepository;
+    private $partnerRepository;
     private $reportRepository;
     private $estoque;
     private $kmOrdersVendaEntregue = [];
 
-    public function __construct(OrderRepository $orderRepository, ReportRepository $reportRepository) {
+    public function __construct(OrderRepository $orderRepository, ReportRepository $reportRepository, PartnerRepository $partnerRepository) {
         $this->orderRepository = $orderRepository;
+        $this->partnerRepository = $partnerRepository;
         $this->reportRepository = $reportRepository;
         $this->estoque = $this->orderRepository->calculaEstoque();
     }
@@ -355,47 +359,21 @@ class ReportsController extends Controller
 //                    return $item;
 //            });
 
-        $semana = [
-            "Monday" => 0,
-            "Tuesday" => 0,
-            "Wednesday" => 0,
-            "Thursday" => 0,
-            "Friday" => 0,
-            "Saturday" => 0,
-            "Sunday" => 0,
-        ];
-        $hora = [
-            '00' => 0,
-            '01' => 0,
-            '02' => 0,
-            '03' => 0,
-            '04' => 0,
-            '05' => 0,
-            '06' => 0,
-            '07' => 0,
-            '08' => 0,
-            '09' => 0,
-            '10' => 0,
-            '11' => 0,
-            '12' => 0,
-            '13' => 0,
-            '14' => 0,
-            '15' => 0,
-            '16' => 0,
-            '17' => 0,
-            '18' => 0,
-            '19' => 0,
-            '20' => 0,
-            '21' => 0,
-            '22' => 0,
-            '23' => 0,
-        ];
+
+
         foreach($ordensFiltradas as $order){
-            $indexSemana = $order->posted_at_carbon->format('l');
-            $semana[$indexSemana] = $semana[$indexSemana]+1;
+            $indexMes = $order->posted_at_carbon->format('m');
+            $mes[$indexMes] = isset($mes[$indexMes])?$mes[$indexMes]+1:1;
+
+            $indexDiaMes = $order->posted_at_carbon->format('d');
+            $diaMes[$indexDiaMes] = isset($diaMes[$indexDiaMes])?$diaMes[$indexDiaMes]+1:1;
+
+            $indexSemana = $order->posted_at_carbon->format('w-l');
+            $semana[$indexSemana] = isset($semana[$indexSemana])?$semana[$indexSemana]+1:1;
+
             if (($order->posted_at_carbon->format('H:i')!='01:00')&&($order->posted_at_carbon->format('H:i')!='00:00')){
                 $indexHora = $order->posted_at_carbon->format('H');
-                $hora[$indexHora] = $hora[$indexHora]+1;
+                $hora[$indexHora] = isset($hora[$indexHora])?$hora[$indexHora]+1:1;
             }
 //            $indexUsuario = $order->partner->nome;
 //            $usuario[$indexUsuario] = isset($usuario[$indexUsuario])?$usuario[$indexUsuario]+1:1;
@@ -404,27 +382,73 @@ class ReportsController extends Controller
 //                $usuarioDesativado[$indexUsuarioDesativado] = isset($usuarioDesativado[$indexUsuarioDesativado])?$usuarioDesativado[$indexUsuarioDesativado]+1:1;
 //            }
         }
-//        asort($semana);
-//        ksort($hora);
-//        arsort($usuario);
-//        arsort($usuarioDesativado);
-        dd([
+
+        $usuariosFiltrados = $this->partnerRepository->getPartnersActivatedWithOrder();
+
+        foreach ($usuariosFiltrados as $partner){
+            if (count($partner->orders)>0) {
+                $usuarioNovo = false;
+                foreach ($partner->orders as $order) {
+                    if ($order->type->tipo=='ordemVenda') {
+                        $usuarios[$partner->nome] = isset($usuarios[$partner->nome])?$usuarios[$partner->nome]+1:1;
+                        $usuariosValor[$partner->nome] = isset($usuariosValor[$partner->nome])?$usuariosValor[$partner->nome]+$order->valor_total:$order->valor_total;
+
+                        $usuariosAntigos[$partner->nome] = isset($usuariosAntigos[$partner->nome])?$usuariosAntigos[$partner->nome]+1:1;
+                        $usuariosAntigosValor[$partner->nome] = isset($usuariosAntigosValor[$partner->nome])?$usuariosAntigosValor[$partner->nome]+$order->valor_total:$order->valor_total;
+
+                        if ($order->posted_at_carbon>Carbon::now()->subMonth()){
+                            $usuarioNovo = true;
+                        }
+                    }
+                }
+                if ($usuarioNovo){
+                    unset($usuariosAntigos[$partner->nome]);
+                    unset($usuariosAntigosValor[$partner->nome]);
+                }
+            }//dd($partner->orders);
+
+        }
+
+        arsort($usuarios);
+        arsort($usuariosValor);
+
+        arsort($usuariosAntigos);
+        arsort($usuariosAntigosValor);
+
+        $usr = [
+            '$usuarios'=>$usuarios,
+            'soma$usuarios'=>array_sum($usuarios),
+
+            '$usuariosValor'=>$usuariosValor,
+            'soma$usuariosValor'=>array_sum($usuariosValor),
+
+            '$usuariosAntigos'=>$usuariosAntigos,
+            'soma$usuariosAntigos'=>array_sum($usuariosAntigos),
+
+            '$usuariosAntigosValor'=>$usuariosAntigosValor,
+            'soma$usuariosAntigosValor'=>array_sum($usuariosAntigosValor),
+        ];
+
+        ksort($diaMes);
+        ksort($semana);
+        ksort($hora);
+
+        $ord = [
+            '$mes'=>$mes,
+            'soma$mes'=>array_sum($mes),
+            '$diaMes'=>$diaMes,
+            'soma$diaMes'=>array_sum($diaMes),
             '$semana'=>$semana,
-            'somaa'=>array_sum($semana),
+            'soma$semana'=>array_sum($semana),
             '$hora'=>$hora,
-            'somab'=>array_sum($hora),
+            'soma$hora'=>array_sum($hora),
 //            '$usuario'=>$usuario,
 //            'somac'=>array_sum($usuario),
 //            '$usuarioDesativado'=>$usuarioDesativado,
 //            'somad'=>array_sum($usuarioDesativado),
+        ];
 
-        ]);
-
-        foreach($semana as $key => $value){
-
-//            $retorno[]
-        }
-        return $semana;
+        return $usr+$ord;
     }
 
     public function estatUsuarios() {

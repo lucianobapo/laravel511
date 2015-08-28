@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserRepository {
 
+    private $user;
+
+    public function __construct(User $user) {
+        $this->user = $user;
+    }
+
     public function findByUserNameOrCreate($userData, $provider) {
 
         if (!isset($userData->email)) {
@@ -66,5 +72,17 @@ class UserRepository {
             Auth::login($user);
         }
         return true;
+    }
+
+    public function getUsersActivated() {
+//        return $this->user
+//            ->with('status','type')
+//            ->orderBy('posted_at', 'desc' )
+//            ->orderBy('id', 'desc' )
+//            ->get()
+//            ->filter(function($item) {
+//                if (strpos($item->status_list,'Finalizado')!==false)
+//                    return $item;
+//            });
     }
 }
