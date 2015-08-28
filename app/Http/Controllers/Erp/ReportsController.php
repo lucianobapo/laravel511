@@ -143,7 +143,9 @@ class ReportsController extends Controller
             ]),
             'viewTableOrdensPorHora' => view('erp.reports.partials.tableOrdensPorHora')->with([
                 'data' => $levantamentoDeOrdens['ordensHora'],
+                'dataPosicao' => $levantamentoDeOrdens['ordensHoraPosicao'],
                 'dataValor' => $levantamentoDeOrdens['ordensHoraValor'],
+                'dataValorPosicao' => $levantamentoDeOrdens['ordensHoraValorPosicao'],
                 'soma' => $levantamentoDeOrdens['somaOrdensHora'],
                 'somaValor' => $levantamentoDeOrdens['somaOrdensHoraValor'],
             ]),

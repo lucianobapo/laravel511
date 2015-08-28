@@ -13,7 +13,12 @@
             <td>{{ trans('report.estatOrdem.tableOrdensPorHora.quantidade') }}</td>
             <?php $soma15=0; ?>
             @foreach($data as $key=>$value)
-                @if($key<=config('delivery.reports.divisaoDoDia') && ($soma15=$soma15+$value)) <td>{{ ($value) }}</td> @endif
+                @if($key<=config('delivery.reports.divisaoDoDia') && ($soma15=$soma15+$value))
+                    <td>
+                        {{ ($value) }}
+                        <strong class="small" style="color: #0000ff;">{{ isset($dataPosicao[$key])?$dataPosicao[$key].'º':'' }}</strong>
+                    </td>
+                @endif
             @endforeach
             <td>{{ $soma15 }}</td>
         </tr>
@@ -21,7 +26,12 @@
             <td>{{ trans('report.estatOrdem.tableOrdensPorHora.valor') }}</td>
             <?php $soma15=0; ?>
             @foreach($dataValor as $key=>$value)
-                @if($key<=config('delivery.reports.divisaoDoDia') && ($soma15=$soma15+$value)) <td>{{ formatBRL($value) }}</td> @endif
+                @if($key<=config('delivery.reports.divisaoDoDia') && ($soma15=$soma15+$value))
+                    <td>
+                        {{ formatBRL($value) }}
+                        <strong class="small" style="color: #0000ff;">{{ isset($dataValorPosicao[$key])?$dataValorPosicao[$key].'º':'' }}</strong>
+                    </td>
+                @endif
             @endforeach
             <td>{{ formatBRL($soma15) }}</td>
         </tr>
@@ -42,14 +52,24 @@
     <tr>
         <td>{{ trans('report.estatOrdem.tableOrdensPorHora.quantidade') }}</td>
         @foreach($data as $key=>$value)
-            @if($key>config('delivery.reports.divisaoDoDia')) <td>{{ ($value) }}</td> @endif
+            @if($key>config('delivery.reports.divisaoDoDia'))
+                <td>
+                    {{ ($value) }}
+                    <strong class="small" style="color: #0000ff;">{{ isset($dataPosicao[$key])?$dataPosicao[$key].'º':'' }}</strong>
+                </td>
+            @endif
         @endforeach
         <td>{{ $soma }}</td>
     </tr>
     <tr>
         <td>{{ trans('report.estatOrdem.tableOrdensPorHora.valor') }}</td>
         @foreach($dataValor as $key=>$value)
-            @if($key>config('delivery.reports.divisaoDoDia')) <td>{{ formatBRL($value) }}</td> @endif
+            @if($key>config('delivery.reports.divisaoDoDia'))
+                <td>
+                    {{ formatBRL($value) }}
+                    <strong class="small" style="color: #0000ff;">{{ isset($dataValorPosicao[$key])?$dataValorPosicao[$key].'º':'' }}</strong>
+                </td>
+            @endif
         @endforeach
         <td>{{ formatBRL($somaValor) }}</td>
     </tr>

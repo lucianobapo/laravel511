@@ -152,6 +152,15 @@ class OrderRepository {
      * @return array
      */
     public function getLevantamentoDeOrdens() {
+        function calculaPosicao(array $array){
+            arsort($array);
+            $i=1;
+            foreach ($array as $key => $value) {
+                if ($i<=config('delivery.reports.maxPodium')) $resultado[$key] = $i;
+                $i++;
+            }
+            return $resultado;
+        }
         $ordensFiltradas = $this->getSalesOrdersFinished();
         foreach($ordensFiltradas as $order){
             $indexMes = $order->posted_at_carbon->format('m');
@@ -180,38 +189,20 @@ class OrderRepository {
         ksort($mes);
         ksort($mesValor);
 
-        arsort($diaMes);
-        $i=1;
-        foreach ($diaMes as $key => $value) {
-            if ($i<=config('delivery.reports.maxPodium')) $diaMesPosicao[$key] = $i;
-            $i++;
-        }
+        $diaMesPosicao = calculaPosicao($diaMes);
         ksort($diaMes);
-        arsort($diaMesValor);
-        $i=1;
-        foreach ($diaMesValor as $key => $value) {
-            if ($i<=config('delivery.reports.maxPodium')) $diaMesValorPosicao[$key] = $i;
-            $i++;
-        }
+        $diaMesValorPosicao = calculaPosicao($diaMesValor);
         ksort($diaMesValor);
 
-        arsort($semana);
-        $i=1;
-        foreach ($semana as $key => $value) {
-            if ($i<=config('delivery.reports.maxPodium')) $semanaPosicao[$key] = $i;
-            $i++;
-        }
+        $semanaPosicao = calculaPosicao($semana);
         ksort($semana);
-        arsort($semanaValor);
-        $i=1;
-        foreach ($semanaValor as $key => $value) {
-            if ($i<=config('delivery.reports.maxPodium')) $semanaValorPosicao[$key] = $i;
-            $i++;
-        }
+        $semanaValorPosicao = calculaPosicao($semanaValor);
         ksort($semanaValor);
 
         ksort($hora);
+        $horaPosicao = calculaPosicao($hora);
         ksort($horaValor);
+        $horaValorPosicao = calculaPosicao($horaValor);
 
         return [
             'ordensMes'=>$mes,
@@ -234,8 +225,10 @@ class OrderRepository {
             'somaOrdensSemanaValor'=>array_sum($semanaValor),
 
             'ordensHora'=>$hora,
+            'ordensHoraPosicao'=>$horaPosicao,
             'somaOrdensHora'=>array_sum($hora),
             'ordensHoraValor'=>$horaValor,
+            'ordensHoraValorPosicao'=>$horaValorPosicao,
             'somaOrdensHoraValor'=>array_sum($horaValor),
         ];
 
