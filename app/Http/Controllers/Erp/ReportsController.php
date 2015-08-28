@@ -94,7 +94,6 @@ class ReportsController extends Controller
 
         if (($quocienteOrders = count($orders))==0) $quocienteOrders = 1;
 
-
         $levantamentoDeOrdens = $this->orderRepository->getLevantamentoDeOrdens();
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
@@ -128,13 +127,17 @@ class ReportsController extends Controller
             ]),
             'viewTableOrdensPorDia' => view('erp.reports.partials.tableOrdensPorDia')->with([
                 'data' => $levantamentoDeOrdens['ordensDiaDoMes'],
+                'dataPosicao' => $levantamentoDeOrdens['ordensDiaDoMesPosicao'],
                 'dataValor' => $levantamentoDeOrdens['ordensDiaDoMesValor'],
+                'dataValorPosicao' => $levantamentoDeOrdens['ordensDiaDoMesValorPosicao'],
                 'soma' => $levantamentoDeOrdens['somaOrdensDiaDoMes'],
                 'somaValor' => $levantamentoDeOrdens['somaOrdensDiaDoMesValor'],
             ]),
             'viewTableOrdensPorSemana' => view('erp.reports.partials.tableOrdensPorSemana')->with([
                 'data' => $levantamentoDeOrdens['ordensSemana'],
+                'dataPosicao' => $levantamentoDeOrdens['ordensSemanaPosicao'],
                 'dataValor' => $levantamentoDeOrdens['ordensSemanaValor'],
+                'dataValorPosicao' => $levantamentoDeOrdens['ordensSemanaValorPosicao'],
                 'soma' => $levantamentoDeOrdens['somaOrdensSemana'],
                 'somaValor' => $levantamentoDeOrdens['somaOrdensSemanaValor'],
             ]),

@@ -74,6 +74,14 @@ if ( ! function_exists('formatBRL')){
     }
 }
 
+if ( ! function_exists('formatDateTranslated')){
+    function formatDateTranslated($valor = 0, $format=null){
+        $fmt = new \IntlDateFormatter( \App::getLocale() ,\IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, $format);
+//        dd($fmt->format($valor));
+        return $fmt->format($valor);
+    }
+}
+
 if ( ! function_exists('formatPercent')){
     function formatPercent($valor = 0){
         return ( app('formatPercent')->format($valor));

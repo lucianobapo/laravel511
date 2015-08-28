@@ -47,6 +47,12 @@ return [
         'whatsapp' => "WhatsApp",
     ],
 
+    'reports' => [
+        'divisaoDoMes' => 15,
+        'divisaoDoDia' => 11,
+        'maxPodium' => 7,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

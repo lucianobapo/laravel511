@@ -164,7 +164,7 @@ class OrderRepository {
             $indexDiaMesValor = $order->posted_at_carbon->format('d');
             $diaMesValor[$indexDiaMesValor] = isset($diaMesValor[$indexDiaMesValor])?$diaMesValor[$indexDiaMesValor]+$order->valor_total:$order->valor_total;
 
-            $indexSemana = $order->posted_at_carbon->format('w-l');
+            $indexSemana = $order->posted_at_carbon->format('w-').ucfirst(formatDateTranslated($order->posted_at_carbon, 'EEEE'));
             $semana[$indexSemana] = isset($semana[$indexSemana])?$semana[$indexSemana]+1:1;
             $indexSemanaValor = $order->posted_at_carbon->format('w-l');
             $semanaValor[$indexSemanaValor] = isset($semanaValor[$indexSemanaValor])?$semanaValor[$indexSemanaValor]+$order->valor_total:$order->valor_total;
@@ -179,11 +179,39 @@ class OrderRepository {
 
         ksort($mes);
         ksort($mesValor);
+
+        arsort($diaMes);
+        $i=1;
+        foreach ($diaMes as $key => $value) {
+            if ($i<=config('delivery.reports.maxPodium')) $diaMesPosicao[$key] = $i;
+            $i++;
+        }
         ksort($diaMes);
+        arsort($diaMesValor);
+        $i=1;
+        foreach ($diaMesValor as $key => $value) {
+            if ($i<=config('delivery.reports.maxPodium')) $diaMesValorPosicao[$key] = $i;
+            $i++;
+        }
         ksort($diaMesValor);
+
+        arsort($semana);
+        $i=1;
+        foreach ($semana as $key => $value) {
+            if ($i<=config('delivery.reports.maxPodium')) $semanaPosicao[$key] = $i;
+            $i++;
+        }
         ksort($semana);
+        arsort($semanaValor);
+        $i=1;
+        foreach ($semanaValor as $key => $value) {
+            if ($i<=config('delivery.reports.maxPodium')) $semanaValorPosicao[$key] = $i;
+            $i++;
+        }
         ksort($semanaValor);
+
         ksort($hora);
+        ksort($horaValor);
 
         return [
             'ordensMes'=>$mes,
@@ -192,13 +220,17 @@ class OrderRepository {
             'somaOrdensMesValor'=>array_sum($mesValor),
 
             'ordensDiaDoMes'=>$diaMes,
+            'ordensDiaDoMesPosicao'=>$diaMesPosicao,
             'somaOrdensDiaDoMes'=>array_sum($diaMes),
             'ordensDiaDoMesValor'=>$diaMesValor,
+            'ordensDiaDoMesValorPosicao'=>$diaMesValorPosicao,
             'somaOrdensDiaDoMesValor'=>array_sum($diaMesValor),
 
             'ordensSemana'=>$semana,
+            'ordensSemanaPosicao'=>$semanaPosicao,
             'somaOrdensSemana'=>array_sum($semana),
             'ordensSemanaValor'=>$semanaValor,
+            'ordensSemanaValorPosicao'=>$semanaValorPosicao,
             'somaOrdensSemanaValor'=>array_sum($semanaValor),
 
             'ordensHora'=>$hora,

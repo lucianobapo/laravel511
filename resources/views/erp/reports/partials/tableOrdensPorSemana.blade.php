@@ -12,14 +12,20 @@
         <tr>
             <td>{{ trans('report.estatOrdem.tableOrdensPorSemana.quantidade') }}</td>
             @foreach($data as $key=>$value)
-                <td>{{ ($value) }}</td>
+                <td>
+                    {{ ($value) }}
+                    <strong class="small" style="color: #0000ff;">{{ isset($dataPosicao[$key])?$dataPosicao[$key].'º':'' }}</strong>
+                </td>
             @endforeach
             <td>{{ $soma }}</td>
         </tr>
         <tr>
             <td>{{ trans('report.estatOrdem.tableOrdensPorSemana.valor') }}</td>
             @foreach($dataValor as $key=>$value)
-                <td>{{ formatBRL($value) }}</td>
+                <td>
+                    {{ formatBRL($value) }}
+                    <strong class="small" style="color: #0000ff;">{{ isset($dataValorPosicao[$key])?$dataValorPosicao[$key].'º':'' }}</strong>
+                </td>
             @endforeach
             <td>{{ formatBRL($somaValor) }}</td>
         </tr>
