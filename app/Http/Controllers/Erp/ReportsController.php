@@ -2,20 +2,14 @@
 
 namespace App\Http\Controllers\Erp;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
 use App\Repositories\PartnerRepository;
 use App\Repositories\ReportRepository;
-use App\Repositories\UserRepository;
-use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
-use DebugBar\DebugBar;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -99,6 +93,9 @@ class ReportsController extends Controller
             });
 
         if (($quocienteOrders = count($orders))==0) $quocienteOrders = 1;
+
+
+        $levantamentoDeOrdens = $this->orderRepository->getLevantamentoDeOrdens();
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
                 'data' => [
@@ -122,6 +119,30 @@ class ReportsController extends Controller
             ]),
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
                 'data' => $arrayDaSoma,
+            ]),
+            'viewTableOrdensPorMes' => view('erp.reports.partials.tableOrdensPorMes')->with([
+                'data' => $levantamentoDeOrdens['ordensMes'],
+                'dataValor' => $levantamentoDeOrdens['ordensMesValor'],
+                'soma' => $levantamentoDeOrdens['somaOrdensMes'],
+                'somaValor' => $levantamentoDeOrdens['somaOrdensMesValor'],
+            ]),
+            'viewTableOrdensPorDia' => view('erp.reports.partials.tableOrdensPorDia')->with([
+                'data' => $levantamentoDeOrdens['ordensDiaDoMes'],
+                'dataValor' => $levantamentoDeOrdens['ordensDiaDoMesValor'],
+                'soma' => $levantamentoDeOrdens['somaOrdensDiaDoMes'],
+                'somaValor' => $levantamentoDeOrdens['somaOrdensDiaDoMesValor'],
+            ]),
+            'viewTableOrdensPorSemana' => view('erp.reports.partials.tableOrdensPorSemana')->with([
+                'data' => $levantamentoDeOrdens['ordensSemana'],
+                'dataValor' => $levantamentoDeOrdens['ordensSemanaValor'],
+                'soma' => $levantamentoDeOrdens['somaOrdensSemana'],
+                'somaValor' => $levantamentoDeOrdens['somaOrdensSemanaValor'],
+            ]),
+            'viewTableOrdensPorHora' => view('erp.reports.partials.tableOrdensPorHora')->with([
+                'data' => $levantamentoDeOrdens['ordensHora'],
+                'dataValor' => $levantamentoDeOrdens['ordensHoraValor'],
+                'soma' => $levantamentoDeOrdens['somaOrdensHora'],
+                'somaValor' => $levantamentoDeOrdens['somaOrdensHoraValor'],
             ]),
         ]);
     }
@@ -351,107 +372,11 @@ class ReportsController extends Controller
     }
 
     public function estatOrdemFinalizadas() {
+        $ord = $this->orderRepository->getLevantamentoDeOrdens();
 
-        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished();
-//        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished()
-//            ->filter(function($item) {
-//                if ($item->posted_at_carbon->format('H:i')!='01:00')
-//                    return $item;
-//            });
+        $usr = $this->partnerRepository->getLevantamentoDeParceiros();
 
-
-
-        foreach($ordensFiltradas as $order){
-            $indexMes = $order->posted_at_carbon->format('m');
-            $mes[$indexMes] = isset($mes[$indexMes])?$mes[$indexMes]+1:1;
-
-            $indexDiaMes = $order->posted_at_carbon->format('d');
-            $diaMes[$indexDiaMes] = isset($diaMes[$indexDiaMes])?$diaMes[$indexDiaMes]+1:1;
-
-            $indexSemana = $order->posted_at_carbon->format('w-l');
-            $semana[$indexSemana] = isset($semana[$indexSemana])?$semana[$indexSemana]+1:1;
-
-            if (($order->posted_at_carbon->format('H:i')!='01:00')&&($order->posted_at_carbon->format('H:i')!='00:00')){
-                $indexHora = $order->posted_at_carbon->format('H');
-                $hora[$indexHora] = isset($hora[$indexHora])?$hora[$indexHora]+1:1;
-            }
-//            $indexUsuario = $order->partner->nome;
-//            $usuario[$indexUsuario] = isset($usuario[$indexUsuario])?$usuario[$indexUsuario]+1:1;
-//            if ($order->posted_at_carbon<=Carbon::now()->subMonth()){
-//                $indexUsuarioDesativado = $order->partner->nome;
-//                $usuarioDesativado[$indexUsuarioDesativado] = isset($usuarioDesativado[$indexUsuarioDesativado])?$usuarioDesativado[$indexUsuarioDesativado]+1:1;
-//            }
-        }
-
-        $usuariosFiltrados = $this->partnerRepository->getPartnersActivatedWithOrder();
-
-        foreach ($usuariosFiltrados as $partner){
-            if (count($partner->orders)>0) {
-                $usuarioNovo = false;
-                foreach ($partner->orders as $order) {
-                    if ($order->type->tipo=='ordemVenda') {
-                        $usuarios[$partner->nome] = isset($usuarios[$partner->nome])?$usuarios[$partner->nome]+1:1;
-                        $usuariosValor[$partner->nome] = isset($usuariosValor[$partner->nome])?$usuariosValor[$partner->nome]+$order->valor_total:$order->valor_total;
-
-                        $usuariosAntigos[$partner->nome] = isset($usuariosAntigos[$partner->nome])?$usuariosAntigos[$partner->nome]+1:1;
-                        $usuariosAntigosValor[$partner->nome] = isset($usuariosAntigosValor[$partner->nome])?$usuariosAntigosValor[$partner->nome]+$order->valor_total:$order->valor_total;
-
-                        if ($order->posted_at_carbon>Carbon::now()->subMonth()){
-                            $usuarioNovo = true;
-                        }
-                    }
-                }
-                if ($usuarioNovo){
-                    unset($usuariosAntigos[$partner->nome]);
-                    unset($usuariosAntigosValor[$partner->nome]);
-                }
-            }//dd($partner->orders);
-
-        }
-
-        arsort($usuarios);
-        arsort($usuariosValor);
-
-        arsort($usuariosAntigos);
-        arsort($usuariosAntigosValor);
-
-        $usr = [
-            '$usuarios'=>$usuarios,
-            'soma$usuarios'=>array_sum($usuarios),
-
-            '$usuariosValor'=>$usuariosValor,
-            'soma$usuariosValor'=>array_sum($usuariosValor),
-
-            '$usuariosAntigos'=>$usuariosAntigos,
-            'soma$usuariosAntigos'=>array_sum($usuariosAntigos),
-
-            '$usuariosAntigosValor'=>$usuariosAntigosValor,
-            'soma$usuariosAntigosValor'=>array_sum($usuariosAntigosValor),
-        ];
-
-        ksort($diaMes);
-        ksort($semana);
-        ksort($hora);
-
-        $ord = [
-            '$mes'=>$mes,
-            'soma$mes'=>array_sum($mes),
-            '$diaMes'=>$diaMes,
-            'soma$diaMes'=>array_sum($diaMes),
-            '$semana'=>$semana,
-            'soma$semana'=>array_sum($semana),
-            '$hora'=>$hora,
-            'soma$hora'=>array_sum($hora),
-//            '$usuario'=>$usuario,
-//            'somac'=>array_sum($usuario),
-//            '$usuarioDesativado'=>$usuarioDesativado,
-//            'somad'=>array_sum($usuarioDesativado),
-        ];
-
-        return $usr+$ord;
+        dd($usr+$ord);
     }
 
-    public function estatUsuarios() {
-        $ordensFiltradas = $this->orderRepository->getSalesOrdersFinished();
-    }
 }

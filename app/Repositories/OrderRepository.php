@@ -148,5 +148,66 @@ class OrderRepository {
             });
     }
 
+    /**
+     * @return array
+     */
+    public function getLevantamentoDeOrdens() {
+        $ordensFiltradas = $this->getSalesOrdersFinished();
+        foreach($ordensFiltradas as $order){
+            $indexMes = $order->posted_at_carbon->format('m');
+            $mes[$indexMes] = isset($mes[$indexMes])?$mes[$indexMes]+1:1;
+            $indexMesValor = $order->posted_at_carbon->format('m');
+            $mesValor[$indexMesValor] = isset($mesValor[$indexMesValor])?$mesValor[$indexMesValor]+$order->valor_total:$order->valor_total;
+
+            $indexDiaMes = $order->posted_at_carbon->format('d');
+            $diaMes[$indexDiaMes] = isset($diaMes[$indexDiaMes])?$diaMes[$indexDiaMes]+1:1;
+            $indexDiaMesValor = $order->posted_at_carbon->format('d');
+            $diaMesValor[$indexDiaMesValor] = isset($diaMesValor[$indexDiaMesValor])?$diaMesValor[$indexDiaMesValor]+$order->valor_total:$order->valor_total;
+
+            $indexSemana = $order->posted_at_carbon->format('w-l');
+            $semana[$indexSemana] = isset($semana[$indexSemana])?$semana[$indexSemana]+1:1;
+            $indexSemanaValor = $order->posted_at_carbon->format('w-l');
+            $semanaValor[$indexSemanaValor] = isset($semanaValor[$indexSemanaValor])?$semanaValor[$indexSemanaValor]+$order->valor_total:$order->valor_total;
+
+            if (($order->posted_at_carbon->format('H:i')!='01:00')&&($order->posted_at_carbon->format('H:i')!='00:00')){
+                $indexHora = $order->posted_at_carbon->format('H');
+                $hora[$indexHora] = isset($hora[$indexHora])?$hora[$indexHora]+1:1;
+                $indexHoraValor = $order->posted_at_carbon->format('H');
+                $horaValor[$indexHoraValor] = isset($horaValor[$indexHoraValor])?$horaValor[$indexHoraValor]+$order->valor_total:$order->valor_total;
+            }
+        }
+
+        ksort($mes);
+        ksort($mesValor);
+        ksort($diaMes);
+        ksort($diaMesValor);
+        ksort($semana);
+        ksort($semanaValor);
+        ksort($hora);
+
+        return [
+            'ordensMes'=>$mes,
+            'somaOrdensMes'=>array_sum($mes),
+            'ordensMesValor'=>$mesValor,
+            'somaOrdensMesValor'=>array_sum($mesValor),
+
+            'ordensDiaDoMes'=>$diaMes,
+            'somaOrdensDiaDoMes'=>array_sum($diaMes),
+            'ordensDiaDoMesValor'=>$diaMesValor,
+            'somaOrdensDiaDoMesValor'=>array_sum($diaMesValor),
+
+            'ordensSemana'=>$semana,
+            'somaOrdensSemana'=>array_sum($semana),
+            'ordensSemanaValor'=>$semanaValor,
+            'somaOrdensSemanaValor'=>array_sum($semanaValor),
+
+            'ordensHora'=>$hora,
+            'somaOrdensHora'=>array_sum($hora),
+            'ordensHoraValor'=>$horaValor,
+            'somaOrdensHoraValor'=>array_sum($horaValor),
+        ];
+
+    }
+
 
 }

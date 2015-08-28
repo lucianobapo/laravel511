@@ -55,6 +55,7 @@ return array(
         'title' => 'Estatística de Ordens',
         'titleFinishedOrders' => 'Valores de Ordens Finalizadas',
         'tipo' => 'Tipo de Ordem',
+        'panelOrdemVenda' => 'Ordens de Venda Finalizadas',
         'tipos' => [
             'totalOrder' => 'Todas as Ordens',
             'cancelledOrders' => 'Ordens Canceladas',
@@ -73,6 +74,34 @@ return array(
             'debitoFinanceiro' => 'Total de Débito Financeiro',
             'creditoFinanceiro' => 'Total de Crédito Financeiro',
             'diferenca' => 'Saldo',
+        ],
+        'tableOrdensPorDia' => [
+            'title' => 'Ordens x Dia do Mês',
+            'diaMes' => 'Dia do Mês',
+            'valor' => 'Valor',
+            'quantidade' => 'Quantidade',
+            'soma' => 'Total',
+        ],
+        'tableOrdensPorMes' => [
+            'title' => 'Ordens x Mês',
+            'diaMes' => 'Mês',
+            'quantidade' => 'Quantidade',
+            'valor' => 'Valor',
+            'soma' => 'Total',
+        ],
+        'tableOrdensPorSemana' => [
+            'title' => 'Ordens x Dia da Semana',
+            'semana' => 'Dia da Semana',
+            'quantidade' => 'Quantidade',
+            'valor' => 'Valor',
+            'soma' => 'Total',
+        ],
+        'tableOrdensPorHora' => [
+            'title' => 'Ordens x Hora do Dia',
+            'hora' => 'Hora',
+            'quantidade' => 'Quantidade',
+            'valor' => 'Valor',
+            'soma' => 'Total',
         ],
     ],
 
@@ -128,4 +157,6 @@ return array(
         'valor' => 'Valor',
         'transacao' => 'Transação',
     ],
+
+
 );
