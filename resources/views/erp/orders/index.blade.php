@@ -1,5 +1,5 @@
 @extends('erp.app')
-@section('content')
+@section('contentWide')
     <h1 class="h1s">{{ trans('order.title') }}</h1>
     <hr>
     @include('erp.orders.partials.pillsNav')
@@ -25,58 +25,61 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($orders as $order)
-                <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->partner->nome }}</td>
-                    <td>{{ $order->posted_at }}</td>
-                    <td>{{ formatBRL($order->valor_total) }}</td>
-                    <td>{{ formatBRL($order->troco) }}</td>
-                    <td>{{ $order->currency->nome_universal }}</td>
-                    <td>{{ $order->type->descricao }}</td>
-                    <td>{{ $order->payment->descricao }}</td>
-                    <td>{{ $order->status_list }}</td>
-                    <td>
-                        <div style="width: 90px" class="">
-                            @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
-                                {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
-                                'title'=>trans('order.actionEditTitle'),
-                                ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
-                            @endif
-
-                            {!! Form::open([
-                            'url'=>route('orders.destroy', [$host,$order->id]),
-                            'id' => 'form'.$order->id,
-                            'method' => 'DELETE',
-                            'style' => 'display: inline;',
-                            ]) !!}
-
-                            {!! sprintf( link_to('#', '%s', [
-                            'title'=>trans('order.actionDeleteTitle'),
-                            'send-delete'=>$order->id,
-                            ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
-
-                            {!! Form::close() !!}
-                        </div>
-                    </td>
-                </tr>
-                @if(count($order->orderItems))
-                    @if(!is_null($order->address))
-                        <tr>
-                            <td class="text-right">{{ trans('order.listaEndereco').':' }}</td>
-                            <td colspan="7">
-                                {{ $order->address->endereco }}
-                            </td>
-                        </tr>
-                    @endif
-
+                @foreach($orders as $order)
                     <tr>
-                        <td class="text-right">{{ trans('order.listaItens').':' }}</td>
-                        <td colspan="7">
-                            @include('erp.orders.partials.itemOrder')
+                        <td>{{ $order->id }}</td>
+                        <td>{{ $order->partner->nome }}</td>
+                        <td>{{ $order->posted_at }}</td>
+                        <td>{{ formatBRL($order->valor_total) }}</td>
+                        <td>{{ formatBRL($order->troco) }}</td>
+                        <td>{{ $order->currency->nome_universal }}</td>
+                        <td>{{ $order->type->descricao }}</td>
+                        <td>{{ $order->payment->descricao }}</td>
+                        <td>{{ $order->status_list }}</td>
+                        <td>
+                            <div style="width: 130px" class="" ng-init="detalhes=true">
+                                <button title="{{ trans('order.actionDetailsTitle') }}" ng-click="detalhes{{ $order->id }}=!detalhes{{ $order->id }}" style="margin: 0px 10px 0px 0px" class="glyphicon btn btn-default btn-sm" ng-class="{'glyphicon-plus':!detalhes{{ $order->id }},'glyphicon-minus':detalhes{{ $order->id }}}"></button>
+
+                                @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
+                                    {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
+                                    'title'=>trans('order.actionEditTitle'),
+                                    ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
+                                @endif
+
+                                {!! Form::open([
+                                'url'=>route('orders.destroy', [$host,$order->id]),
+                                'id' => 'form'.$order->id,
+                                'method' => 'DELETE',
+                                'style' => 'display: inline;',
+                                ]) !!}
+
+                                {!! sprintf( link_to('#', '%s', [
+                                'title'=>trans('order.actionDeleteTitle'),
+                                'send-delete'=>$order->id,
+                                ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
+
+                                {!! Form::close() !!}
+
+                            </div>
                         </td>
                     </tr>
-                @endif
+                    <tr ng-show="detalhes{{ $order->id }}">
+                        <td colspan="9">
+                            <div class="well">
+                                @if(!is_null($order->address))
+                                    <div>{{ trans('order.listaEndereco').': '.$order->address->endereco }}</div>
+                                @endif
+                                @if(count($order->attachments))
+                                    <div ng-init="active='anexos'">
+                                        @include('erp.orders.partials.anexosForm', ['host' => $host, 'attachments' => $order->attachments])
+                                    </div>
+                                @endif
+                                @if(count($order->orderItems))
+                                    @include('erp.orders.partials.itemOrder')
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

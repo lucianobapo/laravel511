@@ -1,6 +1,6 @@
 <div ng-show="active=='anexos'">
     <?php $i=1; ?>
-    @foreach($attachments as $attachment)
+    @forelse($attachments as $attachment)
         <div class="row">
             @if(is_null($attachment->id))
                 <!-- attachment Form Input -->
@@ -17,5 +17,7 @@
 
         </div>
         <?php $i++; ?>
-    @endforeach
+    @empty
+        <div>{{ trans('order.listaAnexosEmpty') }}</div>
+    @endforelse
 </div>

@@ -50,7 +50,7 @@
         {!! Form::hidden('method',$method) !!}
             <tr>
                 <td></td>
-                <td>{!! Form::input('number', 'cod_barra', null, ['maxlength'=>13, 'min'=>'10000000', 'max'=>'9999999999999', 'class'=>'form-control numbersOnly']) !!}</td>
+                <td>{!! Form::input('number', 'cod_barra', null, ['maxlength'=>13, 'min'=>'10000000', 'max'=>'9999999999999', 'class'=>'form-control numbersOnly nextFocusEnter']) !!}</td>
                 <td>{!! Form::input('number', 'cod_fiscal', null, ['maxlength'=>8, 'min'=>'01012100', 'max'=>'97060000', 'class'=>'form-control numbersOnly']) !!}</td>
                 <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
                 <td>{!! Form::file('imagem', ['class'=>'form-control', 'accept'=>'.png']) !!}</td>
@@ -149,4 +149,5 @@
     @include('angular.sendDeleteDirective')
     @include('angular.selectDirective')
     @include('angular.numbersOnlyDirective')
+    @include('angular.nextFocusEnterDirective')
 @endsection

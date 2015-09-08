@@ -360,7 +360,8 @@ class ReportsController extends Controller
     }
 
     public function cardapio($host){
-        return view('erp.reports.clientSideCardapio',compact('host'))->with([
+//        return view('erp.reports.clientSideCardapio',compact('host'))->with([
+        return view('erp.reports.cardapio',compact('host'))->with([
             'products' => $this->orderRepository->getProductsDelivery(),
         ]);
     }

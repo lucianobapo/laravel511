@@ -12,7 +12,7 @@
         @foreach($order->orderItems as $item)
             <tr>
                 <td>{{ $item->product->nome }}</td>
-                <td style="color: #1c94c4; font-weight: bold;">{{ $item->cost->cost_list }}</td>
+                <td style="font-style: italic; font-weight: bold;">{{ $item->cost->cost_list }}</td>
                 <td>{{ $item->quantidade }}</td>
                 <td>{{ formatBRL($item->valor_unitario) }}</td>
                 <td>{{ $item->currency->nome_universal   }}</td>

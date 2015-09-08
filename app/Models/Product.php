@@ -72,6 +72,11 @@ class Product extends Model {
         return $this->belongsToMany('App\Models\ProductGroup')->withTimestamps();
     }
 
+    public function groupsWhere() {
+        return $this->belongsToMany('App\Models\ProductGroup')
+            ->wherePivot('grupo', '');
+    }
+
     public function getGroupListAttribute(){
         $groups = $this->groups->toArray();
         $lista = '';
@@ -147,6 +152,13 @@ class Product extends Model {
         return $this->belongsToMany('App\Models\SharedStat')->withTimestamps();
     }
 
+    public function statusWhere() {
+        return $this->belongsToMany('App\Models\SharedStat');
+//            ->getQuery();
+//            ->belongsToMany('App\Models\SharedStat')
+//            ->wherePivot('status', 'ativado');
+    }
+
     public function getStatusListAttribute(){
         $status = $this->status->toArray();
         $lista = '';
@@ -180,5 +192,7 @@ class Product extends Model {
             ->lists('nome','id')
             ->toArray();
     }
+
+
 
 }

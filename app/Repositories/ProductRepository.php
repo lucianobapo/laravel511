@@ -89,26 +89,47 @@ class ProductRepository {
     /**
      * @return Product
      */
-    public function getProductsCardapio() {
+    public function getProductsBase() {
+        dd($this->product->statusWhere());
+
         return $this->product
             ->with('status','groups')
+
+//            ->join('product_shared_stat', 'products.id', '=', 'product_shared_stat.product_id')
+//            ->join('shared_stats', function ($join) {
+//                $join->on('product_shared_stat.shared_stat_id', '=', 'shared_stats.id')
+//                    ->where('shared_stats.status', '=', 'ativado');
+//            })
+//
+//            ->join('product_product_group', 'products.id', '=', 'product_product_group.product_id')
+//            ->join('product_groups', function ($join) {
+//                $join->on('product_product_group.product_group_id', '=', 'product_groups.id')
+//                    ->where('product_groups.grupo', '=', 'Delivery');
+//            })
+
             ->orderBy('promocao', 'desc' )
             ->orderBy('nome', 'asc' )
-            ->get()
-            ->filter(function($item) {
-                if (strpos($item->status_list,'Ativado')!==false)
-                    return $item;
-            })
-            ->filter(function($item) {
-                if (strpos($item->group_list,'Delivery')!==false)
-                    return $item;
-            });
+            ->get();
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProductsCardapio() {
+        return $this->getProductsBase();
+
+//            ->filter(function($item) {
+//                return search_status($item,'ativado');
+//            })
+//            ->filter(function($item) {
+//                return search_group($item,'Delivery');
+//            });
     }
 
     public function getProductsDelivery() {
         $aux = $this->getProductsCardapio()
             ->filter(function($item) {
-                if ($this->estoque[$item->id]>0)
+                if ( (isset($this->estoque[$item->id]))&&($this->estoque[$item->id]>0) )
                     return $item;
             });
         return $aux;
@@ -117,90 +138,69 @@ class ProductRepository {
     public function getProductsPorcoes() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Porções')
-                    return $item;
+                if ($item->categoria_list=='Porções') return $item;
             });
-//        dd($aux);
         return $aux;
     }
 
     public function getProductsCervejas() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Cervejas')
-                    return $item;
+                if ($item->categoria_list=='Cervejas') return $item;
             });
-//        dd($aux);
         return $aux;
     }
 
     public function getProductsVinhos() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Vinhos')
-                    return $item;
+                if ($item->categoria_list=='Vinhos') return $item;
             });
-//        dd($aux);
         return $aux;
     }
 
     public function getProductsDestilados() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Destilados')
-                    return $item;
+                if ($item->categoria_list=='Destilados') return $item;
             });
-//        dd($aux);
         return $aux;
     }
 
     public function getProductsRefrigerantes() {
         $aux = $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Refrigerantes')
-                    return $item;
+                if ($item->categoria_list=='Refrigerantes') return $item;
             });
 //        dd($aux);
         return $aux;
     }
 
     public function getProductsEnergeticos() {
-        $aux = $this->getProductsDelivery()
+        return $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Energéticos')
-                    return $item;
+                if ($item->categoria_list=='Energéticos') return $item;
             });
-//        dd($aux);
-        return $aux;
     }
 
     public function getProductsTabacaria() {
-        $aux = $this->getProductsDelivery()
+        return $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Tabacaria')
-                    return $item;
+                if ($item->categoria_list=='Tabacaria') return $item;
             });
-//        dd($aux);
-        return $aux;
     }
 
     public function getProductsSucos() {
-        $aux = $this->getProductsDelivery()
+        return $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Sucos')
-                    return $item;
+                if ($item->categoria_list=='Sucos') return $item;
             });
-//        dd($aux);
-        return $aux;
     }
 
     public function getProductsOutros() {
-        $aux = $this->getProductsDelivery()
+        return $this->getProductsDelivery()
             ->filter(function($item) {
-                if ($item->categoria_list=='Outros')
-                    return $item;
+                if ($item->categoria_list=='Outros') return $item;
             });
-//        dd($aux);
-        return $aux;
     }
 }

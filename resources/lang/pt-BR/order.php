@@ -15,10 +15,13 @@ return array(
 //	'menuOrder' => 'Ordens',
 	'listaItens' => 'Lista de Itens',
 	'listaEndereco' => 'Entrega',
+	'listaAnexos' => 'Anexos',
+	'listaAnexosEmpty' => 'Sem Anexos',
 	'semEndereco' => 'Sem Endereço Cadastrado',
     'actionTitle' => 'Ações',
     'actionDeleteTitle' => 'Remover',
     'actionEditTitle' => 'Editar',
+    'actionDetailsTitle' => 'Detalhes',
 
     'menu' => [
         'title' => 'Ordens',
