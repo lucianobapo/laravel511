@@ -41,35 +41,35 @@
             </tr>
         </thead>
         <tbody>
-        {!! Form::model($product, [
-        'method'=>$method,
-        'url'=>route($route, isset($product->id)?[$product->id]+$params:$params),
-        'files' => true,
-        ]) !!}
-        <!-- method Form Input -->
-        {!! Form::hidden('method',$method) !!}
-            <tr>
-                <td></td>
-                <td>{!! Form::input('number', 'cod_barra', null, ['maxlength'=>13, 'min'=>'10000000', 'max'=>'9999999999999', 'class'=>'form-control numbersOnly nextFocusEnter']) !!}</td>
-                <td>{!! Form::input('number', 'cod_fiscal', null, ['maxlength'=>8, 'min'=>'01012100', 'max'=>'97060000', 'class'=>'form-control numbersOnly']) !!}</td>
-                <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
-                <td>{!! Form::file('imagem', ['class'=>'form-control', 'accept'=>'.png']) !!}</td>
-                <td>{!! Form::checkbox('promocao', 1, null, ['class'=>'']) !!}</td>
-                <td>{!! Form::select('grupos[]', $grupos, $group_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-                <td>{!! Form::select('cost_id', $costs, $cost_selected, ['class'=>'form-control select2']) !!}</td>
-                <td>{!! Form::text('valorUnitVenda', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
-                <td>{!! Form::text('valorUnitVendaPromocao', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
-                <td>{!! Form::text('valorUnitCompra', null, ['size'=>'10', 'class'=>'form-control']) !!}</td>
+            {!! Form::model($product, [
+            'method'=>$method,
+            'url'=>route($route, isset($product->id)?[$product->id]+$params:$params),
+            'files' => true,
+            ]) !!}
+            <!-- method Form Input -->
+            {!! Form::hidden('method',$method) !!}
+                <tr>
+                    <td></td>
+                    <td>{!! Form::input('number', 'cod_barra', null, ['maxlength'=>13, 'min'=>'10000000', 'max'=>'9999999999999', 'class'=>'form-control numbersOnly nextFocusEnter']) !!}</td>
+                    <td>{!! Form::input('number', 'cod_fiscal', null, ['maxlength'=>8, 'min'=>'01012100', 'max'=>'97060000', 'class'=>'form-control numbersOnly']) !!}</td>
+                    <td>{!! Form::text('nome', null, ['class'=>'form-control', 'required']) !!}</td>
+                    <td>{!! Form::file('imagem', ['class'=>'form-control', 'accept'=>'.png']) !!}</td>
+                    <td>{!! Form::checkbox('promocao', 1, null, ['class'=>'']) !!}</td>
+                    <td>{!! Form::select('grupos[]', $grupos, $group_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+                    <td>{!! Form::select('cost_id', $costs, $cost_selected, ['class'=>'form-control select2']) !!}</td>
+                    <td>{!! Form::text('valorUnitVenda', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
+                    <td>{!! Form::text('valorUnitVendaPromocao', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
+                    <td>{!! Form::text('valorUnitCompra', null, ['size'=>'10', 'class'=>'form-control']) !!}</td>
 
 
-                <td>{!! Form::checkbox('estoque', 1, null, ['class'=>'']) !!}</td>
-                <td>{!! Form::text('estoque_minimo', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
-                <td>{!! Form::select('status[]', $status, $status_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
-                <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
-            </tr>
-        {!! Form::close() !!}
-        @if(count($products))
-            @foreach($products as $product)
+                    <td>{!! Form::checkbox('estoque', 1, null, ['class'=>'']) !!}</td>
+                    <td>{!! Form::text('estoque_minimo', null, ['size'=>'8', 'class'=>'form-control']) !!}</td>
+                    <td>{!! Form::select('status[]', $status, $status_selected, ['class'=>'form-control select2tag', 'multiple']) !!}</td>
+                    <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
+                </tr>
+            {!! Form::close() !!}
+
+            @forelse($products as $product)
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->cod_barra }}</td>
@@ -115,12 +115,11 @@
                         </div>
                     </td>
                 </tr>
-            @endforeach
-        @else
-            <tr>
-                <td colspan="12" class="text-center"><em>{{ trans('product.empty') }}</em></td>
-            </tr>
-        @endif
+            @empty
+                <tr>
+                    <td colspan="12" class="text-center"><em>{{ trans('product.empty') }}</em></td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     {!! $products->render() !!}
