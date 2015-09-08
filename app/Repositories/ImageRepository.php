@@ -39,7 +39,7 @@ class ImageRepository {
 //            dd($imageDir . $clientOriginalName);
             $this->load($tempFile);
             $this->resizeToHeight(150);
-            $this->save($tempFile,IMAGETYPE_PNG);
+            $this->save($tempFile, $this->image_type);
 //            dd(file_get_contents($tempFile));
 //            Storage::put($imageDir . $clientOriginalName, file_get_contents($uploadedFile));
             Storage::put($imageDir . $clientOriginalName, file_get_contents($tempFile));
