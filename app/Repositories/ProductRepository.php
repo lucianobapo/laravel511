@@ -90,7 +90,7 @@ class ProductRepository {
      * @return Product
      */
     public function getProductsBase() {
-        dd($this->product->statusWhere());
+//        dd($this->product->statusWhere());
 
         return $this->product
             ->with('status','groups')
