@@ -29,32 +29,31 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
+            <tr>
 
-            {!! Form::model($model, [
-            'method'=>$method,
-            'url'=>route($route['form'], isset($model->id)?[$model->id]+$params:$params),
-            ]) !!}
-            <!-- method Form Input -->
-            {!! Form::hidden('method',$method) !!}
-            @foreach($columns as $column)
-                @if(is_array($column) && isset($column['inputDisabled']) && $column['inputDisabled'])
-                    <td></td>
-                @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='date') )
-                    <td>{!! Form::input('date',$column['name'], isset($column['inputDefault'])?$model->$column['inputDefault']:null, isset($column['attributes'])?$column['attributes']:['class'=>'form-control']) !!}</td>
-                @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='select') )
-                    <td>{!! Form::select($column['name'], $column['selectList'], $column['selectedItem'], isset($column['attributes'])?$column['attributes']:['class'=>'form-control select2']) !!}</td>
-                @elseif(is_array($column))
-                    <td>{!! Form::text($column['name'], null, isset($column['attributes'])?$column['attributes']:['class'=>'form-control']) !!}</td>
-                @else
-                    <td>{!! Form::text($column, null, ['class'=>'form-control']) !!}</td>
-                @endif
-            @endforeach
-            <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
-            {!! Form::close() !!}
-        </tr>
-        @if(count($items))
-            @foreach($items as $item)
+                {!! Form::model($model, [
+                'method'=>$method,
+                'url'=>route($route['form'], isset($model->id)?[$model->id]+$params:$params),
+                ]) !!}
+                <!-- method Form Input -->
+                {!! Form::hidden('method',$method) !!}
+                @foreach($columns as $column)
+                    @if(is_array($column) && isset($column['inputDisabled']) && $column['inputDisabled'])
+                        <td></td>
+                    @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='date') )
+                        <td>{!! Form::input('date',$column['name'], isset($column['inputDefault'])?$model->$column['inputDefault']:null, isset($column['attributes'])?$column['attributes']:['class'=>'form-control']) !!}</td>
+                    @elseif(is_array($column) && isset($column['inputType']) && ($column['inputType']=='select') )
+                        <td>{!! Form::select($column['name'], $column['selectList'], $column['selectedItem'], isset($column['attributes'])?$column['attributes']:['class'=>'form-control select2']) !!}</td>
+                    @elseif(is_array($column))
+                        <td>{!! Form::text($column['name'], null, isset($column['attributes'])?$column['attributes']:['class'=>'form-control']) !!}</td>
+                    @else
+                        <td>{!! Form::text($column, null, ['class'=>'form-control']) !!}</td>
+                    @endif
+                @endforeach
+                <td>{!! Form::submit($submitButtonText, ['class'=>'form-control btn btn-primary']) !!}</td>
+                {!! Form::close() !!}
+            </tr>
+            @forelse($items as $item)
                 <tr>
                     @foreach($columns as $column)
                         @if(is_array($column))
@@ -86,14 +85,11 @@
 
                     </td>
                 </tr>
-            @endforeach
-        @else
-            <tr>
-                <td colspan="5" class="text-center"><em>{{ $emptyText }}</em></td>
-            </tr>
-        @endif
-
-
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center"><em>{{ $emptyText }}</em></td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     {!! $items->render() !!}
