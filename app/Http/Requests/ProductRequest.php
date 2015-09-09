@@ -24,7 +24,7 @@ class ProductRequest extends Request {
 	{
         return [
 //            'imagem' => 'required_if:method,POST|mimes:png',
-            'imagem' => 'mimes:png',
+            'imagem' => 'mimes:jpeg,bmp,png',
 			'nome' => 'required|min:3',
 			'cost_id' => 'required',
             'valorUnitVenda' => 'numeric',
