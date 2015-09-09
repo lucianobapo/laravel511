@@ -66,6 +66,7 @@ return [
 
 //    'domain' => env('APP_DOMAIN','homestead.app'),
 //    'sitePrefix' => 'http://',
+    'emailLogo' => 'https://delivery.ilhanet.com/img/logo-delivery2.png',
     'siteCurrentUrl' => '//'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
 
 
