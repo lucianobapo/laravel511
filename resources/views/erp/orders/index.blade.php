@@ -3,7 +3,6 @@
     <h1 class="h1s">{{ trans('order.title') }}</h1>
     <hr>
     @include('erp.orders.partials.pillsNav')
-
     @if(count($orders))
         {!! $orders->render() !!}
         <table class="table table-hover table-striped table-condensed" ng-app="myApp">
@@ -41,13 +40,16 @@
                                 <button title="{{ trans('order.actionDetailsTitle') }}" ng-click="detalhes{{ $order->id }}=!detalhes{{ $order->id }}" style="margin: 0px 10px 0px 0px" class="glyphicon btn btn-default btn-sm" ng-class="{'glyphicon-plus':!detalhes{{ $order->id }},'glyphicon-minus':detalhes{{ $order->id }}}"></button>
 
                                 @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
-                                    {!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id], [
-                                    'title'=>trans('order.actionEditTitle'),
-                                    ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}
+
+                                    {{--{!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id,$paramsSerialized], [--}}
+                                    {{--'title'=>trans('order.actionEditTitle'),--}}
+                                    {{--]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}--}}
+                                    {!! (str_replace('%s','<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>',link_to_route('orders.edit', '%s', [$host,$order->id,'paramsSerialized'=>$paramsSerialized], ['title'=>trans('order.actionEditTitle')] ))) !!}
                                 @endif
 
+
                                 {!! Form::open([
-                                'url'=>route('orders.destroy', [$host,$order->id]),
+                                'url'=>route('orders.destroy', isset($order->id)?[$order->id]+$params:$params),
                                 'id' => 'form'.$order->id,
                                 'method' => 'DELETE',
                                 'style' => 'display: inline;',

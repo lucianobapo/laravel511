@@ -11,7 +11,8 @@
     @include('erp.orders.partials.pillsNav')
 
     @include ('errors.list')
-    {!! Form::model($order, ['method'=>'PATCH','url'=>route('orders.update', [$host,$order->id]),
+    {{--{{ dd($params) }}--}}
+    {!! Form::model($order, ['method'=>'PATCH','url'=>route('orders.update', isset($order->id)?[$order->id]+$params:$params),
         'ng-app'=>"myApp",
         'ng-controller'=>"myCtrl",
         'files' => true,

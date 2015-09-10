@@ -65,8 +65,7 @@ class OrdersController extends Controller {
 	public function index(Request $request, $host)
 	{
         $params = $request->all();
-        $params['sortBy'] = ['posted_at','id'];
-
+        if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
         return view('erp.orders.index', compact('host'))->with([
             'orders' => $this->orderRepository->getOrdersSortedPaginated([
                 'partner',
@@ -82,6 +81,7 @@ class OrdersController extends Controller {
                 'attachments',
             ], $params),
             'params' => ['host'=>$host]+$params,
+            'paramsSerialized' => urlencode(serialize(['host'=>$host]+$params)),
         ]);
 	}
 
@@ -137,7 +137,7 @@ class OrdersController extends Controller {
      * @param SharedStat $sharedStat
      * @return Response
      */
-    public function edit($host, Order $order, Product $product, Partner $partner)
+    public function edit($host, Order $order, Product $product, Partner $partner, Request $request)
     {
         $itemOrders = $order->orderItems;
         for($i=count($itemOrders);$i<$this->itemCount;$i++){
@@ -149,7 +149,9 @@ class OrdersController extends Controller {
             $attachments[] = new Attachment;
         }
 
+//        dd(unserialize(urldecode($request->all()['paramsSerialized'])));
         return view('erp.orders.edit', compact('host','order'))->with([
+            'params' => unserialize(urldecode($request->all()['paramsSerialized'])),
             'products' => $product->product_list,
             'partners' => $partner->partner_list,
             'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
@@ -247,7 +249,7 @@ class OrdersController extends Controller {
      */
 	public function update($host, Order $order, OrderRequest $request)
 	{
-//        dd($request);
+//        dd(route('orders.index', [$host]+$request->only('direction','sortBy','page')));
         $attributes = $request->all();
         $updateOrder = [
             '' => $attributes,
@@ -317,7 +319,7 @@ class OrdersController extends Controller {
         $order->save();
 
         flash()->overlay(trans('order.flash.orderUpdated', ['ordem' => $order->id]),trans('order.flash.orderUpdatedTitle'));
-        return redirect(route('orders.index', $host));
+        return redirect(route('orders.index', [$host]+$request->only('direction','sortBy','page')));
 	}
 
     /**
