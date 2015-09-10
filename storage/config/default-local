@@ -57,6 +57,15 @@ server {
 	#location ~ /\.ht {
 	#	deny all;
 	#}
+
+	    # PHP FPM configuration.
+        location ~ \.php$ {
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_index index.php;
+            fastcgi_split_path_info ^(.+\.php)(.*)$;
+            include /etc/nginx/fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        }
 }
 
 
@@ -143,6 +152,9 @@ server {
     # Host that will serve this project.
     server_name laravel.localhost.com;
 
+    # set client body size to 2M #
+    client_max_body_size 3M;
+
     # Useful logs for debug.
     rewrite_log on;
 
@@ -188,6 +200,9 @@ server {
 
     # Host that will serve this project.
     server_name pma.localhost.com;
+
+    # set client body size to 2M #
+    client_max_body_size 3M;
 
     # Useful logs for debug.
     rewrite_log on;

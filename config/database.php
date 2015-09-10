@@ -27,6 +27,7 @@ return [
     */
 
     'default' => env('DB_CONNECTION', 'mysql'),
+    'migration' => env('DB_MIGRATION_CONNECTION', 'mysql_admin'),
 
     /*
     |--------------------------------------------------------------------------
@@ -58,6 +59,18 @@ return [
             'database'  => env('DB_DATABASE', 'forge'),
             'username'  => env('DB_USERNAME', 'forge'),
             'password'  => env('DB_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
+        'mysql_admin' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST', 'localhost'),
+            'database'  => env('DB_DATABASE', 'forge'),
+            'username'  => env('DB_USERNAME_ADMIN', 'forge'),
+            'password'  => env('DB_PASSWORD_ADMIN', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

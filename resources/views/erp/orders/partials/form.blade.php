@@ -6,7 +6,7 @@
         </div>
         {!! Form::select('partner_id',$partner_list, $order->partner_id,[
             'id' => 'partner_id',
-            'class'=>'form-control',
+            'class'=>'form-control partner-click',
             'select2partner' => trans('order.create.selecioneParceiro'),
         ]) !!}
 

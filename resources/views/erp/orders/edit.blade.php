@@ -21,6 +21,7 @@
             'postedAtInit'=>$order->posted_at_for_field,
         ])
     {!! Form::close() !!}
+    <input type="hidden" id="string">
 @endsection
 
 @section('footerScriptJs')
@@ -31,15 +32,20 @@
         var app = angular.module('myApp', []);
         var products = [];
         var partners = [];
-        function formatStateAddress (state) {
-            if (!state.id) { return state.text; }
-            var $state = $(
-                    '<span>' + state.text + '<br> - {{ trans('modelPartner.getPartnerList') }}: '+partners[state.element.value]+'</span>'
-//                    '<span><img src="vendor/images/flags/' + state.element.value.toLowerCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
-            );
-            return $state;
+        function htmlEntityDecode(str){
+            return $('#string').html(str).text();
         };
         app.controller('myCtrl', function($scope) {
+            @foreach($partners as $partner)
+            partners [{{ $partner->id }}] = {
+                address_arr: [
+                    @foreach($partner->addresses as $address)
+                    { id: {{ $address->id }}, text: htmlEntityDecode('{{ $address->endereco }}') },
+                    @endforeach
+                ],
+                address: "{{ (!count($partner->addresses))?trans('order.semEndereco'):$partner->addresses[0]->endereco }}"
+            };
+            @endforeach
             @foreach($products as $product)
                 products [{{ $product->id }}] = {
                     nome: '{{ $product->nome }}',
@@ -47,10 +53,6 @@
                     valor_compra: {{ $product->valorUnitCompra }},
                     cost_id: {{ is_null($costId = $product->cost_id)?'null':$costId }}
                 };
-            @endforeach
-
-            @foreach($partners as $partner)
-                partners [{{ $partner->id }}] = "{{ (!count($partner->addresses))?trans('order.semEndereco'):$partner->addresses[0]->endereco }}";
             @endforeach
         });
     </script>

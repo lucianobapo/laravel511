@@ -8,7 +8,7 @@
             {!! Form::select('address_id', $addresses,$order->address_id,[
             'class'=>'form-control',
             'style' => 'width:100%',
-            'select2' => trans('order.create.selecioneEndereco')
+            'select2endereco' => trans('order.create.selecioneEndereco')
             ]) !!}
         </div>
     </div>

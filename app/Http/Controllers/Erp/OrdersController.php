@@ -62,17 +62,25 @@ class OrdersController extends Controller {
      * @param $host
      * @return Response
      */
-	public function index(Order $order, Request $request, $host)
+	public function index(Request $request, $host)
 	{
         $params = $request->all();
-
-        $orderOrdered = $this->orderRepository->sorting($order, $params, 'posted_at');
+        $params['sortBy'] = ['posted_at','id'];
 
         return view('erp.orders.index', compact('host'))->with([
-            'orders' => $orderOrdered
-                ->with('partner','currency','type','payment','status','address','orderItems','orderItems.product','orderItems.cost','orderItems.currency')
-                ->paginate(config('delivery.orderListCountMax'))
-                ->appends($params),
+            'orders' => $this->orderRepository->getOrdersSortedPaginated([
+                'partner',
+                'currency',
+                'type',
+                'payment',
+                'status',
+                'address',
+                'orderItems',
+                'orderItems.product',
+                'orderItems.cost',
+                'orderItems.currency',
+                'attachments',
+            ], $params),
             'params' => ['host'=>$host]+$params,
         ]);
 	}
@@ -113,7 +121,7 @@ class OrdersController extends Controller {
             'viewConsumoForm' =>  view('erp.orders.partials.consumoForm'),
             'viewTransporteForm' =>  view('erp.orders.partials.transporteForm')->with([
                 'order' => new Order,
-                'addresses' => [''=>''] + (($addresses = Address::get())? $addresses->lists('logradouro','id')->toArray():[]),
+                'addresses' => [''=>''], // + (($addresses = Address::get())? $addresses->lists('logradouro','id')->toArray():[]),
             ]),
             'viewAnexosForm' =>  view('erp.orders.partials.anexosForm', compact('host'))->with([
                 'attachments' => $attachments,
@@ -131,11 +139,16 @@ class OrdersController extends Controller {
      */
     public function edit($host, Order $order, Product $product, Partner $partner)
     {
-        $attachments = Attachment::where(['order_id'=>$order->id])->get();
+        $itemOrders = $order->orderItems;
+        for($i=count($itemOrders);$i<$this->itemCount;$i++){
+            $itemOrders[] = new ItemOrder;
+        }
+
+        $attachments = $order->attachments;
         for($i=count($attachments);$i<$this->attachmentCount;$i++){
             $attachments[] = new Attachment;
         }
-//        dd($attachments);
+
         return view('erp.orders.edit', compact('host','order'))->with([
             'products' => $product->product_list,
             'partners' => $partner->partner_list,
@@ -149,7 +162,7 @@ class OrdersController extends Controller {
                 'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
                 'itemCount' => $this->itemCount,
-                'itemOrders' => ItemOrder::where(['order_id'=>$order->id])->get(),
+                'itemOrders' => $itemOrders,
             ]),
             'viewPagamentoForm' => view('erp.orders.partials.pagamentoForm'),
             'viewConsumoForm' =>  view('erp.orders.partials.consumoForm'),
@@ -262,7 +275,9 @@ class OrdersController extends Controller {
 //        for($i=0;$i<$this->itemCount;$i++){
         for($i=0;isset($attributes['id'.$i]);$i++) {
             if (! $attributes['quantidade'.$i]>0) {
-                ItemOrder::find($attributes['id'.$i])->delete();
+                if (!is_null($item = ItemOrder::find($attributes['id'.$i]) )){
+                    $item->delete();
+                }
                 continue;
             }
 //            dd($attributes['id'.$i]);
@@ -277,7 +292,12 @@ class OrdersController extends Controller {
             if (isset($attributes['desconto_unitario'.$i])) $updateItemOrder['desconto_unitario'] = $attributes['desconto_unitario'.$i];
             if (isset($attributes['descricao'.$i])) $updateItemOrder['descricao'] = $attributes['descricao'.$i];
 
-            ItemOrder::find($attributes['id'.$i])->update($updateItemOrder);
+            if (!is_null($item = ItemOrder::find($attributes['id'.$i]))){
+                $item->update($updateItemOrder);
+            }else{
+                $addedItemOrder = $this->getAddedItemOrder($attributes,$i);
+                $order->orderItems()->save($addedItemOrder);
+            }
 
             $somaTotal = $somaTotal+($attributes['quantidade'.$i]*$attributes['valor_unitario'.$i]);
         }

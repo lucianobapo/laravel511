@@ -144,6 +144,9 @@ server {
     # Host that will serve this project.
     server_name laravel.ilhanet.com;
 
+    # set client body size to 2M #
+    client_max_body_size 3M;
+
     # Useful logs for debug.
     rewrite_log on;
 
@@ -189,6 +192,9 @@ server {
 
     # Host that will serve this project.
     server_name pma.ilhanet.com;
+
+    # set client body size to 2M #
+    client_max_body_size 3M;
 
     # Useful logs for debug.
     rewrite_log on;

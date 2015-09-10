@@ -136,11 +136,57 @@ class OrderRepository {
     /**
      * @return Order
      */
-    public function getOrdersFinished() {
+    public function getOrdersBase($withs=[]) {
         return $this->order
-            ->with('status','type')
-            ->orderBy('posted_at', 'desc' )
-            ->orderBy('id', 'desc' )
+            ->with($withs);
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersBaseWhereSorted($wheres=[], $withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
+
+        if (!isset($params['direction'])) $params['direction'] = $defaultDirection;
+        if (!isset($params['sortBy'])) $params['sortBy'] = $defaultColumn;
+
+        $result = $this->getOrdersBase($withs)
+            ->where($wheres);
+
+        if (is_array($params['sortBy'])) {
+            foreach ($params['sortBy'] as $sort) {
+                $result = $result->orderBy($sort, ($params['direction'] ? 'asc' : 'desc'));
+            }
+        } else {
+            $result = $result->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersWhereSortedPaginated($wheres=[], $withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
+        return $this->getOrdersBaseWhereSorted($wheres, $withs, $params, $defaultColumn, $defaultDirection)
+            ->paginate(config('delivery.orderListCountMax'))
+            ->appends($params);
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersSortedPaginated($withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
+        return $this->getOrdersBaseWhereSorted([], $withs, $params, $defaultColumn, $defaultDirection)
+            ->paginate(config('delivery.orderListCountMax'))
+            ->appends($params);
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersFinished() {
+        $params['sortBy'] = ['posted_at','id'];
+        return $this->getOrdersBaseWhereSorted([], ['status','type'], $params)
             ->get()
             ->filter(function($item) {
                 if (strpos($item->status_list,'Finalizado')!==false)
