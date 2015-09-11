@@ -36,17 +36,21 @@
                         <td>{{ $order->payment->descricao }}</td>
                         <td>{{ $order->status_list }}</td>
                         <td>
-                            <div style="width: 130px" class="" ng-init="detalhes=true">
+                            <div style="width: 180px" class="" ng-init="detalhes=true">
                                 <button title="{{ trans('order.actionDetailsTitle') }}" ng-click="detalhes{{ $order->id }}=!detalhes{{ $order->id }}" style="margin: 0px 10px 0px 0px" class="glyphicon btn btn-default btn-sm" ng-class="{'glyphicon-plus':!detalhes{{ $order->id }},'glyphicon-minus':detalhes{{ $order->id }}}"></button>
 
                                 @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
-
                                     {{--{!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id,$paramsSerialized], [--}}
                                     {{--'title'=>trans('order.actionEditTitle'),--}}
                                     {{--]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}--}}
                                     {!! (str_replace('%s','<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>',link_to_route('orders.edit', '%s', [$host,$order->id,'paramsSerialized'=>$paramsSerialized], ['title'=>trans('order.actionEditTitle')] ))) !!}
                                 @endif
 
+                                @if( (stripos($order->status_list,'Aberto')!==false) )
+                                    {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                                    'title'=>trans('confirmation.actionConfirmTitle'),
+                                    ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-flag btn btn-default btn-sm"></span>' ) !!}
+                                @endif
 
                                 {!! Form::open([
                                 'url'=>route('orders.destroy', isset($order->id)?[$order->id]+$params:$params),
@@ -61,7 +65,6 @@
                                 ]), '<span class="glyphicon glyphicon-remove btn btn-default btn-sm"></span>' ) !!}
 
                                 {!! Form::close() !!}
-
                             </div>
                         </td>
                     </tr>
