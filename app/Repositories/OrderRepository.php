@@ -12,6 +12,7 @@ class OrderRepository {
      * @var Order $order
      */
     private $order;
+    public $ordersGetWithTypeStatusConfirmations;
 //    private $orderRepository;
     public $estoque;
 
@@ -20,6 +21,8 @@ class OrderRepository {
      */
     public function __construct(Order $order) {
         $this->order = $order;
+        $params['sortBy'] = ['posted_at','id'];
+        $this->ordersGetWithTypeStatusConfirmations = $this->getOrdersBaseWhereSorted([], ['type','status','confirmations'], $params)->get();
     }
 
     public function calculaEstoque()
@@ -125,13 +128,6 @@ class OrderRepository {
 
     }
 
-    public function getSalesOrdersFinished() {
-        return $this->getOrdersFinished()
-            ->filter(function($item) {
-            if ($item->type->tipo=='ordemVenda')
-                return $item;
-        });
-    }
 
     /**
      * @return Order
@@ -185,14 +181,92 @@ class OrderRepository {
      * @return Order
      */
     public function getOrdersFinished() {
-        $params['sortBy'] = ['posted_at','id'];
-        return $this->getOrdersBaseWhereSorted([], ['status','type'], $params)
-            ->get()
+        return $this->ordersGetWithTypeStatusConfirmations
             ->filter(function($item) {
                 if (strpos($item->status_list,'Finalizado')!==false)
                     return $item;
             });
     }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersOpened() {
+        return $this->ordersGetWithTypeStatusConfirmations
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Aberto')!==false)
+                    return $item;
+            });
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrdersCanceled() {
+        return $this->ordersGetWithTypeStatusConfirmations
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Cancelado')!==false)
+                    return $item;
+            });
+    }
+
+
+    /**
+     * @return Order
+     */
+    public function getSalesOrdersFinished() {
+        return $this->getOrdersFinished()
+            ->filter(function($item) {
+                if ($item->type->tipo=='ordemVenda')
+                    return $item;
+            });
+    }
+
+    /**
+     * @return Order
+     */
+    public function getPurchaseOrdersFinished() {
+        return $this->getOrdersFinished()
+            ->filter(function($item) {
+                if ($item->type->tipo=='ordemCompra')
+                    return $item;
+            });
+    }
+
+
+    /**
+     * @return Order
+     */
+    public function getSalesOrdersFinishedDelivered() {
+        return $this->getSalesOrdersFinished()
+            ->filter(function($item) {
+                if ($item->hasConfirmation('entregando')
+                    && $item->hasConfirmation('entregue')
+                    && ($item->kmFinal>$item->kmInicial)
+                ){
+                    $this->kmOrdersVendaEntregue[$item->id] = $item->kmFinal-$item->kmInicial;
+                    return $item;
+                }
+            });
+    }
+
+    public function getSomaMeses(Carbon $from, Carbon $to, array &$arrayDaSoma){
+
+        $ordersMes = $this->getOrdersFinished();
+        dd($ordersMes->posted_at);
+        $ordersMes = $this->getOrdersBase(['type','status'])
+            ->whereBetween('posted_at', [$from->toDateTimeString(), $to->toDateTimeString()])
+            ->get()
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
+        if (count($ordersMes)>0){
+            $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
+            return $this->somaMeses($from->subMonth(), $to->subMonth(),$arrayDaSoma);
+        } else return;
+    }
+
 
     /**
      * @return array
@@ -207,8 +281,8 @@ class OrderRepository {
             }
             return $resultado;
         }
-        $ordensFiltradas = $this->getSalesOrdersFinished();
-        foreach($ordensFiltradas as $order){
+//        $ordensFiltradas = $this->getSalesOrdersFinished();
+        foreach($this->getSalesOrdersFinished() as $order){
             $indexMes = $order->posted_at_carbon->format('m');
             $mes[$indexMes] = isset($mes[$indexMes])?$mes[$indexMes]+1:1;
             $indexMesValor = $order->posted_at_carbon->format('m');

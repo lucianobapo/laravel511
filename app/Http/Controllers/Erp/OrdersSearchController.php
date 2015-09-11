@@ -43,6 +43,7 @@ class OrdersSearchController extends Controller
                 'attachments',
             ], $params ),
             'params' => ['host'=>$host]+$params,
+            'paramsSerialized' => urlencode(serialize(['host'=>$host]+$params)),
         ]);
 
     }
@@ -67,6 +68,7 @@ class OrdersSearchController extends Controller
                 'attachments',
             ], $params ),
             'params' => ['host'=>$host]+$params,
+            'paramsSerialized' => urlencode(serialize(['host'=>$host]+$params)),
         ]);
 
     }

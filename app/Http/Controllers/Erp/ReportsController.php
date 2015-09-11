@@ -52,68 +52,28 @@ class ReportsController extends Controller
         $arrayDaSoma = [];
         $this->somaMeses($order, Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $arrayDaSoma);
 
-        $orders = $order->with('type','status','confirmations')->get();
-
-        $finishedOrders = $orders
-            ->filter(function($item) {
-                if (strpos($item->status_list,'Finalizado')!==false)
-                    return $item;
-            });
-        $openedOrders = $orders
-            ->filter(function($item) {
-                if (strpos($item->status_list,'Aberto')!==false)
-                    return $item;
-            });
-        $cancelledOrders = $orders
-            ->filter(function($item) {
-                if (strpos($item->status_list,'Cancelado')!==false)
-                    return $item;
-            });
-
-        $ordersVenda = $finishedOrders
-            ->filter(function($item) {
-                if (!!array_search('ordemVenda',$item->type->toArray()))
-                    return $item;
-            });
-        $ordersCompra = $finishedOrders
-            ->filter(function($item) {
-                if (!!array_search('ordemCompra',$item->type->toArray()))
-                    return $item;
-            });
-
-        $ordersVendaEntregue = $ordersVenda
-            ->filter(function($item) {
-                if ($item->hasConfirmation('entregando')
-                    && $item->hasConfirmation('entregue')
-                    && ($item->kmFinal>$item->kmInicial)
-                ){
-                    $this->kmOrdersVendaEntregue[$item->id] = $item->kmFinal-$item->kmInicial;
-                    return $item;
-                }
-            });
-
-        if (($quocienteOrders = count($orders))==0) $quocienteOrders = 1;
+        if (($quocienteOrders = count($this->orderRepository->ordersGetWithTypeStatusConfirmations))==0) $quocienteOrders = 1;
 
         $levantamentoDeOrdens = $this->orderRepository->getLevantamentoDeOrdens();
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
                 'data' => [
-                    'totalOrder'=>count($orders),
-                    'openedOrders'=>count($openedOrders),
-                    'cancelledOrders'=>count($cancelledOrders),
-                    'finishedOrders'=>count($finishedOrders),
-                    'totalVenda'=>count($ordersVenda),
-                    'totalCompra'=>count($ordersCompra),
-                    'totalVendaEntregue'=>count($ordersVendaEntregue),
+                    'totalOrder'=>count($this->orderRepository->ordersGetWithTypeStatusConfirmations),
+                    'openedOrders'=>count($this->orderRepository->getOrdersOpened()),
+                    'cancelledOrders'=>count($this->orderRepository->getOrdersCanceled()),
+                    'finishedOrders'=>count($this->orderRepository->getOrdersFinished()),
+                    'totalVenda'=>count($this->orderRepository->getSalesOrdersFinished()),
+                    'totalCompra'=>count($this->orderRepository->getPurchaseOrdersFinished()),
+                    'totalVendaEntregue'=>count($this->orderRepository->getSalesOrdersFinishedDelivered()),
                 ],
                 'percentage' => [
-                    'totalOrder'=>formatPercent(count($orders)/$quocienteOrders),
-                    'openedOrders'=>formatPercent(count($openedOrders)/$quocienteOrders),
-                    'cancelledOrders'=>formatPercent(count($cancelledOrders)/$quocienteOrders),
-                    'finishedOrders'=>formatPercent(count($finishedOrders)/$quocienteOrders),
-                    'totalVenda'=>formatPercent(count($ordersVenda)/$quocienteOrders),
-                    'totalCompra'=>formatPercent(count($ordersCompra)/$quocienteOrders),
-                    'totalVendaEntregue'=>formatPercent(count($ordersVendaEntregue)/$quocienteOrders),
+                    'totalOrder'=>formatPercent(count($this->orderRepository->ordersGetWithTypeStatusConfirmations)/$quocienteOrders),
+                    'openedOrders'=>formatPercent(count($this->orderRepository->getOrdersOpened())/$quocienteOrders),
+                    'cancelledOrders'=>formatPercent(count($this->orderRepository->getOrdersCanceled())/$quocienteOrders),
+                    'finishedOrders'=>formatPercent(count($this->orderRepository->getOrdersFinished())/$quocienteOrders),
+                    'totalVenda'=>formatPercent(count($this->orderRepository->getSalesOrdersFinished())/$quocienteOrders),
+                    'totalCompra'=>formatPercent(count($this->orderRepository->getPurchaseOrdersFinished())/$quocienteOrders),
+                    'totalVendaEntregue'=>formatPercent(count($this->orderRepository->getSalesOrdersFinishedDelivered())/$quocienteOrders),
                 ],
             ]),
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
@@ -212,7 +172,6 @@ class ReportsController extends Controller
             $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
             return $this->somaMeses($order, $from->subMonth(), $to->subMonth(),$arrayDaSoma);
         } else return;
-
     }
 
     private function comporPeriodos(array &$periodos, Order $order, Carbon $finish_date, Carbon $start_date=null) {
