@@ -1,18 +1,21 @@
 {!! Form::model($products, ['url'=>secure_route('delivery.addCart', $host), 'id'=>'form-add-setting']) !!}
 
-<div class="panel panel-default">
-    <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.porcoesTitle') }}</h2></div>
-    <div class="panel-body">
-        @foreach($porcoes as $product)
-            <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
-                @include('delivery.partials.productBlock')
-                <div class="row" style="margin: 0px;">
-                    @include('delivery.partials.productBlockForm')
+@if(count($porcoes))
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.porcoesTitle') }}</h2></div>
+        <div class="panel-body">
+            @foreach($porcoes as $product)
+                <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
+                    @include('delivery.partials.productBlock')
+                    <div class="row" style="margin: 0px;">
+                        @include('delivery.partials.productBlockForm')
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
+@endif
+
 
 <div class="panel panel-default">
     <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.cervejasTitle') }}</h2></div>
@@ -84,19 +87,22 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.sucosTitle') }}</h2></div>
-    <div class="panel-body">
-        @foreach($sucos as $product)
-            <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
-                @include('delivery.partials.productBlock')
-                <div class="row" style="margin: 0px;">
-                    @include('delivery.partials.productBlockForm')
+@if(count($sucos))
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.sucosTitle') }}</h2></div>
+        <div class="panel-body">
+            @foreach($sucos as $product)
+                <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
+                    @include('delivery.partials.productBlock')
+                    <div class="row" style="margin: 0px;">
+                        @include('delivery.partials.productBlockForm')
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
+@endif
+
 
 <div class="panel panel-default">
     <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.refrigerantesTitle') }}</h2></div>
