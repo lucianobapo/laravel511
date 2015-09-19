@@ -190,7 +190,7 @@ class OrdersController extends Controller {
      * @param SharedStat $sharedStat
      * @return Response
      */
-    public function edit($host, Order $order, Product $product, Partner $partner, Request $request)
+    public function edit($host, Order $order, Request $request)
     {
         $itemOrders = $order->orderItems;
         for($i=count($itemOrders);$i<$this->itemCount;$i++){
@@ -205,15 +205,15 @@ class OrdersController extends Controller {
 //        dd(unserialize(urldecode($request->all()['paramsSerialized'])));
         return view('erp.orders.edit', compact('host','order'))->with([
             'params' => unserialize(urldecode($request->all()['paramsSerialized'])),
-            'products' => $product->product_list,
-            'partners' => $partner->partner_list,
+            'products' => $this->productRepository->getCachedProductActivated(),
+            'partners' => $this->partnerRepository->getCachedPartnersActivated(),
             'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-            'partner_list' => $partner->partner_select_list,
+            'partner_list' => $this->partnerRepository->getCachedPartnersActivatedSelectList(),
             'order_types' => SharedOrderType::lists('descricao','id')->toArray(),
             'order_payment' => SharedOrderPayment::lists('descricao','id')->toArray(),
             'status' => SharedStat::lists('descricao','id')->toArray(),
             'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
-                'product_list' => $product->product_select_list,
+                'product_list' => $this->productRepository->getCachedProductActivatedSelectList(),
                 'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
                 'itemCount' => $this->itemCount,

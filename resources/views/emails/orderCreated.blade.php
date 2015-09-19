@@ -2,7 +2,7 @@
     background-color: #f5f5f5;border: 1px solid #e3e3e3;border-radius: 4px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
     <h1>Nova Ordem nº {!! link_to_route('orders.edit',$order->id,['laravel',$order->id]) !!}</h1>
-    <h3>{!! link_to_route('confirmations.index','Confirmações',['laravel']) !!}</h3>
+    <h3>{!! link_to_route('orders.abertas','Confirmações',['laravel']) !!}</h3>
     <p>Entregar em: {{ $order->address->endereco }}</p>
     <p>Observação: {{ $order->address->obs }}</p>
     <p>Tipo: {{ $order->type->descricao }}</p>
