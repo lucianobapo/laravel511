@@ -36,11 +36,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('order.menu.title') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li>{!! link_to_route('orders.create', trans('order.menu.create'), $host) !!}</li>
-                        <li>{!! link_to_route('confirmations.index', trans('order.menu.confirmation'), $host) !!}</li>
-                        <li><hr></li>
                         <li>{!! link_to_route('orders.index', trans('order.menu.allOrder'), $host) !!}</li>
-                        <li>{!! link_to_route('ordersSearch.compras', trans('order.menu.compras'), $host) !!}</li>
-                        <li>{!! link_to_route('ordersSearch.vendas', trans('order.menu.vendas'), $host) !!}</li>
+                        <li>{!! link_to_route('orders.abertas', trans('order.menu.abertas'), $host) !!}</li>
+                        <li>{!! link_to_route('orders.compras', trans('order.menu.compras'), $host) !!}</li>
+                        <li>{!! link_to_route('orders.vendas', trans('order.menu.vendas'), $host) !!}</li>
                     </ul>
                 </li>
 

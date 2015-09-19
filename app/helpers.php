@@ -15,6 +15,25 @@ if (!function_exists('controller')) {
     }
 }
 
+if (!function_exists('getRender')) {
+    function getRender(&$paginator)
+    {
+        return (!is_null($paginator)&&get_class($paginator)=='Illuminate\Pagination\Paginator')?$paginator->render():'';
+    }
+}
+
+if (!function_exists('getTableCacheKey')) {
+    function getTableCacheKey($table)
+    {
+        $sql = app('db')
+            ->table($table)
+            ->select(DB::raw('count(*) as register_count, MAX(updated_at)'))
+//            ->toSQL();
+            ->get();
+        return md5(serialize($sql));
+    }
+}
+
 if (! function_exists('secure_route')) {
     /**
      * Generate a URL to a named route.
@@ -38,7 +57,8 @@ if (! function_exists('secure_route')) {
 if ( ! function_exists('link_to_route_sort_by')){
     function link_to_route_sort_by($route, $column, $body, array $params=array(), array $attributes = array()){
         $params['sortBy']=$column;
-        $params['direction']=!$params['direction'];
+        $params['direction']=isset($params['direction'])?!$params['direction']:false;
+//        dd($params);
         return link_to_route($route, $body, $params, $attributes);
     }
 }

@@ -26,10 +26,11 @@ return array(
     'menu' => [
         'title' => 'Ordens',
         'allOrder' => 'Todas as Ordens',
-        'confirmation' => 'Confirmações',
+//        'confirmation' => 'Confirmações',
         'create' => 'Criar Ordem',
         'compras' => 'Ordens de Compra',
         'vendas' => 'Ordens de Venda',
+        'abertas' => 'Ordens Abertas',
     ],
 
     'create' => [

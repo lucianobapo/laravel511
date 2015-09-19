@@ -32,7 +32,7 @@ height: auto;"></p>
     @endif
 
     @foreach($order->orderItems as $item)
-        <p>- {{ $item->quantidade }} x {{ formatBRL($item->valor_unitario) }}: {{ $item->product->nome }} = {{ formatBRL($item->quantidade*$item->valor_unitario) }}</p>
+        <p>- {{ ($item->quantidade+0) }} x {{ formatBRL($item->valor_unitario) }}: {{ $item->product->nome }} = {{ formatBRL($item->quantidade*$item->valor_unitario) }}</p>
     @endforeach
     <p><strong>Valor total: {{ formatBRL($order->valor_total) }}</strong></p>
 </div>

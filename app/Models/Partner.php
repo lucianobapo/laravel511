@@ -194,19 +194,19 @@ class Partner extends Model {
 ////        return $list;
 //    }
 
-    public function getPartnerListAttribute(){
-        return $this->with('groups','status','addresses')
-            ->orderBy('nome', 'asc')
-            ->get()
-            ->filter(function($item) {
-                if ( (strpos($item->status_list,'Ativado')!==false) || (Auth::user()->role->name==config('delivery.rootRole')) )
-                    return $item;
-            });
-    }
-
-    public function getPartnerSelectListAttribute(){
-        return [''=>''] + $this->partner_list
-            ->lists('nome','id')
-            ->toArray();
-    }
+//    public function getPartnerListAttribute(){
+//        return $this->with('groups','status','addresses')
+//            ->orderBy('nome', 'asc')
+//            ->get()
+//            ->filter(function($item) {
+//                if ( (strpos($item->status_list,'Ativado')!==false) || (Auth::user()->role->name==config('delivery.rootRole')) )
+//                    return $item;
+//            });
+//    }
+//
+//    public function getPartnerSelectListAttribute(){
+//        return [''=>''] + $this->partner_list
+//            ->lists('nome','id')
+//            ->toArray();
+//    }
 }

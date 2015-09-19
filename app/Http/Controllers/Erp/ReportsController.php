@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\OrderRepository;
 use App\Repositories\PartnerRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\ReportRepository;
 use Carbon\Carbon;
 
@@ -15,36 +16,50 @@ class ReportsController extends Controller
 {
 
     private $orderRepository;
+    private $productRepository;
     private $partnerRepository;
     private $reportRepository;
-    private $estoque;
     private $kmOrdersVendaEntregue = [];
 
-    public function __construct(OrderRepository $orderRepository, ReportRepository $reportRepository, PartnerRepository $partnerRepository) {
+    public function __construct(OrderRepository $orderRepository,
+                                ReportRepository $reportRepository,
+                                ProductRepository $productRepository,
+                                PartnerRepository $partnerRepository
+    ) {
         $this->orderRepository = $orderRepository;
         $this->partnerRepository = $partnerRepository;
+        $this->productRepository = $productRepository;
         $this->reportRepository = $reportRepository;
-        $this->estoque = $this->orderRepository->calculaEstoque();
     }
 
-    public function estoque($host, Product $product)
+    public function estoque($host)
     {
-        $saldos = $this->estoque;
+        $products = $this->productRepository
+            ->getProductActivatedEstoque()
+            ->orderBy('nome', 'asc')
+            ->get();
+
+        $estoque = $this->orderRepository->getCachedEstoque();
+        $productCost = $this->orderRepository->getCachedProductCost();
+
+        $custoTotal=0;
+        foreach ($productCost as $custo) {
+            $custoTotal+=$custo;
+        }
+
+        $valorVendaTotal=0;
+        foreach ($products as $product) {
+            $valorVendaTotal+=isset($estoque[$product->id])?$estoque[$product->id]*$product->valorUnitVenda:0;
+        }
 
         return view('erp.reports.estoque', compact('host'))->with([
-            'products' => $product->where(['estoque'=>1])
-                ->orderBy('nome', 'asc' )
-                ->get()
-                ->filter(function($item) {
-                    if (strpos($item->status_list,'Desativado')===false)
-                        return $item;
-                }),
-            'estoque' => $saldos['estoque'],
-            'custoMedioEstoque' => $saldos['custoMedio'],
-            'custoSubTotal' => $saldos['custoMedioSubTotal'],
-            'custoTotal' => $saldos['custoTotal'],
-            'valorVenda' => $saldos['valorVenda'],
-            'valorVendaTotal' => $saldos['valorVendaTotal'],
+            'products' => $products,
+            'estoque' => $estoque,
+            'compras' => $this->orderRepository->getCachedProductPurchase(),
+            'vendas' => $this->orderRepository->getCachedProductSales(),
+            'custoMedioEstoque' => $productCost,
+            'custoTotal' => $custoTotal,
+            'valorVendaTotal' => $valorVendaTotal,
         ]);
     }
 
@@ -53,32 +68,17 @@ class ReportsController extends Controller
      * @return $this
      */
     public function estatOrdem($host){
-        $arrayDaSoma = [];
-        $this->orderRepository->getSomaMeses(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $arrayDaSoma);
+        $arrayDaSoma = $this->orderRepository->getCachedOrdersStatistics();
+        $levantamentoDeOrdens = $this->orderRepository->getCachedFinishedOrdersStatistics();
 
-        if (($quocienteOrders = count($this->orderRepository->ordersGetWithTypeStatusConfirmations))==0) $quocienteOrders = 1;
+//        $this->orderRepository->getSomaMeses(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $arrayDaSoma);
+//        if (($quocienteOrders = count($this->orderRepository->ordersGetWiths))==0) $quocienteOrders = 1;
+//        $levantamentoDeOrdens = $this->orderRepository->getLevantamentoDeOrdens();
 
-        $levantamentoDeOrdens = $this->orderRepository->getLevantamentoDeOrdens();
         return view('erp.reports.estatOrdem', compact('host'))->with([
             'viewTableTipoOrdem' => view('erp.reports.partials.tableTipoOrdem')->with([
-                'data' => [
-                    'totalOrder'=>count($this->orderRepository->ordersGetWithTypeStatusConfirmations),
-                    'openedOrders'=>count($this->orderRepository->getOrdersOpened()),
-                    'cancelledOrders'=>count($this->orderRepository->getOrdersCanceled()),
-                    'finishedOrders'=>count($this->orderRepository->getOrdersFinished()),
-                    'totalVenda'=>count($this->orderRepository->getSalesOrdersFinished()),
-                    'totalCompra'=>count($this->orderRepository->getPurchaseOrdersFinished()),
-                    'totalVendaEntregue'=>count($this->orderRepository->getSalesOrdersFinishedDelivered()),
-                ],
-                'percentage' => [
-                    'totalOrder'=>formatPercent(count($this->orderRepository->ordersGetWithTypeStatusConfirmations)/$quocienteOrders),
-                    'openedOrders'=>formatPercent(count($this->orderRepository->getOrdersOpened())/$quocienteOrders),
-                    'cancelledOrders'=>formatPercent(count($this->orderRepository->getOrdersCanceled())/$quocienteOrders),
-                    'finishedOrders'=>formatPercent(count($this->orderRepository->getOrdersFinished())/$quocienteOrders),
-                    'totalVenda'=>formatPercent(count($this->orderRepository->getSalesOrdersFinished())/$quocienteOrders),
-                    'totalCompra'=>formatPercent(count($this->orderRepository->getPurchaseOrdersFinished())/$quocienteOrders),
-                    'totalVendaEntregue'=>formatPercent(count($this->orderRepository->getSalesOrdersFinishedDelivered())/$quocienteOrders),
-                ],
+                'data' => $this->orderRepository->getCachedOrdersCount(),
+                'percentage' => $this->orderRepository->getCachedOrdersPercentage(),
             ]),
             'viewTableValoresMensais' => view('erp.reports.partials.tableValoresMensais')->with([
                 'data' => $arrayDaSoma,
@@ -117,17 +117,16 @@ class ReportsController extends Controller
     }
 
     public function dre($host){
-        $periodos = [];
-        $this->orderRepository->getComporPeriodos($periodos, Carbon::now(), Carbon::now()->subYear(1));
+        $periodos = $this->orderRepository->getCachedDre();
+//        $this->orderRepository->getComporPeriodos($periodos, Carbon::now(), Carbon::now()->subYear(1));
         sort($periodos);
         return view('erp.reports.dre', compact('host','periodos'));
     }
 
     public function drePdf($host){
-        $periodos = [];
-        $usePdf = true;
-        $this->orderRepository->getComporPeriodos($periodos, Carbon::now());
+        $periodos = $this->orderRepository->getCachedDre();
         sort($periodos);
+        $usePdf = true;
         $pdf = \App::make('dompdf.wrapper')
             ->loadView('erp.reports.dre', compact('host','periodos','usePdf'))
             ->setPaper('a2')
@@ -170,13 +169,4 @@ class ReportsController extends Controller
 //        return $pdf->download('invoice.pdf');
         return $pdf->stream('cardapio.pdf');
     }
-
-    public function estatOrdemFinalizadas() {
-        $ord = $this->orderRepository->getLevantamentoDeOrdens();
-
-        $usr = $this->partnerRepository->getLevantamentoDeParceiros();
-
-        dd($usr+$ord);
-    }
-
 }

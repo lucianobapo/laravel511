@@ -37,8 +37,10 @@
                         placeholder: attrs.select2partner,
                         templateResult: function (state) {
                             if (!state.id) { return state.text; }
+//                            console.log(getPartnerAddress(state.element.value));
                             var $state = $(
-                                    '<span>' + state.text + '<br> - {{ trans('modelPartner.getPartnerList') }}: '+partners[state.element.value].address+'</span>'
+                                    '<span>' + state.text + '<br> - {{ trans('modelPartner.getPartnerList') }}: '+getPartnerAddress(state.element.value)+'</span>'
+{{--                                    '<span>' + state.text + '<br> - {{ trans('modelPartner.getPartnerList') }}: '+partners[state.element.value].address+'</span>'--}}
                             );
                             return $state;
                         },

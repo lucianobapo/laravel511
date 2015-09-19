@@ -49,7 +49,7 @@ class ProductsController extends Controller {
             'cost_selected' => null,
             'status'=> SharedStat::lists('descricao','id'),
             'status_selected' => null,
-            'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
+            'estoque' => $this->orderRepository->getCachedEstoque(),
             'submitButtonText' => trans('product.actionAddBtn'),
         ]);
     }

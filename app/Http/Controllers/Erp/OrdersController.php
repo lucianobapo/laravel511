@@ -17,6 +17,8 @@ use App\Models\SharedOrderType;
 use App\Models\SharedStat;
 use App\Repositories\ImageRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\PartnerRepository;
+use App\Repositories\ProductRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 //use Illuminate\Cache\Repository as CacheRepository;
@@ -36,12 +38,18 @@ class OrdersController extends Controller {
     private $attachmentCount;
 
     private $orderRepository;
+    private $partnerRepository;
+    private $productRepository;
     private $imageRepository;
 
     /**
      * @param OrderRepository $orderRepository
      */
-    public function __construct(OrderRepository $orderRepository, ImageRepository $imageRepository) {
+    public function __construct(ImageRepository $imageRepository,
+                                Order $order,
+                                PartnerRepository $partnerRepository,
+                                ProductRepository $productRepository,
+                                OrderRepository $orderRepository) {
 //        $this->middleware('auth',['except'=> ['index']]);
 //        $this->middleware('roles',['administrator', 'manager']);
 //        $this->middleware('auth.roles',['middleware'=> 'role:editor', 'except'=> ['index']]);
@@ -51,6 +59,8 @@ class OrdersController extends Controller {
         $this->itemCount = config('delivery.orderItemCountMax');
         $this->attachmentCount = config('delivery.orderAttachmentCountMax');
         $this->orderRepository = $orderRepository;
+        $this->partnerRepository = $partnerRepository;
+        $this->productRepository = $productRepository;
         $this->imageRepository = $imageRepository;
     }
 
@@ -66,24 +76,65 @@ class OrdersController extends Controller {
 	{
         $params = $request->all();
         if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
-        return view('erp.orders.index', compact('host'))->with([
-            'orders' => $this->orderRepository->getOrdersSortedPaginated([
-                'partner',
-                'currency',
-                'type',
-                'payment',
-                'status',
-                'address',
-                'orderItems',
-                'orderItems.product',
-                'orderItems.cost',
-                'orderItems.currency',
-                'attachments',
-            ], $params),
-            'params' => ['host'=>$host]+$params,
-            'paramsSerialized' => urlencode(serialize(['host'=>$host]+$params)),
+        if (!isset($params['host'])) $params['host'] = $host;
+
+        return view('erp.orders.index', compact('host', 'params'))->with([
+            'orders' => $this->orderRepository->getOrdersSortedPaginated($params),
+            'sortRoute' => 'orders.index',
+            'paramsSerialized' => urlencode(serialize($params)),
         ]);
 	}
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @param $host
+     * @return Response
+     */
+	public function getAbertas(Request $request, $host)
+	{
+        $params = $request->all();
+        if (!isset($params['host'])) $params['host'] = $host;
+        if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
+
+        return view('erp.orders.index', compact('host', 'params'))->with([
+            'orders' => ($this->orderRepository->getOrdersOpenedSorted($params)),
+            'sortRoute' => 'orders.abertas',
+            'paramsSerialized' => urlencode(serialize($params)),
+        ]);
+	}
+
+    public function getCompras(Request $request, $host)
+    {
+        $params = $request->all();
+        if (!isset($params['host'])) $params['host'] = $host;
+        if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
+
+        $orderTypeId = is_null($orderTypeId = SharedOrderType::where(['tipo'=>'ordemCompra'])->first())?null:$orderTypeId->id;
+
+        return view('erp.orders.index', compact('host', 'params'))->with([
+            'orders' => $this->orderRepository->getOrdersWhereSortedPaginated(['type_id'=>$orderTypeId], $params ),
+            'sortRoute' => 'orders.compras',
+            'paramsSerialized' => urlencode(serialize($params)),
+        ]);
+
+    }
+    public function getVendas(Request $request, $host)
+    {
+        $params = $request->all();
+        if (!isset($params['host'])) $params['host'] = $host;
+        if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
+
+        $orderTypeId = is_null($orderTypeId = SharedOrderType::where(['tipo'=>'ordemVenda'])->first())?null:$orderTypeId->id;
+
+        return view('erp.orders.index', compact('host', 'params'))->with([
+            'orders' => $this->orderRepository->getOrdersWhereSortedPaginated(['type_id'=>$orderTypeId], $params ),
+            'sortRoute' => 'orders.vendas',
+            'paramsSerialized' => urlencode(serialize($params)),
+        ]);
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -93,7 +144,7 @@ class OrdersController extends Controller {
      * @param Order $order
      * @return Response
      */
-	public function create($host, Order $order, Product $product, Partner $partner)
+	public function create($host, Order $order, Product $product)
 	{
         for($i=0;$i<$this->itemCount;$i++){
             $itemOrders[] = new ItemOrder;
@@ -103,16 +154,18 @@ class OrdersController extends Controller {
             $attachments[] = new Attachment;
         }
 
+//        dd($this->partnerRepository->getPartnersActivated());
+//        dd($partner->partner_list->toArray());
         return view('erp.orders.create', compact('host','order'))->with([
-            'products' => $product->product_list,
-            'partners' => $partner->partner_list,
+            'products' => $this->productRepository->getCachedProductActivated(),
+            'partners' => $this->partnerRepository->getCachedPartnersActivated(),
             'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
-            'partner_list' => $partner->partner_select_list,
+            'partner_list' => $this->partnerRepository->getCachedPartnersActivatedSelectList(),
             'order_types' => SharedOrderType::lists('descricao','id')->toArray(),
             'order_payment' => SharedOrderPayment::lists('descricao','id')->toArray(),
             'status' => SharedStat::lists('descricao','id')->toArray(),
             'viewItemOrderForm' => view('erp.orders.partials.itemOrderForm')->with([
-                'product_list' => $product->product_select_list,
+                'product_list' => $this->productRepository->getCachedProductActivatedSelectList(),
                 'costs' => [''=>''] + (($costs = (new CostAllocate)->orderBy('numero')->get())? $costs->lists('cost_list','id')->toArray():[]),
                 'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
                 'itemOrders' => $itemOrders,

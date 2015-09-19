@@ -36,6 +36,13 @@
         function htmlEntityDecode(str){
             return $('#string').html(str).text();
         };
+        function getPartnerAddress(partnerId){
+            if (typeof(partners[partnerId]) == "undefined") {
+                return '{{ trans('order.semEndereco') }}';
+            } else {
+                return partners[partnerId].address;
+            };
+        };
         app.controller('myCtrl', function($scope) {
             @foreach($partners as $partner)
                 partners [{{ $partner->id }}] = {
@@ -44,7 +51,7 @@
                         { id: {{ $address->id }}, text: htmlEntityDecode('{{ $address->endereco }}') },
                         @endforeach
                     ],
-                    address: "{{ (!count($partner->addresses))?trans('order.semEndereco'):$partner->addresses[0]->endereco }}"
+                    address: "{{ (!count($partner->addresses))?trans('order.semEndereco'):$partner->addresses->first()->endereco }}"
                 };
             @endforeach
             @foreach($products as $product)

@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\ProductGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Cache\Repository as CacheRepository;
 
 class OrderRepository {
 
@@ -12,76 +13,88 @@ class OrderRepository {
      * @var Order $order
      */
     private $order;
-    public $ordersGetWithTypeStatusConfirmations = null;
-    public $ordersGetWithTypeStatusPaymentOrderItemsCost = null;
-    private $estoque;
+
+    /**
+     * @var CacheRepository
+     */
+    private $cache;
+    private $ordersCacheKey;
+
+    public $ordersGetWiths;
+//    public $estoqueProduct;
+//    public $custoMedioProduct;
 
     /**
      * @param Order $order
      */
-    public function __construct(Order $order) {
+    public function __construct(Order $order, CacheRepository $cache) {
+        $this->cache = $cache;
+        $this->ordersCacheKey = getTableCacheKey('orders');
         $this->order = $order;
-        $params['sortBy'] = ['posted_at','id'];
-        $this->ordersGetWithTypeStatusConfirmations = $this->getOrdersBaseWhereSorted([], ['type','status','confirmations'], $params)->get();
-        $this->ordersGetWithTypeStatusPaymentOrderItemsCost = $this->getOrdersBaseWhereSorted([], ['type','status','payment','orderItems','orderItems.cost'], $params)->get();
-        $this->estoque = $this->calculaEstoque();
+        $params['sortBy'] = ['orders.posted_at','orders.id'];
+        $this->ordersGetWiths = $this->getOrdersBaseWhereSorted([], [
+            'type',
+            'status',
+            'confirmations',
+            'payment',
+            'partner',
+            'currency',
+            'address',
+            'attachments',
+            'orderItems',
+            'orderItems.product',
+            'orderItems.currency',
+            'orderItems.cost'
+        ], $params);
     }
 
-    public function calculaEstoque()
-    {
-        $saldo_produtos['estoque'] = [];
-        $saldo_produtos['custoMedio'] = [];
-        $saldo_produtos['custoMedioSubTotal'] = [];
-        $saldo_produtos['valorVenda'] = [];
-        $saldo_produtos['custoTotal'] = 0;
-        $saldo_produtos['valorVendaTotal'] = 0;
-        $products = Product::with('itemOrders','itemOrders.order','itemOrders.order.type','itemOrders.order.status','status','groups')->get();
-        foreach ($products as $product) {
-            if (!$product->estoque) continue;
-            if ($product->checkStatus($product->status->toArray(),'desativado')) {
-                continue;
-//                dd($product->nome);//
-            }
-            if ($product->checkGroup($product->groups->toArray(),'Estoque Produção 3')) {
-                $saldo_produtos['estoque'][$product->id]=3;
-                continue;
-            }
-            if ($product->checkGroup($product->groups->toArray(),'Estoque Revenda 8-18')) {
-                if ( (Carbon::now()->hour>=8)&&(Carbon::now()->hour<=18) )
-                    $saldo_produtos['estoque'][$product->id]=2;
-            }
-            //12642845000160
-            $custo = 0;
-            $index = 0;
-            foreach ($product->itemOrders as $item) {
-                if (is_null($ord = $item->order)) continue;
-                if (strpos($ord->status_list,'Finalizado')===false) continue;
 
-                if ($item->order->type->tipo=='ordemVenda')
-                    $quantidade=-$item->quantidade;
-                elseif ($item->order->type->tipo=='ordemCompra'){
-                    $quantidade=+$item->quantidade;
-                    $custo = $custo+$item->valor_unitario;
-                    $index = $index + 1;
-                }
-
-
-                if (isset($saldo_produtos['estoque'][$item->product_id]))
-                    $saldo_produtos['estoque'][$item->product_id] = $saldo_produtos['estoque'][$item->product_id]+$quantidade;
+    public function getCustoMedioProduct(){
+        foreach ($this->getPurchaseOrdersFinished() as $order)
+            foreach ($order->orderItems as $item) {
+                if (isset($custo[$item->product_id]))
+                    $custo[$item->product_id]+=($item->valor_unitario*$item->quantidade);
                 else
-                    $saldo_produtos['estoque'][$item->product_id] = $quantidade;
+                    $custo[$item->product_id]=($item->valor_unitario*$item->quantidade);
+
+                if (isset($quantidade[$item->product_id]))
+                    $quantidade[$item->product_id]+=$item->quantidade;
+                else
+                    $quantidade[$item->product_id]=$item->quantidade+0;
             }
 
-            if (isset($saldo_produtos['estoque'][$product->id])){
-                $saldo_produtos['valorVenda'][$product->id]=$saldo_produtos['estoque'][$product->id]*($product->promocao?$product->valorUnitVendaPromocao:$product->valorUnitVenda);
-                $saldo_produtos['valorVendaTotal']=$saldo_produtos['valorVendaTotal']+$saldo_produtos['valorVenda'][$product->id];
-                $saldo_produtos['custoMedio'][$product->id]=$custo>0?$custo/$index:0;
-                $saldo_produtos['custoMedioSubTotal'][$product->id]=$saldo_produtos['estoque'][$product->id]>0?$saldo_produtos['custoMedio'][$product->id]*$saldo_produtos['estoque'][$product->id]:0;
-                $saldo_produtos['custoTotal'] = $saldo_produtos['custoTotal'] + $saldo_produtos['custoMedioSubTotal'][$product->id];
-            }
+        foreach ($custo as $id => $valor){
+            $custo[$id] = $valor/$quantidade[$id];
         }
-        return $saldo_produtos;
+        return $custo;
     }
+
+    public function getComprasProduct(){
+        foreach ($this->getPurchaseOrdersFinished() as $order)
+            foreach ($order->orderItems as $item)
+                if (isset($quantidade[$item->product_id]))
+                    $quantidade[$item->product_id]+=$item->quantidade;
+                else
+                    $quantidade[$item->product_id]=$item->quantidade+0;
+        return $quantidade;
+    }
+    public function getVendasProduct(){
+        foreach ($this->getSalesOrdersFinished() as $order)
+            foreach ($order->orderItems as $item)
+                if (isset($quantidade[$item->product_id]))
+                    $quantidade[$item->product_id]+=$item->quantidade;
+                else
+                    $quantidade[$item->product_id]=$item->quantidade+0;
+        return $quantidade;
+    }
+
+    public function getEstoqueProduct(){
+        $vendas = $this->getVendasProduct();
+        foreach ($this->getComprasProduct() as $productId => $compras)
+            $estoque[$productId]=$compras-(isset($vendas[$productId])?$vendas[$productId]:0);
+        return $estoque;
+    }
+
 
     /**
      * Sort Models
@@ -128,18 +141,6 @@ class OrderRepository {
         return $produtos2;
     }
 
-
-//    /**
-//     * @return Order
-//     */
-//    private function getOrdersBase($withs=[]) {
-//        return $this->order
-//            ->with($withs);
-//    }
-
-    /**
-     * @return Order
-     */
     private function getOrdersBaseWhereSorted($wheres=[], $withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
 
         if (!isset($params['direction'])) $params['direction'] = $defaultDirection;
@@ -163,46 +164,72 @@ class OrderRepository {
     /**
      * @return Order
      */
-    public function getOrdersWhereSortedPaginated($wheres=[], $withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
-        return $this->getOrdersBaseWhereSorted($wheres, $withs, $params, $defaultColumn, $defaultDirection)
-            ->paginate(config('delivery.orderListCountMax'))
+    public function getOrdersWhereSortedPaginated($wheres=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
+        $this->toBuilder();
+
+        return $this->sortOrders($params, $defaultColumn, $defaultDirection)
+            ->where($wheres)
+            ->simplePaginate(config('delivery.orderListCountMax'))
             ->appends($params);
     }
 
-    /**
-     * @return Order
-     */
-    public function getOrdersSortedPaginated($withs=[], &$params=[], $defaultColumn='id', $defaultDirection=false) {
-        return $this->getOrdersBaseWhereSorted([], $withs, $params, $defaultColumn, $defaultDirection)
-            ->paginate(config('delivery.orderListCountMax'))
+
+
+    public function getOrdersSortedPaginated(&$params=[], $defaultColumn='id', $defaultDirection=false) {
+        return $this->sortOrders($params, $defaultColumn, $defaultDirection)
+            ->simplePaginate(config('delivery.orderListCountMax'))
             ->appends($params);
+    }
+
+    private function sortOrders(&$params=[], $defaultColumn='id', $defaultDirection=false) {
+        $this->toBuilder();
+
+        if (!isset($params['direction'])) $params['direction'] = $defaultDirection;
+        if (!isset($params['sortBy'])) $params['sortBy'] = $defaultColumn;
+        $this->ordersGetWiths->getQuery()->orders = [];
+
+        if (is_array($params['sortBy'])) {
+            foreach ($params['sortBy'] as $sort) {
+                $this->ordersGetWiths = $this->ordersGetWiths->orderBy($sort, ($params['direction'] ? 'asc' : 'desc'));
+            }
+        } else {
+            $this->ordersGetWiths = $this->ordersGetWiths->orderBy($params['sortBy'], ($params['direction'] ? 'asc' : 'desc'));
+        }
+        return $this->ordersGetWiths;
     }
 
     /**
      * @return Order
      */
     public function getOrdersFinished($withs = null) {
-        if ($withs===null) {
-            return $this->ordersGetWithTypeStatusConfirmations
-                ->filter(function($item) {
-                    if (strpos($item->status_list,'Finalizado')!==false)
-                        return $item;
-                });
-        } else {
-            return $withs
-                ->filter(function($item) {
-                    if (strpos($item->status_list,'Finalizado')!==false)
-                        return $item;
-                });
-        }
+        $this->toCollection();
 
+        return $this->ordersGetWiths
+            ->filter(function($item) {
+                if (strpos($item->status_list,'Finalizado')!==false)
+                    return $item;
+            });
     }
 
-    /**
-     * @return Order
-     */
+    public function getBaseOrdersOpened() {
+        $this->toBuilder();
+        return $this->ordersGetWiths
+            ->select('orders.*')
+            ->join('order_shared_stat', 'orders.id', '=', 'order_shared_stat.order_id')
+            ->join('shared_stats', 'order_shared_stat.shared_stat_id', '=', 'shared_stats.id')
+            ->where('shared_stats.status', '=', 'aberto');
+    }
+
+    public function getOrdersOpenedSorted(&$params) {
+        $this->toBuilder();
+        $this->ordersGetWiths = $this->getBaseOrdersOpened();
+        return $this->sortOrders($params)
+            ->get();
+    }
+
     public function getOrdersOpened() {
-        return $this->ordersGetWithTypeStatusConfirmations
+        $this->toCollection();
+        return $this->ordersGetWiths
             ->filter(function($item) {
                 if (strpos($item->status_list,'Aberto')!==false)
                     return $item;
@@ -213,7 +240,8 @@ class OrderRepository {
      * @return Order
      */
     public function getOrdersCanceled() {
-        return $this->ordersGetWithTypeStatusConfirmations
+        $this->toCollection();
+        return $this->ordersGetWiths
             ->filter(function($item) {
                 if (strpos($item->status_list,'Cancelado')!==false)
                     return $item;
@@ -265,7 +293,7 @@ class OrderRepository {
      * @param Carbon $to
      * @param array $arrayDaSoma
      */
-    public function getSomaMeses(Carbon $from, Carbon $to, array &$arrayDaSoma){
+    private function getSomaMeses(Carbon $from, Carbon $to, array &$arrayDaSoma){
         $ordersMes = $this->getOrdersFinished()
             ->filter(function($item) use ($from, $to) {
                 if ( ($item->posted_at_carbon>=$from->toDateTimeString()) && ($item->posted_at_carbon<=$to->toDateTimeString()) )
@@ -305,8 +333,8 @@ class OrderRepository {
     }
 
 
-    public function getComporPeriodos(array &$periodos, Carbon $finish_date, Carbon $start_date=null) {
-        $ordersMes = $this->getOrdersFinished($this->ordersGetWithTypeStatusPaymentOrderItemsCost)
+    private function getComporPeriodos(array &$periodos, Carbon $finish_date, Carbon $start_date=null) {
+        $ordersMes = $this->getOrdersFinished()
             ->filter(function($item) use ($finish_date) {
                 if ( ($item->posted_at_carbon>=$finish_date->startOfMonth()->toDateTimeString()) && ($item->posted_at_carbon<=$finish_date->endOfMonth()->toDateTimeString()) )
                     return $item;
@@ -315,13 +343,13 @@ class OrderRepository {
         if ( (count($ordersMes)>0) && ($finish_date>$start_date) ){
             $periodos[] = [
                 'title' => $finish_date->startOfMonth()->format('m/Y'),
-                'ordersMes' => $this->comporDre($ordersMes, $this->estoque),
+                'ordersMes' => $this->comporDre($ordersMes),
             ];
             return $this->getComporPeriodos($periodos, $finish_date->subMonth(), $start_date);
         } else return;
     }
 
-    private function comporDre(&$orders, array $estoque) {
+    private function comporDre(&$orders) {
         $data = [];
         $ordersFiltred = $orders->filter(function($item) {
             if ($item->type->tipo == 'ordemVenda')
@@ -330,8 +358,9 @@ class OrderRepository {
         $data['receitaBrutaDinheiro'] = 0;
         $data['receitaBrutaCartaoCredito'] = 0;
         $data['receitaBrutaCartaoDebito'] = 0;
-
         $data['consumoMedioEstoque'] = 0;
+
+        $custoMedio = $this->getCustoMedioProduct();
         foreach ($ordersFiltred as $order) {
             // calcula receita
             if ($order->payment->pagamento=='vistad')
@@ -343,8 +372,8 @@ class OrderRepository {
 
             foreach ($order->orderItems as $item) {
                 //calcula custo médio
-                if ( ($item->cost->nome=='estoqueMercadorias')&&( isset($estoque['custoMedio'][$item->product_id]) ) ) {
-                    $data['consumoMedioEstoque'] = $data['consumoMedioEstoque'] + ($estoque['custoMedio'][$item->product_id]*$item->quantidade);
+                if ( ($item->cost->nome=='estoqueMercadorias')&&(isset($custoMedio[$item->product_id])) ) {
+                    $data['consumoMedioEstoque'] = $data['consumoMedioEstoque'] + ($custoMedio[$item->product_id]*$item->quantidade);
                 } else {
 //                    \Debugbar::info($item->product->nome);
 //                    \Debugbar::info($estoque['custoMedio']);
@@ -431,7 +460,7 @@ class OrderRepository {
     /**
      * @return array
      */
-    public function getLevantamentoDeOrdens() {
+    private function getLevantamentoDeOrdens() {
         function calculaPosicao(array $array){
             arsort($array);
             $i=1;
@@ -511,6 +540,206 @@ class OrderRepository {
             'somaOrdensHoraValor'=>array_sum($horaValor),
         ];
 
+    }
+
+    private function toCollection() {
+        if (get_class($this->ordersGetWiths)=='Illuminate\Database\Eloquent\Builder') {
+            $this->ordersGetWiths = $this->ordersGetWiths->get();
+        }
+    }
+
+    private function toBuilder() {
+        if (get_class($this->ordersGetWiths)!='Illuminate\Database\Eloquent\Builder')
+            dd('erro no $this->ordersGetWiths');
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrdersCount() {
+        $this->toCollection();
+        return [
+            'totalOrder'=>count($this->ordersGetWiths),
+            'openedOrders'=>count($this->getOrdersOpened()),
+            'cancelledOrders'=>count($this->getOrdersCanceled()),
+            'finishedOrders'=>count($this->getOrdersFinished()),
+            'totalVenda'=>count($this->getSalesOrdersFinished()),
+            'totalCompra'=>count($this->getPurchaseOrdersFinished()),
+            'totalVendaEntregue'=>count($this->getSalesOrdersFinishedDelivered()),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrdersPercentage() {
+        $this->toCollection();
+        if (($quocienteOrders = count($this->ordersGetWiths))==0) $quocienteOrders = 1;
+        return [
+            'totalOrder'=>formatPercent(count($this->ordersGetWiths)/$quocienteOrders),
+            'openedOrders'=>formatPercent(count($this->getOrdersOpened())/$quocienteOrders),
+            'cancelledOrders'=>formatPercent(count($this->getOrdersCanceled())/$quocienteOrders),
+            'finishedOrders'=>formatPercent(count($this->getOrdersFinished())/$quocienteOrders),
+            'totalVenda'=>formatPercent(count($this->getSalesOrdersFinished())/$quocienteOrders),
+            'totalCompra'=>formatPercent(count($this->getPurchaseOrdersFinished())/$quocienteOrders),
+            'totalVendaEntregue'=>formatPercent(count($this->getSalesOrdersFinishedDelivered())/$quocienteOrders),
+        ];
+    }
+
+
+
+
+    /*
+     * Serving methods
+     * ********************************************
+     */
+
+
+    /**
+     * @return array
+     */
+    public function getCachedEstoque()
+    {
+        $tag = 'estoque';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getEstoqueProduct();
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey, $cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedProductCost()
+    {
+        $tag = 'ProductCost';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getCustoMedioProduct();
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedProductSales()
+    {
+        $tag = 'ProductSales';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getVendasProduct();
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedProductPurchase()
+    {
+        $tag = 'ProductPurchase';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getComprasProduct();
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedOrdersStatistics() {
+        $tag = 'OrdersStatistics';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = [];
+            $this->getSomaMeses(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $cacheContent);
+
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedFinishedOrdersStatistics() {
+        $tag = 'FinishedOrdersStatistics';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getLevantamentoDeOrdens();
+
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedOrdersCount() {
+        $tag = 'OrdersCount';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getOrdersCount();
+
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedOrdersPercentage() {
+        $tag = 'OrdersPercentage';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = $this->getOrdersPercentage();
+
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCachedDre() {
+        $tag = 'Dre';
+        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        } else {
+            $cacheContent = [];
+            $this->getComporPeriodos($cacheContent, Carbon::now(), Carbon::now()->subYear(1));
+
+            $this->cache->tags($tag)->flush();
+            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
     }
 
 }

@@ -94,6 +94,7 @@ class Order extends Model {
     public function status() {
         return $this->belongsToMany('App\Models\SharedStat')->withTimestamps();
     }
+
     public function getStatusListAttribute(){
         $status = $this->status->toArray();
         $lista = '';

@@ -34,12 +34,16 @@ return array(
         'title' => 'Posição do estoque',
         'id' => 'Id',
         'produto' => 'Produto',
+        'compras' => 'Compras',
+        'vendas' => 'Vendas',
+        'margem' => 'Margem Bruta',
         'estoque' => 'Estoque',
         'estoqueMinimo' => 'Estoque Mínimo',
         'total' => 'Total',
         'custoMedioUnitario' => 'Custo médio unitario',
-        'custoMedioSubTotal' => 'Custo médio Subtotal',
+        'custoMedioSubTotal' => 'Custo em Estoque',
         'valorVenda' => 'Valor de venda',
+        'valorVendaSubTotal' => 'Venda em Estoque',
     ],
 
     'cardapio' => [

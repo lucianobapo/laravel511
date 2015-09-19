@@ -6,6 +6,7 @@
     <h1 class="h1s">{{ trans('product.title') }}</h1>
     <hr>
     @include ('errors.list')
+    {!! $products->render() !!}
     <table class="table table-hover table-striped table-condensed table-responsive" ng-app="myApp">
         <thead>
             <tr>

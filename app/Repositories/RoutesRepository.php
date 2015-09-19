@@ -50,30 +50,34 @@ class RoutesRepository{
                 'roles' => ['Root', 'Administrator']
             ],
                 function() {
-                resource('orders','Erp\OrdersController', [
-                    'names' => [
-                        'index'=>'orders.index',
-                        'create'=>'orders.create',
-                        'store'=>'orders.store',
-                        'edit'=>'orders.edit',
-                        'update'=>'orders.update',
-                        'destroy'=>'orders.destroy',
-                    ],
-                    'only'=>[
-                        'index',
-                        'create',
-                        'store',
-                        'edit',
-                        'update',
-                        'destroy',
-                    ],
-                ]);
+                    resource('orders','Erp\OrdersController', [
+                        'names' => [
+                            'index'=>'orders.index',
+                            'create'=>'orders.create',
+                            'store'=>'orders.store',
+                            'edit'=>'orders.edit',
+                            'update'=>'orders.update',
+                            'destroy'=>'orders.destroy',
+                        ],
+                        'only'=>[
+                            'index',
+                            'create',
+                            'store',
+                            'edit',
+                            'update',
+                            'destroy',
+                        ],
+                    ]);
 
-                controller('ordersSearch', 'Erp\OrdersSearchController', [
-                    'getCompras'=>'ordersSearch.compras',
-                    'getVendas'=>'ordersSearch.vendas',
-//                    'postConfirm'=>'confirmations.postConfirm',
-                ]);
+                    get('orders/abertas', ['as'=>'orders.abertas', 'uses'=>'Erp\OrdersController@getAbertas']);
+                    get('orders/compras', ['as'=>'orders.compras', 'uses'=>'Erp\OrdersController@getCompras']);
+                    get('orders/vendas', ['as'=>'orders.vendas', 'uses'=>'Erp\OrdersController@getVendas']);
+
+
+//                    controller('ordersSearch', 'Erp\OrdersSearchController', [
+////                        'getCompras'=>'ordersSearch.compras',
+//                        'getVendas'=>'ordersSearch.vendas',
+//                    ]);
 
                 resource('products','Erp\ProductsController', [
                     'names' => [
@@ -180,7 +184,7 @@ class RoutesRepository{
                 get('attachment/{file}', ['as'=>'attachment', 'uses'=>'FileController@showAttachment']);
 
                 controller('confirmations', 'Erp\OrderConfirmationsController', [
-                    'getIndex'=>'confirmations.index',
+//                    'getIndex'=>'confirmations.index',
                     'getConfirm'=>'confirmations.getConfirm',
                     'postConfirm'=>'confirmations.postConfirm',
                 ]);

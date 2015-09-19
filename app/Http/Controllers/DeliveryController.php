@@ -26,6 +26,7 @@ use Illuminate\Cache\Repository as CacheRepository;
 
 use Illuminate\Html\HtmlBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
@@ -83,20 +84,22 @@ class DeliveryController extends Controller {
             $cartView = view('delivery.partials.cartVazio');
         }
 
-        if(count($products = $this->productRepository->getProductsDelivery() ) ) {
+        $estoque = $this->orderRepository->getCachedEstoque();
+
+        if(count($products = $this->productRepository->getProductsDelivery($estoque) ) ) {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $product,
-                'porcoes' => $this->productRepository->getProductsPorcoes(),
-                'cervejas' => $this->productRepository->getProductsCervejas(),
-                'vinhos' => $this->productRepository->getProductsVinhos(),
-                'destilados' => $this->productRepository->getProductsDestilados(),
-                'refrigerantes' => $this->productRepository->getProductsRefrigerantes(),
-                'energeticos' => $this->productRepository->getProductsEnergeticos(),
-                'tabacaria' => $this->productRepository->getProductsTabacaria(),
-                'sucos' => $this->productRepository->getProductsSucos(),
-                'outros' => $this->productRepository->getProductsOutros(),
+                'porcoes' => $this->productRepository->getProductsCategoria($estoque, 'Porções'),
+                'cervejas' => $this->productRepository->getProductsCategoria($estoque, 'Cervejas'),
+                'vinhos' => $this->productRepository->getProductsCategoria($estoque, 'Vinhos'),
+                'destilados' => $this->productRepository->getProductsCategoria($estoque, 'Destilados'),
+                'refrigerantes' => $this->productRepository->getProductsCategoria($estoque, 'Refrigerantes'),
+                'energeticos' => $this->productRepository->getProductsCategoria($estoque, 'Energéticos'),
+                'tabacaria' => $this->productRepository->getProductsCategoria($estoque, 'Tabacaria'),
+                'sucos' => $this->productRepository->getProductsCategoria($estoque, 'Sucos'),
+                'outros' => $this->productRepository->getProductsCategoria($estoque, 'Outros'),
 //                'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
-                'estoque' => $this->productRepository->estoque,
+                'estoque' => $estoque,
             ]);
         } else {
             $panelBody = trans('delivery.index.semProdutos');
@@ -398,4 +401,5 @@ class DeliveryController extends Controller {
     private function syncStatus(Order $order, $status) {
         $order->status()->sync(is_null($status)?[]:$status);
     }
+
 }
