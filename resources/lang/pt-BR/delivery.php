@@ -39,6 +39,7 @@ return array(
     ],
 
     'categorias' => [
+        'itensEmpty' => 'Não disponíveis no momento',
         'porcoesTitle' => 'Porções',
         'cervejasTitle' => 'Cervejas',
         'vinhosTitle' => 'Vinhos',
@@ -48,6 +49,7 @@ return array(
         'tabacariaTitle' => 'Tabacaria',
         'sucosTitle' => 'Sucos',
         'outrosTitle' => 'Outros',
+
     ],
 
     'index' => [
