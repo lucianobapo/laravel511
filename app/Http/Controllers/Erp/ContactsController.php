@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Erp;
 use App\Models\Contact;
 use App\Models\Document;
 use App\Models\Partner;
+use App\Repositories\PartnerRepository;
 use App\Repositories\WidgetsRepository;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,14 @@ use App\Http\Controllers\Controller;
 class ContactsController extends Controller
 {
     private $widgetsRepository;
+    private $partnerRepository;
 
-    public function __construct(WidgetsRepository $widgetsRepository) {
+    public function __construct(PartnerRepository $partnerRepository, WidgetsRepository $widgetsRepository) {
 //        $this->middleware('auth',['except'=> ['index','show']]);
 //        $this->middleware('guest',['only'=> ['index','show']]);
 //        $this->middleware('after');
         $this->widgetsRepository = $widgetsRepository;
+        $this->partnerRepository = $partnerRepository;
     }
 
     /**
@@ -130,7 +133,7 @@ class ContactsController extends Controller
                     'sub' => 'partner',
                     'column' => 'nome',
                     'inputType' => 'select',
-                    'selectList' => $partner->partner_select_list,
+                    'selectList' => $this->partnerRepository->getCachedPartnersActivatedSelectList(),
                     'selectedItem' => $tipo=='index'?null:$partner->partner_id,
                 ],
                 [
