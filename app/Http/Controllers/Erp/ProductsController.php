@@ -77,7 +77,7 @@ class ProductsController extends Controller {
             'cost_selected' => $product->cost_id,
             'status'=> SharedStat::lists('descricao','id'),
             'status_selected' => $product->status()->getRelatedIds()->toArray(),
-            'estoque' => $this->orderRepository->calculaEstoque()['estoque'],
+            'estoque' => $this->orderRepository->getCachedEstoque(),
             'submitButtonText' => trans('product.actionUpdateBtn'),
         ]);
     }
