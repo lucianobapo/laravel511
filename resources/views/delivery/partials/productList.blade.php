@@ -1,27 +1,5 @@
 {!! Form::model($products, ['url'=>secure_route('delivery.addCart', $host), 'id'=>'form-add-setting']) !!}
 
-
-    <div class="panel panel-default">
-        <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.porcoesTitle') }}</h2></div>
-        <div class="panel-body">
-            @if(count($porcoes))
-                @foreach($porcoes as $product)
-                    <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
-                        @include('delivery.partials.productBlock')
-                        <div class="row" style="margin: 0px;">
-                            @include('delivery.partials.productBlockForm')
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                {{ trans('delivery.categorias.itensEmpty') }}
-            @endif
-
-        </div>
-    </div>
-
-
-
 <div class="panel panel-default">
     <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.cervejasTitle') }}</h2></div>
     <div class="panel-body">
@@ -134,6 +112,25 @@
                 </div>
             </div>
         @endforeach
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.porcoesTitle') }}</h2></div>
+    <div class="panel-body">
+        @if(count($porcoes))
+            @foreach($porcoes as $product)
+                <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
+                    @include('delivery.partials.productBlock')
+                    <div class="row" style="margin: 0px;">
+                        @include('delivery.partials.productBlockForm')
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <em>{{ trans('delivery.categorias.itensEmpty') }}</em>
+        @endif
+
     </div>
 </div>
 
