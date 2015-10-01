@@ -90,6 +90,7 @@ class DeliveryController extends Controller {
             $panelBody = view('delivery.partials.productList', compact('host'))->with([
                 'products' => $product,
                 'porcoes' => $this->productRepository->getProductsCategoria($estoque, 'Porções'),
+                'lanches' => $this->productRepository->getProductsCategoria($estoque, 'Lanches'),
                 'cervejas' => $this->productRepository->getProductsCategoria($estoque, 'Cervejas'),
                 'vinhos' => $this->productRepository->getProductsCategoria($estoque, 'Vinhos'),
                 'destilados' => $this->productRepository->getProductsCategoria($estoque, 'Destilados'),

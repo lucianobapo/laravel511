@@ -14,6 +14,23 @@
     </div>
 </div>
 
+@if(count($lanches))
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.lanchesTitle') }}</h2></div>
+        <div class="panel-body">
+            @foreach($lanches as $product)
+                <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
+                    @include('delivery.partials.productBlock')
+                    <div class="row" style="margin: 0px;">
+                        @include('delivery.partials.productBlockForm')
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
+
+
 <div class="panel panel-default">
     <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.vinhosTitle') }}</h2></div>
     <div class="panel-body">

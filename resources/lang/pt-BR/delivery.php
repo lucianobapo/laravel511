@@ -41,6 +41,7 @@ return array(
     'categorias' => [
         'itensEmpty' => 'Não disponíveis no momento',
         'porcoesTitle' => 'Porções',
+        'lanchesTitle' => 'Lanches',
         'cervejasTitle' => 'Cervejas',
         'vinhosTitle' => 'Vinhos',
         'destiladosTitle' => 'Destilados',
