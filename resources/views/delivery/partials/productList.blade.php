@@ -1,4 +1,4 @@
-{!! Form::model($products, ['url'=>secure_route('delivery.addCart', $host), 'id'=>'form-add-setting']) !!}
+{!! Form::model($products, ['url'=>secure_route('delivery.addCart'), 'id'=>'form-add-setting']) !!}
 
 <div class="panel panel-default">
     <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.cervejasTitle') }}</h2></div>

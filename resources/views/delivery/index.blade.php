@@ -36,13 +36,13 @@
                 @endif
                 <div class="text-right" id="btnPedido" style="margin: 10px 0px;">
                     @if(Session::has('cart'))
-                        {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']) !!}
+                        {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']) !!}
                     @endif
                 </div>
                 {!! $panelBody !!}
                 <div class="text-right" id="btnPedido2" style="margin: 10px 0px;">
                     @if(Session::has('cart'))
-                        {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']) !!}
+                        {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']) !!}
                     @endif
                 </div>
         </div>

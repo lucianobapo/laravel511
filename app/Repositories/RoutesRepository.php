@@ -224,13 +224,14 @@ class RoutesRepository{
 
     public static function deliveryRoutes(){
         // Delivery routes
-
         Route::group([
-            'domain' => '{host}.'.config('app.domain'),
+            //'domain' => '{host}.'.config('app.domain'),
+            //'domain' => '{host}.'.config('app.domain'),
             'middleware' => config('delivery.forceSiteSSL')?['secure']:[],
 //            'prefix' => 'delivery',
-            'where' => ['host' => 'delivery'],
+//            'where' => ['host' => 'delivery'],
         ], function(){
+
             get('/', ['as'=>'delivery.index', 'uses'=>'DeliveryController@index']);
             get('images/{file}', ['as'=>'images', 'uses'=>'FileController@showImage']);
 

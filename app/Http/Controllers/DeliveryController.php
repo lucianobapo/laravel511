@@ -73,7 +73,7 @@ class DeliveryController extends Controller {
      * @param Product $product
      * @return $this
      */
-    public function index(Product $product, $host){
+    public function index(Product $product){
         if (Session::has('cart')){
             $totalCart = formatBRL(Cart::total());
             $cartView = view('delivery.partials.cart', compact('host'))->with([
@@ -121,7 +121,7 @@ class DeliveryController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function addCart(Request $request, $host){
+    public function addCart(Request $request){
         $data = $request->all();
         foreach($data['quantidade'] as $key => $value){
             if (!$value>0) continue;
@@ -129,20 +129,20 @@ class DeliveryController extends Controller {
             if(!$request->ajax()) flash()->success(trans('delivery.flash.itemAdd'));
         }
         if($request->ajax()) return Response::json( [
-            'view' => view('delivery.partials.cart', compact('host'))->with([
+            'view' => view('delivery.partials.cart')->with([
                 'cart' => Cart::content()->toArray(),
             ])->render(),
             'total' => formatBRL(Cart::total()),
-            'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']),
+            'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']),
         ]);
-        else return redirect(route('delivery.index', $host));
+        else return redirect(route('delivery.index'));
     }
 
     /**
      * @param Product $product
      * @return $this
      */
-    public function pedido(Product $product, $host, Request $request){
+    public function pedido(Product $product, Request $request, $host='delivery'){
 
         if (Auth::guest()) {
             $panelListaEnderecos = '';
@@ -198,7 +198,7 @@ class DeliveryController extends Controller {
     /**
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function emptyCart($host){
+    public function emptyCart($host='delivery'){
         if (Session::has('cart')) Session::forget('cart');
 
         return redirect(route('delivery.index', $host));
@@ -208,7 +208,7 @@ class DeliveryController extends Controller {
      * Prepara o carrinho de compras
      * @param $host
      */
-    private function prepareCart($host){
+    private function prepareCart($host='delivery'){
         if (Session::has('cart')){
             $this->totalCart = formatBRL(Cart::total());
             $this->cartView = view('delivery.partials.cart', compact('host'))->with([
@@ -217,7 +217,7 @@ class DeliveryController extends Controller {
         }
     }
 
-    public function addOrder(DeliveryRequest $request, $host,
+    public function addOrder(DeliveryRequest $request,
                              Product $product, SharedOrderType $sharedOrderType,
                              SharedOrderPayment $sharedOrderPayment, SharedCurrency $sharedCurrency){
 
@@ -302,7 +302,7 @@ class DeliveryController extends Controller {
             $params['email'] = $email->contact_data;
         flash()->success(trans('delivery.flash.pedidoAdd', $params));
         if (Session::has('cart')) Session::forget('cart');
-        return redirect(route('delivery.index', $host));
+        return redirect(route('delivery.index'));
 
     }
 

@@ -19,5 +19,5 @@
     {{ trans('delivery.nav.cartTotal') }}: {{ formatBRL(Cart::total()) }}
 </div>
 <div class="">
-    {!! isset($host)? link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), $host, ['class'=>'btn btn-success']):false !!}
+    {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']) !!}
 </div>
