@@ -146,7 +146,7 @@ server {
     rewrite_log on;
 
     # The location of our projects public directory.
-    root /home/luciano/Code/delivery24horas/public;
+    root /home/ubuntu/delivery24horas/public;
 
     # Point index to the Laravel front controller.
     index index.php;
