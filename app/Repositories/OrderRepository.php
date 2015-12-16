@@ -395,6 +395,7 @@ class OrderRepository {
         $data['saldo'] = 0;
 
         $data['estoqueMercadorias'] = 0;
+        $data['estoqueCigarros'] = 0;
         $data['estoqueLanches'] = 0;
 
         $data['comprasMercadorias'] = 0;
@@ -413,6 +414,8 @@ class OrderRepository {
                 //calcula estoque
                 if ($item->cost->nome=='estoqueMercadorias')
                     $data['estoqueMercadorias'] = $data['estoqueMercadorias'] + ($item->valor_unitario*$item->quantidade);
+                if ($item->cost->nome=='estoqueCigarros')
+                    $data['estoqueCigarros'] = $data['estoqueCigarros'] + ($item->valor_unitario*$item->quantidade);
                 if ($item->cost->nome=='estoqueLanches')
                     $data['estoqueLanches'] = $data['estoqueLanches'] + ($item->valor_unitario*$item->quantidade);
 
@@ -444,7 +447,7 @@ class OrderRepository {
 //        $data['custoProdutos'] = $data['custoMedioVendas'];
         $data['custoProdutos'] = $data['comprasMercadorias']+$data['comprasLanches']+$data['consumoMedioEstoque'];
 
-        $data['comprasEstoque'] = $data['estoqueMercadorias']+$data['estoqueLanches'];
+        $data['comprasEstoque'] = $data['estoqueMercadorias']+$data['estoqueCigarros']+$data['estoqueLanches'];
         $data['saldo'] = $data['comprasEstoque']-$data['consumoMedioEstoque'];
 
         $data['margem'] = $data['receitaLiquida'] - $data['custoProdutos'];

@@ -147,6 +147,7 @@ return array(
             'acumulado' => 'Acumulado',
             'compras' => 'Compras',
             'mercadorias' => 'Mercadorias',
+            'cigarros' => 'Cigarros',
             'lanches' => 'Lanches',
             'consumo' => 'Consumo médio',
             'saldo' => 'Saldo',
