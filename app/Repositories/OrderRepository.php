@@ -299,8 +299,10 @@ class OrderRepository {
                 if ( ($item->posted_at_carbon>=$from->toDateTimeString()) && ($item->posted_at_carbon<=$to->toDateTimeString()) )
                     return $item;
             });
+
         if (count($ordersMes)>0){
             $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
+            \Debugbar::info($from->format('m/Y').' - '.count($ordersMes).' - '.$arrayDaSoma[$from->format('m/Y')]['vendas'].' - '.$arrayDaSoma[$from->format('m/Y')]['compras']);
             return $this->getSomaMeses($from->subMonth(), $to->subMonth(),$arrayDaSoma);
         } else return;
     }
@@ -317,6 +319,7 @@ class OrderRepository {
         $data['debitoFinanceiro'] = 0;
         foreach ($ordersMes as $orderValue) {
             if ($orderValue->type->tipo == 'ordemVenda') {
+//                \Debugbar::info(count($ordersMes));
                 $data['vendas'] = $data['vendas'] + $orderValue->valor_total;
             }
             if ($orderValue->type->tipo == 'ordemCompra') {
@@ -666,7 +669,7 @@ class OrderRepository {
      * @return array
      */
     public function getCachedOrdersStatistics() {
-        $tag = 'OrdersStatistics';
+        $tag = 'OrdersStatisticsss';
         if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
             return $this->cache->tags($tag)->get($this->ordersCacheKey);
         } else {
