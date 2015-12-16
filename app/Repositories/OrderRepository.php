@@ -302,7 +302,7 @@ class OrderRepository {
 
         if (count($ordersMes)>0){
             $arrayDaSoma[$from->format('m/Y')] = $this->somaValorOrdensMes($ordersMes);
-            \Debugbar::info($from->format('m/Y').' - '.count($ordersMes).' - '.$arrayDaSoma[$from->format('m/Y')]['vendas'].' - '.$arrayDaSoma[$from->format('m/Y')]['compras']);
+//            \Debugbar::info($from->format('m/Y').' - '.count($ordersMes).' - '.$arrayDaSoma[$from->format('m/Y')]['vendas'].' - '.$arrayDaSoma[$from->format('m/Y')]['compras']);
             return $this->getSomaMeses($from->subMonth(), $to->subMonth(),$arrayDaSoma);
         } else return;
     }
@@ -669,7 +669,7 @@ class OrderRepository {
      * @return array
      */
     public function getCachedOrdersStatistics() {
-        $tag = 'OrdersStatisticsss';
+        $tag = 'OrdersStatistics';
         if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
             return $this->cache->tags($tag)->get($this->ordersCacheKey);
         } else {
