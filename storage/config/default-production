@@ -134,8 +134,10 @@ server {
         listen 80;
         listen 443 ssl;
         ssl on;
-    ssl_certificate /home/ubuntu/ssl/delivery24horas/a070464ad926118f.crt.chained.crt;
-    ssl_certificate_key /home/ubuntu/ssl/delivery24horas/nginx.key;
+    #ssl_certificate /home/ubuntu/ssl/delivery24horas/a070464ad926118f.crt.chained.crt;
+    #ssl_certificate_key /home/ubuntu/ssl/delivery24horas/nginx.key;
+    ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt.chained.crt;
+    ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
 
     # Host that will serve this project.
     server_name delivery24horas.com;
