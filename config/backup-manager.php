@@ -7,10 +7,10 @@ return [
     ],
     's3' => [
         'type' => 'AwsS3',
-        'key'    => config('filesystems.s3.key'),
-        'secret' => config('filesystems.s3.secret'),
-        'region' => config('filesystems.s3.region'),
-        'bucket' => config('filesystems.s3.bucket'),
+        'key'    => env('S3_KEY', 'your-key'),
+        'secret' => env('S3_SECRET', 'your-secret'),
+        'region' => env('S3_REGION', 'your-region'),
+        'bucket' => env('S3_BUCKET', 'your-bucket'),
         'root'   => '',
     ],
     'gcs' => [
