@@ -169,7 +169,7 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
         Spatie\Backup\BackupServiceProvider::class,
-        BackupManager\Laravel\Laravel5ServiceProvider::class,
+//        BackupManager\Laravel\Laravel5ServiceProvider::class,
 
         GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
