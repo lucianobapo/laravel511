@@ -3,8 +3,9 @@
 namespace App\Console;
 
 use App\Models\Order;
-use App\Models\OrderConfirmation;
+//use App\Models\OrderConfirmation;
 use App\Repositories\MessagesRepository;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -28,9 +29,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $filePath = storage_path('logs').DIRECTORY_SEPARATOR.'scheduled.log';
+        $date = Carbon::now()->toW3cString();
+        $environment = env('APP_ENV');
 
 //        $schedule->command('inspire')
 //                 ->hourly();
+
+        $schedule->command("db:backup --database=mysql_admin --destination=".config('delivery.backup_destination')." --destinationPath=backups/{$environment}-{$date} --compression=gzip")
+            ->twiceDaily(13,21)
+//            ->dailyAt('20:41')
+//            ->everyTenMinutes()
+            ->sendOutputTo($filePath);
 
         $schedule->command('backup:run')
             ->dailyAt('06:03')

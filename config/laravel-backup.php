@@ -33,7 +33,7 @@ return [
         /*
          * Should the database be part of the back up.
          */
-        'backup-db' => true,
+        'backup-db' => false,
     ],
 
     'destination' => [
@@ -87,7 +87,7 @@ return [
          *
          * See: https://dev.mysql.com/doc/refman/5.1/en/mysqldump.html#option_mysqldump_extended-insert
          */
-        'useExtendedInsert' => false,
+        'useExtendedInsert' => true,
 
         /*
          * If the dump of the db takes more seconds that the specified value,

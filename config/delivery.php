@@ -54,6 +54,8 @@ return [
         'maxPodium' => 7,
     ],
 
+    'backup_destination' => env('BACKUP_1','local'),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

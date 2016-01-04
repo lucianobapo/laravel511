@@ -15,7 +15,8 @@
         "spatie/laravel-backup": "dev-master",
         "graham-campbell/htmlmin": "^3.1@dev",
         "barryvdh/laravel-dompdf": "0.6.*@dev",
-        "lucadegasperi/oauth2-server-laravel": "^5.0@dev"
+        "lucadegasperi/oauth2-server-laravel": "^5.0@dev",
+        "backup-manager/laravel": "^1.0"
 
     },
     "require-dev": {

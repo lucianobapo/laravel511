@@ -167,12 +167,17 @@ return [
 //        Bernardino\EasyAuthenticator\EasyAuthenticatorServiceProvider::class,
         App\Providers\EasyAuthenticatorServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+
         Spatie\Backup\BackupServiceProvider::class,
+        BackupManager\Laravel\Laravel5ServiceProvider::class,
+
         GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
+
+
 
 
     ],
