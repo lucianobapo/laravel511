@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b5623c7aa8416cfce70fb95e908d7a6c",
+    "hash": "6fa66f231584c74b174420cf9165de70",
+    "content-hash": "6e2ebb185130a58344ebfb545336d458",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -78,6 +79,128 @@
                 "sdk"
             ],
             "time": "2015-08-06 16:51:46"
+        },
+        {
+            "name": "backup-manager/backup-manager",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/backup-manager/backup-manager.git",
+                "reference": "98d4f059a89b0e4041bddf1ac9aac51d2656acec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/backup-manager/backup-manager/zipball/98d4f059a89b0e4041bddf1ac9aac51d2656acec",
+                "reference": "98d4f059a89b0e4041bddf1ac9aac51d2656acec",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "~1.0",
+                "php": ">=5.5.9",
+                "symfony/process": "~2.1"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "~3.0",
+                "dropbox/dropbox-sdk": "~1.1",
+                "league/flysystem-aws-s3-v3": "~1.0",
+                "league/flysystem-dropbox": "~1.0",
+                "league/flysystem-rackspace": "~1.0",
+                "league/flysystem-sftp": "~1.0",
+                "mockery/mockery": "~0.9",
+                "phpspec/phpspec": "~2.1",
+                "satooshi/php-coveralls": "~0.6"
+            },
+            "suggest": {
+                "league/flysystem-aws-s3-v3": "AwsS3 and GoogleCS adapter support.",
+                "league/flysystem-dropbox": "Dropbox adapter support.",
+                "league/flysystem-rackspace": "Rackspace adapter support.",
+                "league/flysystem-sftp": "Sftp adapter support."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BackupManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shawn McCool",
+                    "email": "shawn@heybigname.com",
+                    "homepage": "http://heybigname.com/"
+                },
+                {
+                    "name": "Mitchell van Wijngaarden",
+                    "email": "mitchell@kooding.nl",
+                    "homepage": "http://heybigname.com/"
+                }
+            ],
+            "description": "A framework agnostic database backup manager with user-definable procedures and support for S3, Dropbox, FTP, SFTP, and more with drivers for popular frameworks.",
+            "time": "2015-12-07 09:59:25"
+        },
+        {
+            "name": "backup-manager/laravel",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/backup-manager/laravel.git",
+                "reference": "a063dd546a98ee4d96748d77e22d3de1b3ba1fea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/backup-manager/laravel/zipball/a063dd546a98ee4d96748d77e22d3de1b3ba1fea",
+                "reference": "a063dd546a98ee4d96748d77e22d3de1b3ba1fea",
+                "shasum": ""
+            },
+            "require": {
+                "backup-manager/backup-manager": "^1.0",
+                "illuminate/console": "^4.0||^5.0",
+                "illuminate/container": "^4.0||^5.0",
+                "illuminate/support": "^4.0||^5.0",
+                "php": ">=5.5.0",
+                "symfony/process": "^2.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "dev-master",
+                "satooshi/php-coveralls": "~0.6"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BackupManager\\Laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shawn McCool",
+                    "email": "shawn@heybigname.com",
+                    "homepage": "http://heybigname.com/"
+                },
+                {
+                    "name": "Mitchell van Wijngaarden",
+                    "email": "mitchell@kooding.nl",
+                    "homepage": "http://heybigname.com/"
+                }
+            ],
+            "description": "Database backup manager seamlessly integrated with Laravel 4 or 5 with user-definable procedures and support for S3, Dropbox, FTP, SFTP, and more.",
+            "time": "2015-12-07 09:55:51"
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -834,7 +957,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/fac172ea80577fa202a8b8ff6be349a0ef61f909",
+                "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/f5f15c73a21fe8bd0752b6320d20a14819322cda",
                 "reference": "fac172ea80577fa202a8b8ff6be349a0ef61f909",
                 "shasum": ""
             },
@@ -1399,7 +1522,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laracasts/flash/zipball/f8d339b569e4da3348ab9a20be8318f39aa3a623",
+                "url": "https://api.github.com/repos/laracasts/flash/zipball/e0a048b911092e15920ce66f4b6a54b6befa30a3",
                 "reference": "a042e8126c5d986ec435f1c618cc320cca8eec66",
                 "shasum": ""
             },
@@ -2501,7 +2624,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/158144e11fe9ab9260c738b611ef4371f53cb1e5",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/a1116de174c48c8f07bcfb878bdf0b35d5ae8a17",
                 "reference": "933cab5fde27ec6ee94b4633aedc6891ece58cd2",
                 "shasum": ""
             },
@@ -2606,12 +2729,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "shasum": ""
             },
@@ -2663,12 +2786,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/CssSelector.git",
+                "url": "https://github.com/symfony/css-selector.git",
                 "reference": "0b5c07b516226b7dd32afbbc82fe547a469c5092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/0b5c07b516226b7dd32afbbc82fe547a469c5092",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/0b5c07b516226b7dd32afbbc82fe547a469c5092",
                 "reference": "0b5c07b516226b7dd32afbbc82fe547a469c5092",
                 "shasum": ""
             },
@@ -2716,12 +2839,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Debug.git",
+                "url": "https://github.com/symfony/debug.git",
                 "reference": "9daa1bf9f7e615fa2fba30357e479a90141222e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Debug/zipball/9daa1bf9f7e615fa2fba30357e479a90141222e3",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/9daa1bf9f7e615fa2fba30357e479a90141222e3",
                 "reference": "9daa1bf9f7e615fa2fba30357e479a90141222e3",
                 "shasum": ""
             },
@@ -2776,12 +2899,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/DomCrawler.git",
+                "url": "https://github.com/symfony/dom-crawler.git",
                 "reference": "9dabece63182e95c42b06967a0d929a5df78bc35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/9dabece63182e95c42b06967a0d929a5df78bc35",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/9dabece63182e95c42b06967a0d929a5df78bc35",
                 "reference": "9dabece63182e95c42b06967a0d929a5df78bc35",
                 "shasum": ""
             },
@@ -2829,12 +2952,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/EventDispatcher.git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
                 "reference": "9310b5f9a87ec2ea75d20fec0b0017c77c66dac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
                 "reference": "9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
                 "shasum": ""
             },
@@ -2936,12 +3059,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/HttpFoundation.git",
+                "url": "https://github.com/symfony/http-foundation.git",
                 "reference": "863af6898081b34c65d42100c370b9f3c51b70ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/863af6898081b34c65d42100c370b9f3c51b70ca",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/863af6898081b34c65d42100c370b9f3c51b70ca",
                 "reference": "863af6898081b34c65d42100c370b9f3c51b70ca",
                 "shasum": ""
             },
@@ -2989,12 +3112,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/HttpKernel.git",
+                "url": "https://github.com/symfony/http-kernel.git",
                 "reference": "405d3e7a59ff7a28ec469441326a0ac79065ea98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/405d3e7a59ff7a28ec469441326a0ac79065ea98",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/405d3e7a59ff7a28ec469441326a0ac79065ea98",
                 "reference": "405d3e7a59ff7a28ec469441326a0ac79065ea98",
                 "shasum": ""
             },
