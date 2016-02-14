@@ -331,12 +331,12 @@ server {
     # Port that the web server will listen on.
         listen 80;
         listen 443 ssl;
-        ssl on;
-	    ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt.chained.crt;
-    	ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+        #ssl on;
+	    #ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt.chained.crt;
+    	#ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
 
     # Host that will serve this project.
-    server_name programaDiscreto.ilhanet.com;
+    server_name programadiscreto.ilhanet.com;
 
     # set client body size to 2M #
     client_max_body_size 3M;
