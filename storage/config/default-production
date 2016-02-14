@@ -326,3 +326,47 @@ server {
     }
 
 }
+
+server {
+    # Port that the web server will listen on.
+        listen 80;
+        listen 443 ssl;
+        ssl on;
+	    ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt.chained.crt;
+    	ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+
+    # Host that will serve this project.
+    server_name programaDiscreto.ilhanet.com;
+
+    # set client body size to 2M #
+    client_max_body_size 3M;
+
+    # Useful logs for debug.
+    rewrite_log on;
+
+    # The location of our projects public directory.
+    root /home/ubuntu/programa-discreto/public;
+
+    # Point index to the Laravel front controller.
+    index index.php;
+
+    location / {
+        # URLs to attempt, including pretty ones.
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # PHP FPM configuration.
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    # We don't need .ht files with nginx.
+    location ~ /\.ht {
+            deny all;
+    }
+
+}
