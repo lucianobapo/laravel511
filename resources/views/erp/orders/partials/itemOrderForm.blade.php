@@ -48,12 +48,14 @@
             <!-- Quantidade Form Input -->
             <div class="form-group col-sm-2">
                 {!! Form::text('quantidade'.$i,$item->quantidade,[
+                'autocomplete'=>'off',
                 'class'=>'form-control'
                 ]) !!}
             </div>
             <!-- Valor_unitario Form Input -->
             <div class="form-group col-sm-2">
                 {!! Form::text('valor_unitario'.$i,$item->valor_unitario,[
+                'autocomplete'=>'off',
                 'class'=>'form-control',
                 ]) !!}
             </div>
