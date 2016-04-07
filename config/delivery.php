@@ -25,7 +25,9 @@ return [
     'orderListCountMax' => env('ORDER_LIST_COUNT_MAX', 3),
     'rootRole' => env('ROOT_ROLE', 'Root'),
 
+    'originalImageLocation' => 'original-images',
     'imageLocation' => 'images',
+    'thumbnailImageLocation' => 'thumbnails',
     'attachmentLocation' => 'attachments',
 
     'newOrderEmailAlert' => env('NEW_ORDER_EMAIL_ALERT', false),

@@ -178,7 +178,7 @@ return [
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
-
+        Intervention\Image\ImageServiceProvider::class,
 
 
     ],
@@ -243,6 +243,8 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
+
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

@@ -15,6 +15,7 @@ namespace App\Repositories;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ImageRepository {
     var $image;
@@ -29,21 +30,26 @@ class ImageRepository {
     {
         $uploadedFile = $request->file('imagem');
         if (is_null($uploadedFile)) return null;
-        $tempFile = $uploadedFile->getPath(). DIRECTORY_SEPARATOR.$uploadedFile->getFilename();
+        $tempFile = $uploadedFile->getPath(). DIRECTORY_SEPARATOR . $uploadedFile->getFilename();
 //        dd(is_file($tempFile));
+        logger($nome);
+        logger(str_slug($nome));
         $clientOriginalName = 'imagem-de-' . $nome . '.' . $uploadedFile->getClientOriginalExtension();
         // checking file is valid.
         if ($uploadedFile->isValid()) {
-            $imageDir = config('filesystems.imageLocation') . DIRECTORY_SEPARATOR;
+            $imageDir = config('delivery.imageLocation') . DIRECTORY_SEPARATOR;
             if (!Storage::exists($imageDir)) Storage::makeDirectory($imageDir);
-//            dd($imageDir . $clientOriginalName);
-            $this->load($tempFile);
-            $this->resizeToHeight(150);
-            $this->save($tempFile, $this->image_type);
-//            dd(file_get_contents($tempFile));
-//            Storage::put($imageDir . $clientOriginalName, file_get_contents($uploadedFile));
-            Storage::put($imageDir . $clientOriginalName, file_get_contents($tempFile));
-//            dd($clientOriginalName);
+            $imageResized = $this->resizeCentrilized($tempFile, 150, $uploadedFile->getClientOriginalExtension());
+            Storage::put($imageDir . $clientOriginalName, $imageResized);
+
+            $originalImageDir = config('delivery.originalImageLocation') . DIRECTORY_SEPARATOR;
+            if (!Storage::exists($originalImageDir)) Storage::makeDirectory($originalImageDir);
+            Storage::put($originalImageDir . $clientOriginalName, file_get_contents($tempFile));
+
+            $thumbnailImageDir = config('delivery.thumbnailImageLocation') . DIRECTORY_SEPARATOR;
+            if (!Storage::exists($thumbnailImageDir)) Storage::makeDirectory($thumbnailImageDir);
+            $imageResized = $this->resizeCentrilized($tempFile, 80, $uploadedFile->getClientOriginalExtension());
+            Storage::put($thumbnailImageDir . $clientOriginalName, $imageResized);
         } else {
             dd($clientOriginalName);
 //                // sending back with error message.
@@ -172,5 +178,25 @@ class ImageRepository {
         }
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
         $this->image = $new_image;
+    }
+
+    /**
+     * @param $file
+     * @param $size
+     * @param string $format
+     * @return string
+     */
+    private function resizeCentrilized($file, $size, $format='png')
+    {
+        $baseImg = Image::canvas($size, $size);
+        $image = Image::make($file)
+            ->resize($size, $size, function ($c) {
+                $c->aspectRatio();
+                $c->upsize();
+            });
+        $baseImg
+            ->insert($image, 'center')
+            ->stream($format);
+        return $baseImg->__toString();
     }
 }
