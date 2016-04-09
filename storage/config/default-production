@@ -302,6 +302,13 @@ server {
     gzip_proxied    any;
     gzip_types      text/plain application/xml application/javascript text/css;
 
+    # CSS and Javascript
+    location ~* \.(?:css|js)$ {
+      expires 2w;
+      access_log off;
+      add_header Cache-Control "public";
+    }
+
     # The location of our projects public directory.
     root /home/ubuntu/ionic-delivery24horas/www;
 
