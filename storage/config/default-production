@@ -296,6 +296,12 @@ server {
     # Useful logs for debug.
     rewrite_log on;
 
+    gzip            on;
+    gzip_min_length 1000;
+    #gzip_proxied    expired no-cache no-store private auth;
+    gzip_proxied    any;
+    gzip_types      text/plain application/xml application/javascript text/css;
+
     # The location of our projects public directory.
     root /home/ubuntu/ionic-delivery24horas/www;
 

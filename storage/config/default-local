@@ -125,6 +125,43 @@ server {
 server {
     # Port that the web server will listen on.
         listen 80;
+        #listen 443 ssl;
+        #ssl on;
+
+        #ssl_certificate /home/ubuntu/ssl/delivery24horas.com/a070464ad926118f.crt.chained.crt;
+        #ssl_certificate_key /home/ubuntu/ssl/delivery24horas/nginx.key;
+        #ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt.chained.crt;
+        #ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+
+    # Host that will serve this project.
+    server_name ionic.localhost.com;
+
+    # Useful logs for debug.
+    rewrite_log on;
+
+    # The location of our projects public directory.
+    root /home/luciano/Code/ionic-delivery24horas/www;
+
+    # Point index to the Laravel front controller.
+    index index.html;
+
+    # Remove trailing slash to please routing system.
+    if (!-d $request_filename) {
+        rewrite ^/(.+)/$ /$1 permanent;
+    }
+
+    # We don't need .ht files with nginx.
+    location ~ /\.ht {
+            deny all;
+    }
+    # Set header expirations on per-project basis location ~* \.(?:ico|css|js|jpe?g|JPG|png|svg|woff)$ {
+    #        expires 365d;
+    #}
+}
+
+server {
+    # Port that the web server will listen on.
+        listen 80;
         listen 443 ssl;
         ssl on;
 	#ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
@@ -140,6 +177,56 @@ server {
 
     # The location of our projects public directory.
     root /home/luciano/Code/laravel511/public;
+
+    # Point index to the Laravel front controller.
+    index index.php;
+
+    location / {
+        # URLs to attempt, including pretty ones.
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Remove trailing slash to please routing system.
+    if (!-d $request_filename) {
+        rewrite ^/(.+)/$ /$1 permanent;
+    }
+
+    # PHP FPM configuration.
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    # We don't need .ht files with nginx.
+    location ~ /\.ht {
+            deny all;
+    }
+    # Set header expirations on per-project basis location ~* \.(?:ico|css|js|jpe?g|JPG|png|svg|woff)$ {
+    #        expires 365d;
+    #}
+}
+
+server {
+    # Port that the web server will listen on.
+        listen 80;
+        listen 443 ssl;
+        ssl on;
+	#ssl_certificate /etc/nginx/ssl/fd32675451e107f6.crt;
+	#ssl_certificate_key /etc/nginx/ssl/delivery.ilhanet.com.key;
+	ssl_certificate /etc/apache2/ssl/apache.crt;
+	ssl_certificate_key /etc/apache2/ssl/apache.key;
+
+    # Host that will serve this project.
+    server_name api.localhost.com;
+
+    # Useful logs for debug.
+    rewrite_log on;
+
+    # The location of our projects public directory.
+    root /home/luciano/Code/laravel-delivery24horas-api/public;
 
     # Point index to the Laravel front controller.
     index index.php;
