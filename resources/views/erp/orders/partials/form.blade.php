@@ -66,7 +66,7 @@
     <!-- troco Form Input -->
     <div class="form-group col-sm-2">
         {!! Form::label('troco',trans('modelOrder.attributes.troco')) !!}
-        {!! Form::text('troco',$order->troco,['class'=>'form-control']) !!}
+        {!! Form::text('troco',$order->troco,['class'=>'form-control','autocomplete'=>'off']) !!}
     </div>
 
     <!-- Referencia Form Input -->
