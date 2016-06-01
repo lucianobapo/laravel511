@@ -150,6 +150,13 @@ server {
         rewrite ^/(.+)/$ /$1 permanent;
     }
 
+    # CSS and Javascript
+        location ~* \.(?:css|js)$ {
+          expires 0;
+          access_log off;
+          add_header Cache-Control "public";
+        }
+
     # We don't need .ht files with nginx.
     location ~ /\.ht {
             deny all;
