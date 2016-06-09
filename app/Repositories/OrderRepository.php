@@ -90,8 +90,16 @@ class OrderRepository {
 
     public function getEstoqueProduct(){
         $vendas = $this->getVendasProduct();
-        foreach ($this->getComprasProduct() as $productId => $compras)
+        foreach ($this->getComprasProduct() as $productId => $compras){
             $estoque[$productId]=$compras-(isset($vendas[$productId])?$vendas[$productId]:0);
+        }
+
+        $products = (new ProductGroup)->find(1)->products;
+        foreach ($products as $product) {
+            foreach ($product->status as $status) {
+                if ($status->status=='ativado') $estoque[$product->id]=3;
+            }
+        }
         return $estoque;
     }
 
@@ -608,7 +616,8 @@ class OrderRepository {
     {
         $tag = 'estoque';
         if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+            return $this->getEstoqueProduct();
         } else {
             $cacheContent = $this->getEstoqueProduct();
             $this->cache->tags($tag)->flush();
