@@ -60,8 +60,15 @@ class ProductRepository {
         $this->toCollection();
         return $this->productsGetWithsDelivery
             ->filter(function($item) use ($estoque) {
+                $return = false;
+                foreach ($item->groups as $group) {
+                    if($group->id==1) $return = true;
+                }
+
                 if ( (isset($estoque[$item->id]))&&($estoque[$item->id]>0) )
-                    return $item;
+                    $return = true;
+
+                if ($return) return $item;
             });
     }
 
