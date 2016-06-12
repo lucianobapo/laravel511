@@ -27,6 +27,7 @@
 
     ga('create', '{{ config('delivery.googleAnalyticsId') }}', 'auto');
     ga('require', 'linkid', 'linkid.js');
+    ga('set', 'userId', '{{ config('delivery.googleAnalyticsUserId') }}'); // Defina o ID de usuário usando o user_id conectado.
     ga('require', 'displayfeatures');
     ga('send', 'pageview');
 </script>

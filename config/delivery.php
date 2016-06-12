@@ -34,6 +34,7 @@ return [
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
     'googleAnalyticsId' => env('GOOGLE_ANALYTICS_ID', 'UA-59766919-1'),
+    'googleAnalyticsUserId' => app('session')->getId(),
 
     'forceSiteSSL' => env('FORCE_SITE_SSL', false),
 
