@@ -34,7 +34,7 @@ return [
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
     'googleAnalyticsId' => env('GOOGLE_ANALYTICS_ID', 'UA-59766919-1'),
-    'googleAnalyticsUserId' => '',//app('session')->getId(),
+    'googleAnalyticsUserId' => (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['HTTP_USER_AGENT']))?md5($_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']):time(),//app('session')->getId(),
 
     'forceSiteSSL' => env('FORCE_SITE_SSL', false),
 
