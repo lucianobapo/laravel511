@@ -8,9 +8,10 @@
 {{--<meta name="twitter:image" content="{{ config('delivery.siteImage') }}"/>--}}
 
 
-<meta name="twitter:card" content="summary" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@DeliveryLan" />
 <meta name="twitter:creator" content="@DeliveryLan" />
+<meta name="twitter:image:alt" content="{{ trans('delivery.head.metaDescription') }}" />
 
 <meta property="og:url" content="{{ config('delivery.siteMetaTagCurrentUrl') }}"/>
 <meta property="og:type" content="website"/>
