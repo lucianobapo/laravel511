@@ -19,11 +19,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td colspan="7" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
-                <td colspan="2">{{ formatBRL(isset($custoTotal)?$custoTotal:0) }}</td>
-                <td colspan="2">{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>
-            </tr>
+            {{--<tr>--}}
+                {{--<td colspan="7" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>--}}
+                {{--<td colspan="2">{{ formatBRL(isset($custoTotal)?$custoTotal:0) }}</td>--}}
+                {{--<td colspan="2">{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>--}}
+            {{--</tr>--}}
+            <?php $somaCusto=0; ?>
             @foreach($products as $product)
                 @if(isset($estoque[$product->id])&&($product->estoque_minimo>0)&&($estoque[$product->id]<$product->estoque_minimo))
                     <tr style="font-weight: bold;color: red">
@@ -38,12 +39,24 @@
                     <td>{{ isset($estoque[$product->id])?$estoque[$product->id]:0 }}</td>
                     <td>{{ $product->estoque_minimo }}</td>
                     <td>{{ formatBRL(isset($custoMedioEstoque[$product->id])?$custoMedioEstoque[$product->id]:0) }}</td>
-                    <td>{{ formatBRL(isset($estoque[$product->id])&&isset($custoMedioEstoque[$product->id])?$estoque[$product->id]*$custoMedioEstoque[$product->id]:0) }}</td>
+                        @if(isset($estoque[$product->id]) && isset($custoMedioEstoque[$product->id]))
+                            <td>{{ formatBRL($estoque[$product->id]*$custoMedioEstoque[$product->id]) }}</td>
+                            <?php $somaCusto=$somaCusto+$estoque[$product->id]*$custoMedioEstoque[$product->id]; ?>
+                        @else
+                            <td>{{ formatBRL(0) }}</td>
+                        @endif
+{{--                    <td>{{ formatBRL(isset($estoque[$product->id])&&isset($custoMedioEstoque[$product->id])?$estoque[$product->id]*$custoMedioEstoque[$product->id]:0) }}</td>--}}
                     <td>{{ formatBRL($product->valorUnitVenda) }}</td>
                     <td>{{ formatBRL(isset($estoque[$product->id])?$estoque[$product->id]*$product->valorUnitVenda:0) }}</td>
                     <td>{{ formatPercent(1-(isset($estoque[$product->id])&&isset($custoMedioEstoque[$product->id])?( $custoMedioEstoque[$product->id] / $product->valorUnitVenda ):0)) }}</td>
                 </tr>
             @endforeach
+
+            <tr>
+                <td colspan="7" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
+                <td colspan="2">{{ formatBRL($somaCusto) }}</td>
+                <td colspan="2">{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>
+            </tr>
         </tbody>
     </table>
 @endsection
