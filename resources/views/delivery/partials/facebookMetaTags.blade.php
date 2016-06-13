@@ -1,7 +1,7 @@
 <meta property="fb:app_id" content="{{ config('services.facebook.client_id') }}" />
 <meta property="fb:admins" content="riodasostrasdelivery24hs"/>
 
-<meta property="og:url" content="{{ config('delivery.siteCurrentUrl') }}"/>
+<meta property="og:url" content="{{ config('delivery.siteMetaTagCurrentUrl') }}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{{ trans('delivery.head.title') }}"/>
 <meta property="og:site_name" content="{{ trans('delivery.index.title') }}"/>
