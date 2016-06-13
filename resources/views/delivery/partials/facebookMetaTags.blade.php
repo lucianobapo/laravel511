@@ -7,6 +7,7 @@
 {{--<meta name="twitter:description" content="{{ trans('delivery.head.metaDescription') }}"/>--}}
 {{--<meta name="twitter:image" content="{{ config('delivery.siteImage') }}"/>--}}
 
+
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@DeliveryLan" />
 <meta name="twitter:creator" content="@DeliveryLan" />
