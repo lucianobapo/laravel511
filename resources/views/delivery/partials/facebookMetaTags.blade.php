@@ -1,11 +1,15 @@
 <meta property="fb:app_id" content="{{ config('services.facebook.client_id') }}" />
 {{--<meta property="fb:admins" content="riodasostrasdelivery24hs"/>--}}
 
-<meta name="twitter:card" content="photo"/>
-<meta name="twitter:url" content="{{ config('delivery.siteMetaTagCurrentUrl') }}"/>
-<meta name="twitter:title" content="{{ trans('delivery.head.title') }}"/>
-<meta name="twitter:description" content="{{ trans('delivery.head.metaDescription') }}"/>
-<meta name="twitter:image" content="{{ config('delivery.siteImage') }}"/>
+{{--<meta name="twitter:card" content="photo"/>--}}
+{{--<meta name="twitter:url" content="{{ config('delivery.siteMetaTagCurrentUrl') }}"/>--}}
+{{--<meta name="twitter:title" content="{{ trans('delivery.head.title') }}"/>--}}
+{{--<meta name="twitter:description" content="{{ trans('delivery.head.metaDescription') }}"/>--}}
+{{--<meta name="twitter:image" content="{{ config('delivery.siteImage') }}"/>--}}
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@DeliveryLan" />
+<meta name="twitter:creator" content="@DeliveryLan" />
 
 <meta property="og:url" content="{{ config('delivery.siteMetaTagCurrentUrl') }}"/>
 <meta property="og:type" content="website"/>
