@@ -24,7 +24,7 @@
                 {{--<td colspan="2">{{ formatBRL(isset($custoTotal)?$custoTotal:0) }}</td>--}}
                 {{--<td colspan="2">{{ formatBRL(isset($valorVendaTotal)?$valorVendaTotal:0) }}</td>--}}
             {{--</tr>--}}
-            <?php $somaCusto=0; $somaValor=0; ?>
+            <?php $somaCusto=0; $somaValor=0; $somaMargem=0; $countMargem=0; ?>
             @foreach($products as $product)
                 @if(isset($estoque[$product->id])&&($product->estoque_minimo>0)&&($estoque[$product->id]<$product->estoque_minimo))
                     <tr style="font-weight: bold;color: red">
@@ -56,6 +56,8 @@
 
                         @if(isset($estoque[$product->id]) && isset($custoMedioEstoque[$product->id]))
                             <td>{{ formatPercent(1-( $custoMedioEstoque[$product->id] / ($product->promocao?$product->valorUnitVendaPromocao:$product->valorUnitVenda) )) }}</td>
+                            <?php $somaMargem=$somaMargem+($custoMedioEstoque[$product->id] / ($product->promocao?$product->valorUnitVendaPromocao:$product->valorUnitVenda)); ?>
+                            <?php $countMargem=$countMargem+1; ?>
                         @else
                             <td>{{ formatPercent(0) }}</td>
                         @endif
@@ -66,7 +68,8 @@
             <tr>
                 <td colspan="7" class="text-right"><strong>{{ trans('report.estoque.total') }}</strong></td>
                 <td colspan="2">{{ formatBRL($somaCusto) }}</td>
-                <td colspan="2">{{ formatBRL($somaValor) }}</td>
+                <td colspan="1">{{ formatBRL($somaValor) }}</td>
+                <td colspan="1">Tot. {{ formatPercent(1-($somaCusto/$somaValor)) }} / Med. {{ formatPercent(1-($somaMargem/$countMargem)) }}</td>
             </tr>
         </tbody>
     </table>
