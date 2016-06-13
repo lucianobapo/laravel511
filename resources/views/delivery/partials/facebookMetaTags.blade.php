@@ -5,6 +5,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{{ trans('delivery.head.title') }}"/>
 <meta property="og:site_name" content="{{ trans('delivery.index.title') }}"/>
+<meta property="og:image" content="{{ config('delivery.siteImage') }}"/>
 <meta property="og:image:url" content="{{ config('delivery.siteImage') }}"/>
 <meta property="og:image:secure_url" content="{{ config('delivery.siteSecureImage') }}"/>
 <meta property="og:image:type" content="image/png"/>
