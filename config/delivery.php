@@ -34,7 +34,8 @@ return [
 
     'facebookMetaTags' => env('FACEBOOK_META_TAGS', false),
     'googleAnalyticsId' => env('GOOGLE_ANALYTICS_ID', 'UA-59766919-1'),
-    'googleAnalyticsUserId' => (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['HTTP_USER_AGENT']))?md5($_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']):time(),//app('session')->getId(),
+    'googleAnalyticsUserId' => (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['HTTP_USER_AGENT']))?
+        md5($_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']):time(),//app('session')->getId(),
 
     'forceSiteSSL' => env('FORCE_SITE_SSL', false),
 
@@ -75,6 +76,8 @@ return [
 //    'emailLogo' => 'https://delivery.ilhanet.com/img/logo-delivery2.png',
     'emailLogo' => 'https://s3.amazonaws.com/delivery-images/logo/logo-delivery2-resized-compressed.png',
     'siteCurrentUrl' => '//'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
+    'siteImage' => 'http://s3.amazonaws.com/delivery-images/campanhas/campanha-face.png',
+    'siteSecureImage' => 'https://s3.amazonaws.com/delivery-images/campanhas/campanha-face.png',
 
 
 ];
