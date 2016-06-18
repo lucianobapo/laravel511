@@ -20,7 +20,7 @@ class CronController extends Controller
         $process = new Process($command);
         $process->run();
 
-        $this->backupDatabase();
+//        $this->backupDatabase();
 //        $this->checkOpenOrders();
     }
 
