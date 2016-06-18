@@ -15,7 +15,7 @@ class CronController extends Controller
 {
     public function cron($minutes){
         $this->backupDatabase();
-        $this->checkOpenOrders();
+//        $this->checkOpenOrders();
     }
 
     protected function backupDatabase()

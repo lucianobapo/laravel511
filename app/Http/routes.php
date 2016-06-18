@@ -16,6 +16,10 @@ Route::controller('welcome', 'WelcomeController');
 //Route::get('/welcome', function () {
 //    return view('welcome');
 //});
+if (config('app.debug'))
+    Route::get('/phpinfo', function () {
+        return phpinfo();
+    });
 
 get('/cron/{minites}', ['as'=>'cron', 'uses'=>'CronController@cron']);
 
