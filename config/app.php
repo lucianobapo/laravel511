@@ -149,7 +149,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        Illuminate\Html\HtmlServiceProvider::class,
+
+        Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -168,9 +169,7 @@ return [
         App\Providers\EasyAuthenticatorServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
-        Spatie\Backup\BackupServiceProvider::class,
         BackupManager\Laravel\Laravel5ServiceProvider::class,
-
 
         GrahamCampbell\HTMLMin\HTMLMinServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
@@ -229,8 +228,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        'Form'      => Illuminate\Html\FormFacade::class,
-        'Html'      => Illuminate\Html\HtmlFacade::class,
+
+
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
         'RoutesRepository'      => App\Repositories\RoutesRepository::class,
         'Currency'  => App\Facades\CurrencyFacade::class,

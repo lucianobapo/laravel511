@@ -7,15 +7,14 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "illuminate/html": "^5.0@dev",
+        "laravelcollective/html": "^5",
         "laracasts/flash": "dev-master",
         "bernardino/easy-authenticator": "dev-master",
         "gloudemans/shoppingcart": "dev-master",
-        "league/flysystem-aws-s3-v3": "^1.0@dev",
-        "spatie/laravel-backup": "dev-master",
-        "graham-campbell/htmlmin": "^3.1@dev",
-        "barryvdh/laravel-dompdf": "0.6.*@dev",
-        "lucadegasperi/oauth2-server-laravel": "^5.0@dev",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "graham-campbell/htmlmin": "^3.1",
+        "barryvdh/laravel-dompdf": "0.6.*",
+        "lucadegasperi/oauth2-server-laravel": "^5.0",
         "backup-manager/laravel": "^1.0",
         "intervention/image": "^2.3"
 
@@ -61,7 +60,5 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

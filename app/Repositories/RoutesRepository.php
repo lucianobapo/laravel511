@@ -64,21 +64,6 @@ class RoutesRepository{
         );
     }
 
-    public static function galleryRoutes(){
-        // Gallery
-        Route::group([
-            'domain' => '{host}.'.config('app.domain'),
-//            'prefix' => 'delivery',
-            'where' => ['host' => 'gallery'],
-        ], function(){
-
-            get('/gallery', ['as'=>'gallery.index', 'uses'=>'GalleryController@index']);
-//            controller('/', 'GalleryController', [
-//                'getIndex'=>'gallery.index',
-//            ]);
-        });
-    }
-
     private static function authRoutes()
     {
         Route::controller('auth', 'Auth\AuthController', [
