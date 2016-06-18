@@ -23,8 +23,8 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers;
 
-    protected $redirectTo = '/orders';
-    protected $redirectAfterLogout = '/orders';
+    protected $redirectTo = '/laravel/orders';
+    protected $redirectAfterLogout = '/laravel/orders';
 
     /**
      * Create a new authentication controller instance.
@@ -74,9 +74,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getLogin($host)
+    public function getLogin($host=null)
     {
-        return view('auth.login',compact('host'));
+        return view('auth.login',is_null($host)?[]:compact('host'));
     }
 
     /**
@@ -84,9 +84,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister($host)
+    public function getRegister($host=null)
     {
-        return view('auth.register',compact('host'))->with([
+        return view('auth.register',is_null($host)?[]:compact('host'))->with([
             'roles'=> Role::lists('name','id'),
         ]);
     }
