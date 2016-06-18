@@ -10,10 +10,16 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Process\Process;
 
 class CronController extends Controller
 {
     public function cron($minutes){
+//        $command = "mysql -u homestead -psecret " . $this->argument('name') . "<" . $this->argument('import');
+        $command = "ll";
+        $process = new Process($command);
+        $process->run();
+
         $this->backupDatabase();
 //        $this->checkOpenOrders();
     }
