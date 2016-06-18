@@ -16,12 +16,12 @@ class CronController extends Controller
 {
     public function cron($minutes){
 //        $command = "mysql -u homestead -psecret " . $this->argument('name') . "<" . $this->argument('import');
-        $command = "ll";
-        $process = new Process($command);
-        $process->run();
+//        $command = "ll";
+//        $process = new Process($command);
+//        $process->run();
 
 //        $this->backupDatabase();
-//        $this->checkOpenOrders();
+        $this->checkOpenOrders();
     }
 
     protected function backupDatabase()
