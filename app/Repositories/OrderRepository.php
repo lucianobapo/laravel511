@@ -680,13 +680,13 @@ class OrderRepository {
      * @return array
      */
     public function getCachedOrdersStatistics() {
-//        $tag = 'OrdersStatistics';
-        if ($this->cache->has($this->ordersCacheKey)) {
-            return $this->cache->get($this->ordersCacheKey);
+        $tag = 'OrdersStatistics';
+        if ($this->cache->has($this->ordersCacheKey.$tag)) {
+            return $this->cache->get($this->ordersCacheKey.$tag);
         } else {
             $cacheContent = [];
             $this->getSomaMeses(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $cacheContent);
-            $this->cache->put($this->ordersCacheKey,$cacheContent, $this->cacheMinutes);
+            $this->cache->put($this->ordersCacheKey.$tag,$cacheContent, $this->cacheMinutes);
             return $cacheContent;
         }
     }
@@ -695,48 +695,52 @@ class OrderRepository {
      * @return array
      */
     public function getCachedFinishedOrdersStatistics() {
-        $tag = 'FinishedOrdersStatistics';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getLevantamentoDeOrdens();
+        return $this->getCached('ordersCacheKey', 'getLevantamentoDeOrdens');
 
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+//        $tag = 'FinishedOrdersStatistics';
+//        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//        } else {
+//            $cacheContent = $this->getLevantamentoDeOrdens();
+//
+//            $this->cache->tags($tag)->flush();
+//            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+//            return $cacheContent;
+//        }
     }
 
     /**
      * @return array
      */
     public function getCachedOrdersCount() {
-        $tag = 'OrdersCount';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getOrdersCount();
-
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+        return $this->getCached('ordersCacheKey', 'getOrdersCount');
+//        $tag = 'OrdersCount';
+//        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//        } else {
+//            $cacheContent = $this->getOrdersCount();
+//
+//            $this->cache->tags($tag)->flush();
+//            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+//            return $cacheContent;
+//        }
     }
 
     /**
      * @return array
      */
     public function getCachedOrdersPercentage() {
-        $tag = 'OrdersPercentage';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getOrdersPercentage();
-
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+        return $this->getCached('ordersCacheKey', 'getOrdersPercentage');
+//        $tag = 'OrdersPercentage';
+//        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//        } else {
+//            $cacheContent = $this->getOrdersPercentage();
+//
+//            $this->cache->tags($tag)->flush();
+//            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+//            return $cacheContent;
+//        }
     }
 
     /**
@@ -744,14 +748,13 @@ class OrderRepository {
      */
     public function getCachedDre() {
         $tag = 'Dre';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+        if ($this->cache->has($this->ordersCacheKey.$tag)) {
+            return $this->cache->get($this->ordersCacheKey.$tag);
         } else {
             $cacheContent = [];
             $this->getComporPeriodos($cacheContent, Carbon::now(), Carbon::now()->subYear(1));
 
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            $this->cache->put($this->ordersCacheKey.$tag,$cacheContent, $this->cacheMinutes);
             return $cacheContent;
         }
     }
