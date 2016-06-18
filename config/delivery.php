@@ -16,6 +16,7 @@ return [
 //    'debug' => env('APP_DEBUG'),
 
     // Other stuffs
+    'cron' => env('APP_CRON', false),
     'storeTraffic' => env('APP_STORE_TRAFFIC', false),
     'orderItemCountMax' => env('ORDER_ITEM_COUNT_MAX', 3),
     'orderAttachmentCountMax' => env('ORDER_ATTACHMENT_COUNT_MAX', 3),

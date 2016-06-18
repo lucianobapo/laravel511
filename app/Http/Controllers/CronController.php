@@ -20,9 +20,16 @@ class CronController extends Controller
 //        $process = new Process($command);
 //        $process->run();
 
+//        SELECT * from myTable
+//INTO OUTFILE '/tmp/querydump.csv'
+//FIELDS TERMINATED BY ','
+//ENCLOSED BY '"'
+//LINES TERMINATED BY '\n'
+
 //        $this->backupDatabase();
 
-        $this->checkOpenOrders();
+        if (config('delivery.cron'))
+            $this->checkOpenOrders();
     }
 
     protected function backupDatabase()
