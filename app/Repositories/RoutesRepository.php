@@ -81,10 +81,20 @@ class RoutesRepository{
 
     private static function authRoutes()
     {
-        Route::controllers([
-            'auth' => 'Auth\AuthController',
-            'password' => 'Auth\PasswordController',
+        Route::controller('auth', 'Auth\AuthController', [
+            'getLogin'=>'auth.getLogin',
+            'getLogout'=>'auth.getLogout',
+            'getRegister'=>'auth.getRegister',
         ]);
+        Route::controller('password', 'Auth\PasswordController', [
+            'getEmail'=>'password.getEmail',
+        ]);
+
+//        Route::controllers([
+////            'auth'
+//// => 'Auth\AuthController',
+//            'password' => 'Auth\PasswordController',
+//        ]);
     }
 
     private static function ordersRoutes()
