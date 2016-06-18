@@ -23,6 +23,7 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers;
 
+//    protected $loginPath = '/laravel/orders';
     protected $redirectTo = '/laravel/orders';
     protected $redirectAfterLogout = '/laravel/orders';
 
@@ -34,6 +35,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);
+        $this->loginPath = route('auth.getLogin');
     }
 
     /**

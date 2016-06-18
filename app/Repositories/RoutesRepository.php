@@ -83,6 +83,7 @@ class RoutesRepository{
     {
         Route::controller('auth', 'Auth\AuthController', [
             'getLogin'=>'auth.getLogin',
+            'postLogin'=>'auth.postLogin',
             'getLogout'=>'auth.getLogout',
             'getRegister'=>'auth.getRegister',
         ]);
