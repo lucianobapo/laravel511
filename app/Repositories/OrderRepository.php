@@ -18,6 +18,7 @@ class OrderRepository {
      * @var CacheRepository
      */
     private $cache;
+    private $cacheMinutes;
     private $ordersCacheKey;
 
     public $ordersGetWiths;
@@ -29,6 +30,7 @@ class OrderRepository {
      */
     public function __construct(Order $order, CacheRepository $cache) {
         $this->cache = $cache;
+        $this->cacheMinutes = config('cache.queryCacheTimeMinutes');
         $this->ordersCacheKey = getTableCacheKey('orders');
         $this->order = $order;
         $params['sortBy'] = ['orders.posted_at','orders.id'];
@@ -614,19 +616,20 @@ class OrderRepository {
      */
     public function getCachedEstoque()
     {
+        return $this->getCached('ordersCacheKey', 'getEstoqueProduct');
 //        $tag = 'estoque';
 //        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-        if ($this->cache->has($this->ordersCacheKey)) {
-//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-            return $this->getEstoqueProduct();
-        } else {
-            $cacheContent = $this->getEstoqueProduct();
-//            $this->cache->tags($tag)->flush();
-            $this->cache->forget($this->ordersCacheKey);
-//            $this->cache->tags($tag)->forever($this->ordersCacheKey, $cacheContent);
-            $this->cache->forever($this->ordersCacheKey, $cacheContent);
-            return $cacheContent;
-        }
+//        if ($this->cache->has($this->ordersCacheKey)) {
+//            return $this->cache->get($this->ordersCacheKey);
+////            return $this->getEstoqueProduct();
+//        } else {
+//            $cacheContent = $this->getEstoqueProduct();
+////            $this->cache->tags($tag)->flush();
+////            $this->cache->forget($this->ordersCacheKey);
+////            $this->cache->tags($tag)->forever($this->ordersCacheKey, $cacheContent);
+//            $this->cache->put($this->ordersCacheKey, $cacheContent, $this->cacheMinutes);
+//            return $cacheContent;
+//        }
     }
 
     /**
@@ -634,15 +637,15 @@ class OrderRepository {
      */
     public function getCachedProductCost()
     {
-        $tag = 'ProductCost';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getCustoMedioProduct();
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+        return $this->getCached('ordersCacheKey', 'getCustoMedioProduct');
+//        $tag = 'ProductCost';
+//        if ($this->cache->has($this->ordersCacheKey)) {
+//            return $this->cache->get($this->ordersCacheKey);
+//        } else {
+//            $cacheContent = $this->getCustoMedioProduct();
+//            $this->cache->put($this->ordersCacheKey,$cacheContent, $this->cacheMinutes);
+//            return $cacheContent;
+//        }
     }
 
     /**
@@ -650,15 +653,9 @@ class OrderRepository {
      */
     public function getCachedProductSales()
     {
-        $tag = 'ProductSales';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getVendasProduct();
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+//        $tag = 'ProductSales';
+        return $this->getCached('ordersCacheKey', 'getVendasProduct');
+
     }
 
     /**
@@ -666,33 +663,32 @@ class OrderRepository {
      */
     public function getCachedProductPurchase()
     {
-        $tag = 'ProductPurchase';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
-        } else {
-            $cacheContent = $this->getComprasProduct();
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
-            return $cacheContent;
-        }
+//        $tag = 'ProductPurchase';
+        return $this->getCached('ordersCacheKey', 'getComprasProduct');
+
+//        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+//            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//        } else {
+//            $cacheContent = $this->getComprasProduct();
+//            $this->cache->tags($tag)->flush();
+//            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+//            return $cacheContent;
+//        }
     }
 
     /**
      * @return array
      */
     public function getCachedOrdersStatistics() {
-        $tag = 'OrdersStatistics';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
-            return $this->cache->tags($tag)->get($this->ordersCacheKey);
+//        $tag = 'OrdersStatistics';
+        if ($this->cache->has($this->ordersCacheKey)) {
+            return $this->cache->get($this->ordersCacheKey);
         } else {
             $cacheContent = [];
             $this->getSomaMeses(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(), $cacheContent);
-
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            $this->cache->put($this->ordersCacheKey,$cacheContent, $this->cacheMinutes);
             return $cacheContent;
         }
-
     }
 
     /**
@@ -756,6 +752,17 @@ class OrderRepository {
 
             $this->cache->tags($tag)->flush();
             $this->cache->tags($tag)->forever($this->ordersCacheKey,$cacheContent);
+            return $cacheContent;
+        }
+    }
+
+    private function getCached($key, $call)
+    {
+        if ($this->cache->has($this->$key)) {
+            return $this->cache->get($this->$key);
+        } else {
+            $cacheContent = $this->$call();
+            $this->cache->put($this->$key,$cacheContent, $this->cacheMinutes);
             return $cacheContent;
         }
     }
