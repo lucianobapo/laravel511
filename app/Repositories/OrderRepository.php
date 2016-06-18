@@ -758,11 +758,11 @@ class OrderRepository {
 
     private function getCached($key, $call)
     {
-        if ($this->cache->has($this->$key)) {
-            return $this->cache->get($this->$key);
+        if ($this->cache->has($this->$key.$call)) {
+            return $this->cache->get($this->$key.$call);
         } else {
             $cacheContent = $this->$call();
-            $this->cache->put($this->$key,$cacheContent, $this->cacheMinutes);
+            $this->cache->put($this->$key.$call,$cacheContent, $this->cacheMinutes);
             return $cacheContent;
         }
     }
