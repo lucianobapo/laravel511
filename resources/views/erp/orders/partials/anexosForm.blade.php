@@ -11,7 +11,7 @@
             @else
                 <div class="col-sm-5">
                     {{ trans('modelAttachment.attributes.file',['numero'=>$i]) }} -
-                    {!! link_to_route('attachment',$attachment->file,[$host,$attachment->file],['target'=>'_blank', 'title'=>$attachment->file]) !!}
+                    {!! link_to_route('attachment',$attachment->file,isset($host)?[$host,$attachment->file]:[$attachment->file],['target'=>'_blank', 'title'=>$attachment->file]) !!}
                 </div>
             @endif
 

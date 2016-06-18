@@ -1,6 +1,6 @@
 <div class="row well">
     {!! Form::open([
-    'url'=>route('confirmations.postConfirm', [$host]),
+    'url'=>route('confirmations.postConfirm', isset($host)?[$host]:null),
     'id' => 'form'.$order->id,
     'method' => 'POST',
     ]) !!}

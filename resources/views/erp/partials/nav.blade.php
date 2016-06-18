@@ -35,28 +35,28 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('order.menu.title') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>{!! link_to_route('orders.create', trans('order.menu.create'), $host) !!}</li>
-                        <li>{!! link_to_route('orders.index', trans('order.menu.allOrder'), $host) !!}</li>
-                        <li>{!! link_to_route('orders.abertas', trans('order.menu.abertas'), $host) !!}</li>
-                        <li>{!! link_to_route('orders.compras', trans('order.menu.compras'), $host) !!}</li>
-                        <li>{!! link_to_route('orders.vendas', trans('order.menu.vendas'), $host) !!}</li>
+                        <li>{!! link_to_route('orders.create', trans('order.menu.create'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('orders.index', trans('order.menu.allOrder'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('orders.abertas', trans('order.menu.abertas'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('orders.compras', trans('order.menu.compras'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('orders.vendas', trans('order.menu.vendas'), isset($host)?$host:null) !!}</li>
                     </ul>
                 </li>
 
-                <li>{!! link_to_route('products.index', trans('product.menuProduct'), $host) !!}</li>
-                <li>{!! link_to_route('costs.index', trans('cost.menuName'), $host) !!}</li>
-                <li>{!! link_to_route('partners.index', trans('partner.menuName'), $host) !!}</li>
-                <li>{!! link_to_route('addresses.index', trans('address.menuName'), $host) !!}</li>
-                <li>{!! link_to_route('contacts.index', trans('contact.menuName'), $host) !!}</li>
-                <li>{!! link_to_route('documents.index', trans('document.menuName'), $host) !!}</li>
+                <li>{!! link_to_route('products.index', trans('product.menuProduct'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('costs.index', trans('cost.menuName'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('partners.index', trans('partner.menuName'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('addresses.index', trans('address.menuName'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('contacts.index', trans('contact.menuName'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('documents.index', trans('document.menuName'), isset($host)?$host:null) !!}</li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ trans('report.menu.topName') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>{!! link_to_route('reports.estoque', trans('report.menu.estoque'), $host) !!}</li>
-                        <li>{!! link_to_route('reports.estatOrdem', trans('report.menu.estatOrdem'), $host) !!}</li>
-                        <li>{!! link_to_route('reports.cardapio', trans('report.menu.cardapio'), $host) !!}</li>
-                        <li>{!! link_to_route('reports.dre', trans('report.menu.dre'), $host) !!}</li>
-                        <li>{!! link_to_route('reports.diarioGeral', trans('report.menu.diarioGeral'), $host) !!}</li>
+                        <li>{!! link_to_route('reports.estoque', trans('report.menu.estoque'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('reports.estatOrdem', trans('report.menu.estatOrdem'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('reports.cardapio', trans('report.menu.cardapio'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('reports.dre', trans('report.menu.dre'), isset($host)?$host:null) !!}</li>
+                        <li>{!! link_to_route('reports.diarioGeral', trans('report.menu.diarioGeral'), isset($host)?$host:null) !!}</li>
                     </ul>
                 </li>
             </ul>

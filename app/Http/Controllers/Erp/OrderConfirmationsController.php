@@ -24,25 +24,25 @@ class OrderConfirmationsController extends Controller
 //        ]);
 //    }
 
-    public function getConfirm($host, $order){
+    public function getConfirm($order){
         $orderFound = Order::find($order);
-        return view('erp.confirmations.confirm',compact('host'))->with([
+        return view('erp.confirmations.confirm')->with([
             'confirmations' => OrderConfirmation::where(['order_id'=>$order])->get(),
             'order' => $orderFound,
-            'viewConfirmRecebido' => view('erp.confirmations.partials.confirmRecebido',compact('host'))->with([
+            'viewConfirmRecebido' => view('erp.confirmations.partials.confirmRecebido')->with([
                 'order' => $orderFound,
             ]),
-            'viewConfirmEntregando' => view('erp.confirmations.partials.confirmEntregando',compact('host'))->with([
+            'viewConfirmEntregando' => view('erp.confirmations.partials.confirmEntregando')->with([
                 'order' => $orderFound,
 
             ]),
-            'viewConfirmEntregue' => view('erp.confirmations.partials.confirmEntregue',compact('host'))->with([
+            'viewConfirmEntregue' => view('erp.confirmations.partials.confirmEntregue')->with([
                 'order' => $orderFound,
             ]),
         ]);
     }
 
-    public function postConfirm($host, Request $request){
+    public function postConfirm(Request $request){
         if($request->method()==='POST'){
             $attributes = $request->all();
             $order = Order::find($attributes['order_id']);
@@ -75,13 +75,13 @@ class OrderConfirmationsController extends Controller
                     'user'=>is_null($order->partner->user)?null:$order->partner->user,
                     'partner'=>$order->partner,
                     'order'=>$order,
-                    'host'=>$host,
+//                    'host'=>$host,
                     'msg' => $attributes['mensagem'],
                 ]);
 
             flash()->overlay(trans('confirmation.flash.confirmed',['ordem'=>$attributes['order_id']]),trans('confirmation.flash.confirmedTitle'));
 
-            return redirect(route('orders.abertas', $host));
+            return redirect(route('orders.abertas'));
         }
     }
 }

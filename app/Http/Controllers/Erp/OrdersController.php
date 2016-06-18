@@ -72,13 +72,13 @@ class OrdersController extends Controller {
      * @param $host
      * @return Response
      */
-	public function index(Request $request, $host)
+	public function index(Request $request)
 	{
         $params = $request->all();
         if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
-        if (!isset($params['host'])) $params['host'] = $host;
+//        if (!isset($params['host'])) $params['host'] = $host;
 
-        return view('erp.orders.index', compact('host', 'params'))->with([
+        return view('erp.orders.index', compact('params'))->with([
             'orders' => $this->orderRepository->getOrdersSortedPaginated($params),
             'sortRoute' => 'orders.index',
             'paramsSerialized' => urlencode(serialize($params)),
@@ -92,43 +92,43 @@ class OrdersController extends Controller {
      * @param $host
      * @return Response
      */
-	public function getAbertas(Request $request, $host)
+	public function getAbertas(Request $request)
 	{
         $params = $request->all();
-        if (!isset($params['host'])) $params['host'] = $host;
+//        if (!isset($params['host'])) $params['host'] = $host;
         if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
 
-        return view('erp.orders.index', compact('host', 'params'))->with([
+        return view('erp.orders.index', compact('params'))->with([
             'orders' => ($this->orderRepository->getOrdersOpenedSorted($params)),
             'sortRoute' => 'orders.abertas',
             'paramsSerialized' => urlencode(serialize($params)),
         ]);
 	}
 
-    public function getCompras(Request $request, $host)
+    public function getCompras(Request $request)
     {
         $params = $request->all();
-        if (!isset($params['host'])) $params['host'] = $host;
+//        if (!isset($params['host'])) $params['host'] = $host;
         if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
 
         $orderTypeId = is_null($orderTypeId = SharedOrderType::where(['tipo'=>'ordemCompra'])->first())?null:$orderTypeId->id;
 
-        return view('erp.orders.index', compact('host', 'params'))->with([
+        return view('erp.orders.index', compact('params'))->with([
             'orders' => $this->orderRepository->getOrdersWhereSortedPaginated(['type_id'=>$orderTypeId], $params ),
             'sortRoute' => 'orders.compras',
             'paramsSerialized' => urlencode(serialize($params)),
         ]);
 
     }
-    public function getVendas(Request $request, $host)
+    public function getVendas(Request $request)
     {
         $params = $request->all();
-        if (!isset($params['host'])) $params['host'] = $host;
+//        if (!isset($params['host'])) $params['host'] = $host;
         if (!isset($params['sortBy'])) $params['sortBy'] = ['posted_at','id'];
 
         $orderTypeId = is_null($orderTypeId = SharedOrderType::where(['tipo'=>'ordemVenda'])->first())?null:$orderTypeId->id;
 
-        return view('erp.orders.index', compact('host', 'params'))->with([
+        return view('erp.orders.index', compact('params'))->with([
             'orders' => $this->orderRepository->getOrdersWhereSortedPaginated(['type_id'=>$orderTypeId], $params ),
             'sortRoute' => 'orders.vendas',
             'paramsSerialized' => urlencode(serialize($params)),
@@ -144,7 +144,7 @@ class OrdersController extends Controller {
      * @param Order $order
      * @return Response
      */
-	public function create($host, Order $order, Product $product)
+	public function create(Order $order)
 	{
         for($i=0;$i<$this->itemCount;$i++){
             $itemOrders[] = new ItemOrder;
@@ -156,7 +156,7 @@ class OrdersController extends Controller {
 
 //        dd($this->partnerRepository->getPartnersActivated());
 //        dd($partner->partner_list->toArray());
-        return view('erp.orders.create', compact('host','order'))->with([
+        return view('erp.orders.create', compact('order'))->with([
             'products' => $this->productRepository->getCachedProductActivated(),
             'partners' => $this->partnerRepository->getCachedPartnersActivated(),
             'currencies' => SharedCurrency::lists('nome_universal','id')->toArray(),
@@ -190,7 +190,7 @@ class OrdersController extends Controller {
      * @param SharedStat $sharedStat
      * @return Response
      */
-    public function edit($host, Order $order, Request $request)
+    public function edit(Order $order, Request $request)
     {
         $itemOrders = $order->orderItems;
         for($i=count($itemOrders);$i<$this->itemCount;$i++){
@@ -203,7 +203,7 @@ class OrdersController extends Controller {
         }
 
 //        dd(unserialize(urldecode($request->all()['paramsSerialized'])));
-        return view('erp.orders.edit', compact('host','order'))->with([
+        return view('erp.orders.edit', compact('order'))->with([
             'params' => unserialize(urldecode($request->all()['paramsSerialized'])),
             'products' => $this->productRepository->getCachedProductActivated(),
             'partners' => $this->partnerRepository->getCachedPartnersActivated(),

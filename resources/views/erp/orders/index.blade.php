@@ -38,14 +38,15 @@
                             <button title="{{ trans('order.actionDetailsTitle') }}" ng-click="detalhes{{ $order->id }}=!detalhes{{ $order->id }}" style="margin: 0px 10px 0px 0px" class="glyphicon btn btn-default btn-sm" ng-class="{'glyphicon-plus':!detalhes{{ $order->id }},'glyphicon-minus':detalhes{{ $order->id }}}"></button>
 
                             @if( (stripos($order->status_list,'Finalizado')===false) || (Auth::user()->role->name==config('delivery.rootRole')) )
-                                {{--{!! sprintf( link_to_route('orders.edit', '%s', [$host,$order->id,$paramsSerialized], [--}}
+                                {{--{!! sprintf( link_to_route('orders.edit', '%s', [$order->id,$paramsSerialized], [--}}
                                 {{--'title'=>trans('order.actionEditTitle'),--}}
                                 {{--]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>' ) !!}--}}
-                                {!! (str_replace('%s','<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>',link_to_route('orders.edit', '%s', [$host,$order->id,'paramsSerialized'=>$paramsSerialized], ['title'=>trans('order.actionEditTitle')] ))) !!}
+                                {!! (str_replace('%s','<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-pencil btn btn-default btn-sm"></span>',
+                                link_to_route('orders.edit', '%s', isset($host)?[$host,$order->id,'paramsSerialized'=>$paramsSerialized]:[$order->id,'paramsSerialized'=>$paramsSerialized], ['title'=>trans('order.actionEditTitle')] ))) !!}
                             @endif
 
                             @if( (stripos($order->status_list,'Aberto')!==false) )
-                                {!! sprintf( link_to_route('confirmations.getConfirm', '%s', [$host,$order->id], [
+                                {!! sprintf( link_to_route('confirmations.getConfirm', '%s', isset($host)?[$host,$order->id]:[$order->id], [
                                 'title'=>trans('confirmation.actionConfirmTitle'),
                                 ]), '<span style="margin: 0px 10px 0px 0px" class="glyphicon glyphicon-flag btn btn-default btn-sm"></span>' ) !!}
                             @endif
@@ -74,7 +75,7 @@
                             @endif
                             @if(count($order->attachments))
                                 <div ng-init="active='anexos'">
-                                    @include('erp.orders.partials.anexosForm', ['host' => $host, 'attachments' => $order->attachments])
+                                    @include('erp.orders.partials.anexosForm', isset($host)?['host' => $host, 'attachments' => $order->attachments]:['attachments' => $order->attachments])
                                 </div>
                             @endif
                             @if(count($order->orderItems))

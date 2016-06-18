@@ -31,4 +31,4 @@ Route::controller('welcome', 'WelcomeController');
 RoutesRepository::oAuth2Routes();
 RoutesRepository::erpRoutes();
 RoutesRepository::deliveryRoutes();
-RoutesRepository::galleryRoutes();
+//RoutesRepository::galleryRoutes();

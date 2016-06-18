@@ -11,7 +11,7 @@
     @include('erp.orders.partials.pillsNav')
 
     @include ('errors.list')
-    {!! Form::model($order, ['url'=>route('orders.store', $host),
+    {!! Form::model($order, ['url'=>route('orders.store', isset($host)?$host:null),
         'ng-app'=>"myApp",
         'ng-controller'=>"myCtrl",
         'files' => true,
