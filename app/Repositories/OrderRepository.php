@@ -614,14 +614,17 @@ class OrderRepository {
      */
     public function getCachedEstoque()
     {
-        $tag = 'estoque';
-        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+//        $tag = 'estoque';
+//        if ($this->cache->tags($tag)->has($this->ordersCacheKey)) {
+        if ($this->cache->has($this->ordersCacheKey)) {
 //            return $this->cache->tags($tag)->get($this->ordersCacheKey);
             return $this->getEstoqueProduct();
         } else {
             $cacheContent = $this->getEstoqueProduct();
-            $this->cache->tags($tag)->flush();
-            $this->cache->tags($tag)->forever($this->ordersCacheKey, $cacheContent);
+//            $this->cache->tags($tag)->flush();
+            $this->cache->forget($this->ordersCacheKey);
+//            $this->cache->tags($tag)->forever($this->ordersCacheKey, $cacheContent);
+            $this->cache->forever($this->ordersCacheKey, $cacheContent);
             return $cacheContent;
         }
     }
