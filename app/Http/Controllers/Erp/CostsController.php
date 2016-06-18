@@ -29,7 +29,7 @@ class CostsController extends Controller
      * @param $host
      * @return Response
      */
-    public function index($host, CostAllocate $costAllocate, Request $request)
+    public function index(CostAllocate $costAllocate, Request $request, $host=null)
     {
         return $this->getGrid('index', $host, $costAllocate, $request);
     }
@@ -42,7 +42,7 @@ class CostsController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function edit($host, CostAllocate $costAllocate, Request $request){
+    public function edit(CostAllocate $costAllocate, Request $request, $host=null){
         return $this->getGrid('edit', $host, $costAllocate, $request);
     }
 
@@ -54,7 +54,7 @@ class CostsController extends Controller
      * @param $host
      * @return Response
      */
-    public function store(CostAllocate $costAllocate, Request $request, $host)
+    public function store(CostAllocate $costAllocate, Request $request, $host=null)
     {
         $attributes = $request->all();
 
@@ -73,7 +73,7 @@ class CostsController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function update($host, CostAllocate $costAllocate, Request $request){
+    public function update(CostAllocate $costAllocate, Request $request, $host=null){
         $attributes = $request->all();
 
         $costAllocate->update($attributes);
@@ -92,7 +92,7 @@ class CostsController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function destroy($host, Request $request, CostAllocate $costAllocate)
+    public function destroy(Request $request, CostAllocate $costAllocate, $host=null)
     {
         if ($request->method()==='DELETE'){
             $costAllocate->delete();
@@ -101,7 +101,7 @@ class CostsController extends Controller
         } else throw new Exception(trans('app.errors.method'));
     }
 
-    public function getGrid($tipo, &$host, CostAllocate &$costAllocate, Request &$request){
+    public function getGrid($tipo, $host=null, CostAllocate &$costAllocate, Request &$request){
         return $this->widgetsRepository->showGrid($costAllocate, [
             'host' => $host,
             'method' => $tipo=='index'?'POST':'PATCH',

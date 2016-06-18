@@ -34,7 +34,7 @@ class DocumentsController extends Controller
      * @param Partner $partner
      * @return Response
      */
-    public function index($host, Document $document, Request $request, Partner $partner)
+    public function index(Document $document, Request $request, Partner $partner, $host=null)
     {
         return $this->getGrid('index', $host, $document, $request, $partner);
     }
@@ -48,7 +48,7 @@ class DocumentsController extends Controller
      * @param Partner $partner
      * @return Response
      */
-    public function edit($host, Document $document, Request $request, Partner $partner){
+    public function edit(Document $document, Request $request, Partner $partner, $host=null){
         return $this->getGrid('edit', $host, $document, $request, $partner);
     }
 
@@ -60,7 +60,7 @@ class DocumentsController extends Controller
      * @param $host
      * @return Response
      */
-    public function store($host, Document $document, Request $request)
+    public function store(Document $document, Request $request, $host=null)
     {
         $attributes = $request->all();
         $document->create($attributes);
@@ -76,7 +76,7 @@ class DocumentsController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function update($host, Document $document, Request $request){
+    public function update(Document $document, Request $request, $host=null){
         $attributes = $request->all();
         $document->update($attributes);
         flash()->overlay(trans('document.flash.updated', ['nome' => $document->document_data]), trans('document.flash.updatedTitle'));
@@ -92,7 +92,7 @@ class DocumentsController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function destroy($host, Document $document, Request $request)
+    public function destroy(Document $document, Request $request, $host=null)
     {
         if ($request->method()==='DELETE'){
             $document->delete();

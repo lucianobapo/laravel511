@@ -33,7 +33,7 @@ class ProductsController extends Controller {
      * @param $host
      * @return Response
      */
-    public function index(Product $product, Request $request, $host)
+    public function index(Product $product, Request $request, $host=null)
     {
         $params = $request->all();
         $productOrdered = $product->sorting($params);
@@ -62,7 +62,7 @@ class ProductsController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function edit($host, Product $product, Request $request){
+    public function edit(Product $product, Request $request, $host=null){
         $params = $request->all();
         $productOrdered = $product->sorting($params);
 
@@ -90,7 +90,7 @@ class ProductsController extends Controller {
      * @param ProductRequest $request
      * @return Response
      */
-    public function update($host, Product $product, ProductRequest $request){
+    public function update(Product $product, ProductRequest $request, $host=null){
         $attributes = $request->all();
 
         if (!empty($attributes['imagem'])){
@@ -114,7 +114,7 @@ class ProductsController extends Controller {
      *
      * @return Response
      */
-    public function store(Product $product, ProductRequest $request, $host)
+    public function store(Product $product, ProductRequest $request, $host=null)
     {
         $attributes = $request->all();
 
@@ -140,7 +140,7 @@ class ProductsController extends Controller {
      * @return Response
      * @throws Exception
      */
-    public function destroy(Request $request, $host, Product $product)
+    public function destroy(Request $request, Product $product, $host=null)
     {
         if ($request->method()==='DELETE'){
             $product->delete();

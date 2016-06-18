@@ -30,7 +30,7 @@ class PartnersController extends Controller {
      * @param $host
      * @return Response
      */
-    public function index($host, Partner $partner, Request $request, User $user)
+    public function index(Partner $partner, Request $request, User $user, $host=null)
     {
         return $this->getGrid('index', $host, $partner, $request, $user);
 //        $params = $request->all();
@@ -57,7 +57,7 @@ class PartnersController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function edit($host, Partner $partner, Request $request, User $user){
+    public function edit(Partner $partner, Request $request, User $user, $host=null){
         return $this->getGrid('edit', $host, $partner, $request, $user);
 //        $params = $request->all();
 //        $partnerOrdered = $partner->sorting($params);
@@ -80,7 +80,7 @@ class PartnersController extends Controller {
      *
      * @return Response
      */
-    public function store(Partner $partner, PartnerRequest $request, $host)
+    public function store(Partner $partner, PartnerRequest $request, $host=null)
     {
         $attributes = $request->all();
         $partnerCreated = $partner->create($attributes);
@@ -97,7 +97,7 @@ class PartnersController extends Controller {
      * @param PartnerRequest $request
      * @return Response
      */
-    public function update($host, Partner $partner, PartnerRequest $request){
+    public function update(Partner $partner, PartnerRequest $request, $host=null){
         $attributes = $request->all();
         $partner->update($attributes);
         $partner->syncItems($attributes);
@@ -114,7 +114,7 @@ class PartnersController extends Controller {
      * @return Response
      * @throws Exception
      */
-    public function destroy(Request $request, $host, Partner $partner)
+    public function destroy(Request $request, Partner $partner, $host=null)
     {
         if ($request->method()==='DELETE'){
             $nome = $partner->nome;
@@ -124,7 +124,7 @@ class PartnersController extends Controller {
         } else throw new Exception(trans('app.errors.method'));
     }
 
-    public function getGrid($tipo, &$host, Partner &$partner, Request &$request, User &$user){
+    public function getGrid($tipo, $host=null, Partner &$partner, Request &$request, User &$user){
         return $this->widgetsRepository->showGrid($partner, [
             'host' => $host,
             'method' => $tipo=='index'?'POST':'PATCH',

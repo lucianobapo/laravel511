@@ -35,7 +35,7 @@ class ContactsController extends Controller
      * @param Partner $partner
      * @return Response
      */
-    public function index($host, Contact $contact, Request $request, Partner $partner)
+    public function index(Contact $contact, Request $request, Partner $partner, $host=null)
     {
         return $this->getGrid('index', $host, $contact, $request, $partner);
     }
@@ -49,7 +49,7 @@ class ContactsController extends Controller
      * @param Partner $partner
      * @return Response
      */
-    public function edit($host, Contact $contact, Request $request, Partner $partner){
+    public function edit(Contact $contact, Request $request, Partner $partner, $host=null){
         return $this->getGrid('edit', $host, $contact, $request, $partner);
     }
 
@@ -61,7 +61,7 @@ class ContactsController extends Controller
      * @param $host
      * @return Response
      */
-    public function store($host, Contact $contact, Request $request)
+    public function store(Contact $contact, Request $request, $host=null)
     {
         $attributes = $request->all();
         $contact->create($attributes);
@@ -77,7 +77,7 @@ class ContactsController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function update($host, Contact $contact, Request $request){
+    public function update(Contact $contact, Request $request, $host=null){
         $attributes = $request->all();
         $contact->update($attributes);
         flash()->overlay(trans('contact.flash.updated', ['nome' => $contact->contact_data]), trans('contact.flash.updatedTitle'));
@@ -93,7 +93,7 @@ class ContactsController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function destroy($host, Contact $contact, Request $request)
+    public function destroy(Contact $contact, Request $request, $host=null)
     {
         if ($request->method()==='DELETE'){
             $contact->delete();
@@ -110,7 +110,7 @@ class ContactsController extends Controller
      * @param Partner $partner
      * @return $this
      */
-    public function getGrid($tipo, &$host, Contact &$contact, Request &$request, Partner &$partner){
+    public function getGrid($tipo, $host=null, Contact &$contact, Request &$request, Partner &$partner){
         return $this->widgetsRepository->showGrid($contact, [
             'host' => $host,
             'method' => $tipo=='index'?'POST':'PATCH',

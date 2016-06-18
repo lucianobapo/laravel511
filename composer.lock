@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "37161586026220b76e30727c68ad519a",
-    "content-hash": "573c43ea483ac62fd450b62203266b54",
+    "hash": "94d0423a108e675d6c38797fa5b105ed",
+    "content-hash": "03b8822ff59ebf4d53c547206b7cdb94",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1006,35 +1006,37 @@
         },
         {
             "name": "graham-campbell/htmlmin",
-            "version": "v3.1.0",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GrahamCampbell/Laravel-HTMLMin.git",
-                "reference": "5804d4a4c60f6caa4bfd8a00e3030a4832d26f88"
+                "reference": "5fbd7a333250d87a964c0f37fba54117fe3f4dd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-HTMLMin/zipball/5804d4a4c60f6caa4bfd8a00e3030a4832d26f88",
-                "reference": "5804d4a4c60f6caa4bfd8a00e3030a4832d26f88",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-HTMLMin/zipball/5fbd7a333250d87a964c0f37fba54117fe3f4dd9",
+                "reference": "5fbd7a333250d87a964c0f37fba54117fe3f4dd9",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "5.0.*|5.1.*",
-                "illuminate/filesystem": "5.0.*|5.1.*",
-                "illuminate/http": "5.0.*|5.1.*",
-                "illuminate/routing": "5.0.*|5.1.*",
-                "illuminate/support": "5.0.*|5.1.*",
-                "illuminate/view": "5.0.*|5.1.*",
-                "mrclay/minify": "~2.2",
+                "illuminate/contracts": "5.1.*|5.2.*|5.3.*",
+                "illuminate/filesystem": "5.1.*|5.2.*|5.3.*",
+                "illuminate/http": "5.1.*|5.2.*|5.3.*",
+                "illuminate/routing": "5.1.*|5.2.*|5.3.*",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*",
+                "illuminate/view": "5.1.*|5.2.*|5.3.*",
+                "mrclay/minify": "^2.2",
                 "php": ">=5.5.9"
             },
             "require-dev": {
-                "graham-campbell/testbench": "~2.1"
+                "graham-campbell/testbench": "^3.1",
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "^4.8|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -1049,7 +1051,7 @@
             "authors": [
                 {
                     "name": "Graham Campbell",
-                    "email": "graham@mineuk.com"
+                    "email": "graham@alt-three.com"
                 }
             ],
             "description": "HTMLMin Is A Simple HTML Minifier For Laravel 5",
@@ -1065,7 +1067,7 @@
                 "laravel",
                 "minifier"
             ],
-            "time": "2015-05-20 22:49:46"
+            "time": "2016-04-26 14:24:20"
         },
         {
             "name": "guzzle/guzzle",

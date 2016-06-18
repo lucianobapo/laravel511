@@ -32,7 +32,7 @@ class ReportsController extends Controller
         $this->reportRepository = $reportRepository;
     }
 
-    public function estoque($host)
+    public function estoque($host=null)
     {
         $products = $this->productRepository
             ->getProductActivatedEstoque()
@@ -67,7 +67,7 @@ class ReportsController extends Controller
      * @param $host
      * @return $this
      */
-    public function estatOrdem($host){
+    public function estatOrdem($host=null){
         $arrayDaSoma = $this->orderRepository->getCachedOrdersStatistics();
         $levantamentoDeOrdens = $this->orderRepository->getCachedFinishedOrdersStatistics();
 
@@ -116,14 +116,14 @@ class ReportsController extends Controller
         ]);
     }
 
-    public function dre($host){
+    public function dre($host=null){
         $periodos = $this->orderRepository->getCachedDre();
 //        $this->orderRepository->getComporPeriodos($periodos, Carbon::now(), Carbon::now()->subYear(1));
         sort($periodos);
         return view('erp.reports.dre', compact('host','periodos'));
     }
 
-    public function drePdf($host){
+    public function drePdf($host=null){
         $periodos = $this->orderRepository->getCachedDre();
         sort($periodos);
         $usePdf = true;
@@ -135,7 +135,7 @@ class ReportsController extends Controller
         return $pdf->stream('dre.pdf');
     }
 
-    public function diarioGeral($host, Order $order){
+    public function diarioGeral(Order $order, $host=null){
         $orders = $order
             ->with(['type','status','orderItems','orderItems.cost','orderItems.product'])
             ->get()
@@ -152,14 +152,14 @@ class ReportsController extends Controller
         ]);
     }
 
-    public function cardapio($host){
+    public function cardapio($host=null){
 //        return view('erp.reports.clientSideCardapio',compact('host'))->with([
         return view('erp.reports.cardapio',compact('host'))->with([
             'products' => $this->orderRepository->getProductsDelivery(),
         ]);
     }
 
-    public function cardapioPdf($host){
+    public function cardapioPdf($host=null){
         $usePdf = true;
         $products = $this->orderRepository->getProductsDelivery();
         $pdf = \App::make('dompdf.wrapper')

@@ -33,7 +33,7 @@ class AddressesController extends Controller
      * @param $host
      * @return Response
      */
-    public function index($host, Address $address, Request $request, Partner $partner)
+    public function index(Address $address, Request $request, Partner $partner, $host=null)
     {
         return $this->getGrid('index', $host, $address, $request, $partner);
 
@@ -59,7 +59,7 @@ class AddressesController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function edit($host, Address $address, Request $request, Partner $partner){
+    public function edit(Address $address, Request $request, Partner $partner, $host=null){
         return $this->getGrid('edit', $host, $address, $request, $partner);
 
 //        $params = $request->all();
@@ -84,7 +84,7 @@ class AddressesController extends Controller
      * @param $host
      * @return Response
      */
-    public function store($host, Address $address, Request $request)
+    public function store(Address $address, Request $request, $host=null)
     {
         $attributes = $request->all();
         $address->create($attributes);
@@ -116,7 +116,7 @@ class AddressesController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function destroy($host, Address $address, Request $request)
+    public function destroy(Address $address, Request $request, $host=null)
     {
         if ($request->method()==='DELETE'){
             $address->delete();
@@ -125,7 +125,7 @@ class AddressesController extends Controller
         } else throw new Exception(trans('app.errors.method'));
     }
 
-    public function getGrid($tipo, &$host, Address &$address, Request &$request, Partner &$partner){
+    public function getGrid($tipo, $host=null, Address &$address, Request &$request, Partner &$partner){
         return $this->widgetsRepository->showGrid($address, [
             'host' => $host,
             'method' => $tipo=='index'?'POST':'PATCH',
