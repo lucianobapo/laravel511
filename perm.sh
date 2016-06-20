@@ -1,5 +1,5 @@
 #!/bin/sh
-chgrp www-data -R ./
+chgrp luciano_bapo -R ./
 chgrp www-data -R storage/
 chmod -R g+w storage/
 chmod -R u+w storage/
