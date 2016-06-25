@@ -44,6 +44,7 @@
                 </li>
 
                 <li>{!! link_to_route('products.index', trans('product.menuProduct'), isset($host)?$host:null) !!}</li>
+                <li>{!! link_to_route('productGroups.index', trans('productGroups.menuName'), isset($host)?$host:null) !!}</li>
                 <li>{!! link_to_route('costs.index', trans('cost.menuName'), isset($host)?$host:null) !!}</li>
                 <li>{!! link_to_route('partners.index', trans('partner.menuName'), isset($host)?$host:null) !!}</li>
                 <li>{!! link_to_route('addresses.index', trans('address.menuName'), isset($host)?$host:null) !!}</li>

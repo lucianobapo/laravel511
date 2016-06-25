@@ -23,6 +23,9 @@ if (config('app.debug'))
 
 get('/cron/{minites}', ['as'=>'cron', 'uses'=>'CronController@cron']);
 
+Route::get('auth/{provider}', ['as'=>'auth.redirect', 'uses'=>'Auth\AuthController@redirectToProvider']);
+Route::get('auth/{provider}/callback', ['as'=>'auth.callback', 'uses'=>'Auth\AuthController@handleProviderCallback']);
+
 RoutesRepository::oAuth2Routes();
 RoutesRepository::erpRoutes();
 RoutesRepository::deliveryRoutes();

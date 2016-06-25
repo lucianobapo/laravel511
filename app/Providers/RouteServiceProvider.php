@@ -30,6 +30,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $router->model('orders', 'App\Models\Order');
         $router->model('products', 'App\Models\Product');
+        $router->model('productGroups', 'App\Models\ProductGroup');
         $router->model('partners', 'App\Models\Partner');
         $router->model('costs', 'App\Models\CostAllocate');
         $router->model('addresses', 'App\Models\Address');

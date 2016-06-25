@@ -20,15 +20,17 @@ trait SyncItemsTrait
     public function syncItems($attributes)
     {
         //Adicionando Grupos
-        if (empty($attributes['grupos']))
-            $this->groups()->sync([]);
-        else
-            $this->groups()->sync($attributes['grupos']);
+        if (method_exists($this,'groups'))
+            if (empty($attributes['grupos']))
+                $this->groups()->sync([]);
+            else
+                $this->groups()->sync($attributes['grupos']);
 
         //Adicionando Status
-        if (empty($attributes['status']))
-            $this->status()->sync([]);
-        else
-            $this->status()->sync($attributes['status']);
+        if (method_exists($this,'status'))
+            if (empty($attributes['status']))
+                $this->status()->sync([]);
+            else
+                $this->status()->sync($attributes['status']);
     }
 }

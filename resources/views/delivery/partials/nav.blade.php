@@ -16,7 +16,8 @@
                 {{--<li id="willChange">{!! link_to('/easyAuth/github', 'Github', $host) !!}</li>--}}
                 <li id="willChange">
                     <div style="padding: 8px;">
-                        {!! link_to_route_social_button('easy.provider', '<i class="fa fa-facebook"></i>'.trans('delivery.nav.loginFacebook'), ['facebook'], ['class' => 'btn btn-block btn-social btn-facebook']) !!}
+{{--                        {!! link_to_route_social_button('easy.provider', '<i class="fa fa-facebook"></i>'.trans('delivery.nav.loginFacebook'), ['facebook'], ['class' => 'btn btn-block btn-social btn-facebook']) !!}--}}
+                        {!! link_to_route_social_button('auth.redirect', '<i class="fa fa-facebook"></i>'.trans('delivery.nav.loginFacebook'), ['facebook'], ['class' => 'btn btn-block btn-social btn-facebook']) !!}
                     </div>
                 </li>
                 {{--<li id="willChange">{!! link_to('/easyAuth/google', 'Google', $host) !!}</li>--}}

@@ -128,6 +128,25 @@ class RoutesRepository{
             ],
         ]);
     }
+    private static function productGroupsRoutes()
+    {
+        resource('productGroups','Erp\ProductGroupsController', [
+            'names' => [
+                'index'=>'productGroups.index',
+                'edit'=>'productGroups.edit',
+                'update'=>'productGroups.update',
+                'store'=>'productGroups.store',
+                'destroy'=>'productGroups.destroy',
+            ],
+            'only'=>[
+                'index',
+                'edit',
+                'update',
+                'store',
+                'destroy',
+            ],
+        ]);
+    }
 
     private static function partnersRoutes()
     {
@@ -240,6 +259,7 @@ class RoutesRepository{
             function() {
                 self::ordersRoutes();
                 self::productsRoutes();
+                self::productGroupsRoutes();
                 self::partnersRoutes();
                 self::costsRoutes();
                 self::addressesRoutes();

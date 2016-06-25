@@ -17,6 +17,7 @@ class CheckRole{
     {
         // Get the required roles from the route
 //        dd($request->route()->getAction());
+        return $next($request);
 
         $roles = $this->getRequiredRoleForRoute($request->route());
 //        dd($request->user()->hasRole($roles));
