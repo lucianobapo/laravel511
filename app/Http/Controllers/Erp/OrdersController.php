@@ -300,7 +300,7 @@ class OrdersController extends Controller {
      * @param OrderRequest $request
      * @return Response
      */
-	public function update($host, Order $order, OrderRequest $request)
+	public function update(Order $order, OrderRequest $request)
 	{
 //        dd(route('orders.index', [$host]+$request->only('direction','sortBy','page')));
         $attributes = $request->all();
@@ -372,7 +372,7 @@ class OrdersController extends Controller {
         $order->save();
 
         flash()->overlay(trans('order.flash.orderUpdated', ['ordem' => $order->id]),trans('order.flash.orderUpdatedTitle'));
-        return redirect(route('orders.index', [$host]+$request->only('direction','sortBy','page')));
+        return redirect(route('orders.index', $request->only('direction','sortBy','page')));
 	}
 
     /**
