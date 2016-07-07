@@ -276,7 +276,7 @@ class OrdersController extends Controller {
 //        flash()->success(trans('delivery.flash.pedidoAdd', ['pedido' => $addedOrder->id]));
 //        MessagesRepository::send(['name'=>Auth::user()->name,'email'=>Auth::user()->email]);
         flash()->overlay(trans('order.flash.orderCreated', ['ordem' => $addedOrder->id]),trans('order.flash.orderCreatedTitle'));
-        return redirect(route('orders.index', $host));
+        return redirect(route('orders.index'));
     }
 
 	/**
