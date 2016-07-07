@@ -240,7 +240,7 @@ class OrdersController extends Controller {
      * @param $host
      * @return Response
      */
-	public function store(OrderRequest $request, $host)
+	public function store(OrderRequest $request)
 	{
 //		dd($request->all());
         $attributes = $request->all();
