@@ -13,8 +13,8 @@ Laravel is accessible, yet powerful, providing powerful tools needed for large, 
 
 ##Command to Umbler
 ```shell
-$ rsync -rvztPhe "ssh -p 9922" vendor/ ilhanet.com@ilhanet-com.umbler.net:vendor
-$ rsync -rvztPhe "ssh -p 9922" .env.production ilhanet.com@ilhanet-com.umbler.net:.env
+rsync -rvztPhe "ssh -p 9922" vendor/ ilhanet.com@ilhanet-com.umbler.net:vendor
+rsync -rvztPhe "ssh -p 9922" .env.production ilhanet.com@ilhanet-com.umbler.net:.env
 ```
 
 ##Command to Google Cloud
