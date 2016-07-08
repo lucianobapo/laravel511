@@ -47,27 +47,27 @@ class Kernel extends ConsoleKernel
 //            ->sendOutputTo($filePath);
 //            ->emailOutputTo(config('mail.from.address'));
 
-//        $schedule->call(function () {
-//            $orders = Order::with('status','type','confirmations','partner','partner.user')
-//                ->get()
-//                ->filter(function($item) {
-//                    if ( (strpos($item->status_list,'Aberto')!==false) && ($item->type->tipo=='ordemVenda') )
-//                        return $item;
-//                });
-//
-//            foreach ($orders as $order) {
-//                if ( (count($order->confirmations)==0)&&(config('delivery.newOrderEmailAlert')) ){
-//                    MessagesRepository::sendOrderCreated([
-//                        'name'=>config('mail.from.name'),
-//                        'email'=>config('mail.from.address'),
-//                        'user'=>isset($order->partner->user)?$order->partner->user:null,
-//                        'partner'=>$order->partner,
-//                        'order'=>$order,
-//                    ]);
-//                };
-//            }
-//        })
-//            ->everyTenMinutes();
+        $schedule->call(function () {
+            $orders = Order::with('status','type','confirmations','partner','partner.user')
+                ->get()
+                ->filter(function($item) {
+                    if ( (strpos($item->status_list,'Aberto')!==false) && ($item->type->tipo=='ordemVenda') )
+                        return $item;
+                });
+
+            foreach ($orders as $order) {
+                if ( (count($order->confirmations)==0)&&(config('delivery.newOrderEmailAlert')) ){
+                    MessagesRepository::sendOrderCreated([
+                        'name'=>config('mail.from.name'),
+                        'email'=>config('mail.from.address'),
+                        'user'=>isset($order->partner->user)?$order->partner->user:null,
+                        'partner'=>$order->partner,
+                        'order'=>$order,
+                    ]);
+                };
+            }
+        })
+            ->everyTenMinutes();
 //            ->everyMinute();
     }
 }
