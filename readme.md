@@ -25,8 +25,11 @@ sudo add-apt-repository ppa:ondrej/php
 sudo add-apt-repository -y ppa:ondrej/mysql-5.6
 sudo apt-get update
 sudo apt-get install -y php7.0 php7.0-fpm
-sudo apt-get install mysql-server-5.6 nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
+sudo apt-get install mysql-server-5.7 nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
 sudo nano /etc/php/7.0/fpm/php.ini
+cgi.fix_pathinfo=0
+sudo systemctl restart php7.0-fpm
+
 sudo nano /etc/php/7.0/fpm/pool.d/www.conf
 sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/laravel511
 sudo nano /etc/nginx/sites-available/laravel511
