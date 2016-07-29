@@ -18,8 +18,8 @@
 <meta property="og:title" content="{{ trans('delivery.head.title') }}"/>
 <meta property="og:site_name" content="{{ trans('delivery.index.title') }}"/>
 <meta property="og:image" content="{{ config('delivery.siteImage') }}"/>
-<meta property="og:image:width" content="486">
-<meta property="og:image:height" content="255">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="315">
 {{--<meta property="og:image:url" content="{{ config('delivery.siteImage') }}"/>--}}
 {{--<meta property="og:image:secure_url" content="{{ config('delivery.siteSecureImage') }}"/>--}}
 <meta property="og:image:type" content="image/png"/>

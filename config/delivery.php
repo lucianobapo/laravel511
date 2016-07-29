@@ -78,8 +78,8 @@ return [
     'emailLogo' => 'https://s3.amazonaws.com/delivery-images/logo/logo-delivery2-resized-compressed.png',
     'siteCurrentUrl' => '//'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
     'siteMetaTagCurrentUrl' => 'http://'.(isset($_SERVER["HTTP_HOST"])?$_SERVER["HTTP_HOST"]:env('APP_DOMAIN','homestead.app')),
-    'siteImage' => 'http://s3.amazonaws.com/delivery-images/campanhas/campanha-face-compressed.png',
-    'siteSecureImage' => 'https://s3.amazonaws.com/delivery-images/campanhas/campanha-face-compressed.png',
+    'siteImage' => 'http://s3.amazonaws.com/delivery-images/campanhas/campanha-face4-compressed.png',
+    'siteSecureImage' => 'https://s3.amazonaws.com/delivery-images/campanhas/campanha-face4-compressed.png',
 
 
 ];
