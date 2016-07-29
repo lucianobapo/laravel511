@@ -6,7 +6,7 @@
 
 @section('contentWide')
     <div class="row text-center" style="background:darkgray url('/img/capa2.png') no-repeat center center;background-size:cover;">
-            {!! Html::image('/img/logo-delivery3.png', trans('delivery.nav.logoAlt'), [
+            {!! Html::image(config('delivery.siteImage'), trans('delivery.nav.logoAlt'), [
             'title'=>trans('delivery.nav.logoTitle'),
             'class'=>'img-responsive container-fluid']) !!}
             {{--<h1 class="h2s">{{ trans('delivery.index.subTitle') }}</h1>--}}
