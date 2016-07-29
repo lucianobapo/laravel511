@@ -73,19 +73,21 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.energeticosTitle') }}</h2></div>
-    <div class="panel-body">
-        @foreach($energeticos as $product)
-            <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
-                @include('delivery.partials.productBlock')
-                <div class="row" style="margin: 0px;">
-                    @include('delivery.partials.productBlockForm')
+@if(count($energeticos))
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2 class="h2s text-left">{{ trans('delivery.categorias.energeticosTitle') }}</h2></div>
+        <div class="panel-body">
+            @foreach($energeticos as $product)
+                <div class="col-xs-2 col-sm-2 well" style="min-width: 200px; float: none; display: inline-block; vertical-align: top; padding: 0px; margin: 0px 5px 10px 0px;">
+                    @include('delivery.partials.productBlock')
+                    <div class="row" style="margin: 0px;">
+                        @include('delivery.partials.productBlockForm')
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
+@endif
 
 @if(count($sucos))
     <div class="panel panel-default">

@@ -31,12 +31,12 @@ return array(
     ],
 
     'head' => [
-        'title' => 'Delivery Rio das Ostras 24 horas - Entrega de Bebidas, Cigarros e Lanches',
+        'title' => 'Delivery Rio das Ostras 24 horas - Entrega de Bebidas e Cigarros',
         'metaAuthor'=>'Luciano Porto - ilhanet.com',
         'metaRobots'=>'index, follow',
-        'metaDescription' => 'Delivery em Rio das Ostras 24hs - Frete Grátis,
+        'metaDescription' => 'Delivery em Rio das Ostras 24 horas - Frete Grátis,
         com entrega de bebidas, cigarros,
-        vinhos, vodka e lanches, aberto 24 horas.',
+        vinhos e vodka, aberto 24 horas.',
     ],
 
     'categorias' => [

@@ -5,14 +5,15 @@
 {{--@endsection--}}
 
 @section('contentWide')
-    <div class="row text-center" style="background:darkgray url('/img/capa2.png') no-repeat center center;background-size:cover;">
+    {{--<div class="row text-center" style="background:darkgray url('/img/capa2.png') no-repeat center center;background-size:cover;">--}}
+    <div class="row text-center">
             {!! Html::image(config('delivery.siteImage'), trans('delivery.nav.logoAlt'), [
             'title'=>trans('delivery.nav.logoTitle'),
             'class'=>'img-responsive container-fluid']) !!}
             {{--<h1 class="h2s">{{ trans('delivery.index.subTitle') }}</h1>--}}
 
-            <h1 class="h1s" style="color: #ffffff;">{{ trans('delivery.index.title') }}</h1>
-            <h2 class="h2s" style="color: #ffffff;">{{ trans('delivery.index.subTitle') }}</h2>
+            <h1 class="h1s">{{ trans('delivery.index.title') }}</h1>
+            <h2 class="h2s">{{ trans('delivery.index.subTitle') }}</h2>
     </div>
 @endsection
 
