@@ -56,7 +56,7 @@ return array(
 
     'index' => [
         'title' => 'Delivery Rio das Ostras 24 horas',
-        'subTitle' => 'Frete grátis na entrega de Bebidas, Cigarros e Lanches.',
+        'subTitle' => 'Frete grátis na entrega de Bebidas e Cigarros.',
 //        'panelTitle' => 'Faça o pedido e receba em sua casa.',
         'semProdutos' => 'Nenhum produto para exibir',
         'email-is-already-in-use' => 'Email do usuário já está cadastrado em nosso sistema com outras credenciais.',
