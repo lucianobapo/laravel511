@@ -13,6 +13,11 @@ Laravel is accessible, yet powerful, providing powerful tools needed for large, 
 
 ssh 104.197.251.61
 rsync -rvztPhe ssh .env.production 104.197.251.61:code/laravel511/.env
+rsync -rvztPhe ssh .env.production 104.197.251.61:code/delivery24horas/.env
+
+sudo openssl genrsa -out /etc/ssl/ionic.ilhanet.com.key 2048
+mkdir -p /home/luciano/code/ionic-delivery24horas/www/.well-known/acme-challenge/
+
 
 rsync -rvztPhe ssh /home/luciano/Code/nginx-config/ 104.197.251.61:nginx-config
 
@@ -31,7 +36,10 @@ sudo add-apt-repository -y ppa:ondrej/mysql-5.6
 sudo apt-get update
 sudo apt-get install -y php7.0 php7.0-fpm
 sudo apt-get install mysql-server-5.7 nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
-sudo apt-get install nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
+sudo apt-get install nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip php-intl
+
+sudo apt-get install php-memcached memcached
+
 sudo nano /etc/php/7.0/fpm/php.ini
 cgi.fix_pathinfo=0
 sudo systemctl restart php7.0-fpm
@@ -46,7 +54,7 @@ sudo service nginx reload
 ***Ubuntu Firewall***
 ```shell
 sudo ufw allow 'OpenSSH'
-sudo ufw allow 'Nginx HTTP'
+sudo ufw allow 'Nginx Full'
 sudo ufw enable
 ```
 
