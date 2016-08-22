@@ -27,7 +27,7 @@ class CurrencyServiceProvider extends ServiceProvider {
 	public function register()
 	{
         $this->app->bind('currency', function () {
-            $formatter = new NumberFormatter(config('app.locale'), \NumberFormatter::CURRENCY);
+            $formatter = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
 //            $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, 2);
             return $formatter;
 
