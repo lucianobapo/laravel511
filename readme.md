@@ -11,6 +11,11 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
+ssh 104.197.251.61
+rsync -rvztPhe ssh .env.production 104.197.251.61:code/laravel511/.env
+
+rsync -rvztPhe ssh /home/luciano/Code/nginx-config/ 104.197.251.61:nginx-config
+
 ##Command to Umbler
 ```shell
 rsync -rvztPhe "ssh -p 9922" vendor/ ilhanet.com@ilhanet-com.umbler.net:vendor
@@ -26,6 +31,7 @@ sudo add-apt-repository -y ppa:ondrej/mysql-5.6
 sudo apt-get update
 sudo apt-get install -y php7.0 php7.0-fpm
 sudo apt-get install mysql-server-5.7 nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
+sudo apt-get install nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
 sudo nano /etc/php/7.0/fpm/php.ini
 cgi.fix_pathinfo=0
 sudo systemctl restart php7.0-fpm
