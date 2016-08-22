@@ -102,6 +102,7 @@ class ProductGroupsController extends Controller {
     public function getGrid($tipo, $host=null, Model &$model, Request &$request, $routePrefix){
         return $this->widgetsRepository->showGrid($model, [
             'host' => $host,
+
             'method' => $tipo=='index'?'POST':'PATCH',
             'route' => [
                 'form' => $tipo=='index'?$routePrefix.'.store':$routePrefix.'.update',
