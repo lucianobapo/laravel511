@@ -28,19 +28,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $filePath = storage_path('logs').DIRECTORY_SEPARATOR.'scheduled.log';
-//        $date = Carbon::now()->toW3cString();
-//        $environment = env('APP_ENV');
+        $filePath = storage_path('logs').DIRECTORY_SEPARATOR.'scheduled.log';
+        $date = Carbon::now()->toW3cString();
+        $environment = env('APP_ENV');
 
 //        $schedule->command('inspire')
 //                 ->hourly();
 
-//        $schedule->command("db:backup --database=mysql_admin --destination=".
-//            config('delivery.backup_destination')." --destinationPath=backups/{$environment}-{$date} --compression=gzip")
-//            ->twiceDaily(13,21)
-////            ->dailyAt('20:41')
-////            ->everyTenMinutes()
-//            ->sendOutputTo($filePath);
+        $schedule->command("db:backup --database=mysql_admin --destination=".
+            config('delivery.backup_destination').
+            " --destinationPath=backups/{$environment}-{$date} --compression=gzip")
+            ->twiceDaily(13,21)
+//            ->dailyAt('20:41')
+//            ->everyTenMinutes()
+            ->sendOutputTo($filePath);
 
 //        $schedule->command('backup:run')
 //            ->dailyAt('06:03')
