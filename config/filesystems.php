@@ -21,7 +21,9 @@ return [
     'imageLocation' => 'images',
     'imageUrl' => (env('FILESYSTEM_DEFAULT', 'local')=='s3')?
         env('S3_URL', 'your-url').env('S3_BUCKET', 'your-bucket').'/images/'
-        :'/images/',
+        :(env('FILESYSTEM_DEFAULT', 'local')=='google')?
+            env('GOOGLE_URL', 'your-url').env('GOOGLE_BUCKET', 'your-bucket').'/images/'
+            :'/images/',
 
     /*
     |--------------------------------------------------------------------------
@@ -74,6 +76,14 @@ return [
             'secret' => env('S3_SECRET', 'your-secret'),
             'region' => env('S3_REGION', 'your-region'),
             'bucket' => env('S3_BUCKET', 'your-bucket'),
+        ],
+
+        'google' => [
+            'driver' => 's3',
+            'key'    => env('GOOGLE_KEY', 'your-key'),
+            'secret' => env('GOOGLE_SECRET', 'your-secret'),
+            'region' => env('GOOGLE_REGION', 'your-region'),
+            'bucket' => env('GOOGLE_BUCKET', 'your-bucket'),
         ],
 
         'rackspace' => [

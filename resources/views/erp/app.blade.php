@@ -17,5 +17,6 @@
     </section>
 
     @include('erp.partials.footer')
+    @yield('customFooterScripts')
 </body>
 </html>

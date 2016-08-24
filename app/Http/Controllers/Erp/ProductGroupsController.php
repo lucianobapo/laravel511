@@ -29,12 +29,23 @@ class ProductGroupsController extends Controller {
     /**
      * Display a listing of the resource.
      *
-     * @param Partner $partner
+     * @param ProductGroup $model
+     * @param Request $request
      * @param $host
      * @return Response
      */
-    public function index(ProductGroup $model, Request $request, User $user, $host=null)
+    public function index(ProductGroup $model, Request $request, $host=null)
     {
+//        return view('erp.dataIndex')->with([
+//            'data' => $model->all(),
+//            'dataModelInstance' => $model,
+//            'routePrefix' => 'productGroups',
+//            'fields' => $this->fieldsConfig(),
+//            'customFormAttr' => [
+//                'route' => ['productGroups.store'],
+//                'files'=>false,
+//            ],
+//        ]);
         return $this->getGrid('index', $host, $model, $request, 'productGroups');
     }
 
@@ -138,5 +149,13 @@ class ProductGroupsController extends Controller {
 
             ],
         ], $request->all());
+    }
+
+    private function fieldsConfig()
+    {
+        return [
+            'mandante',
+            'grupo',
+        ];
     }
 }
