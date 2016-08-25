@@ -35,8 +35,9 @@ sudo add-apt-repository ppa:ondrej/php
 sudo add-apt-repository -y ppa:ondrej/mysql-5.6
 sudo apt-get update
 sudo apt-get install -y php7.0 php7.0-fpm
-sudo apt-get install mysql-server-5.7 nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip
-sudo apt-get install nginx php7.0-mysql php7.0-curl php7.0-json php-mbstring php7.0-xml php7.0-zip php-intl
+sudo apt-get install mysql-server-5.7 php7.0-mysql 
+
+sudo apt-get install nginx php7.0-curl php7.0-json php7.0-mbstring php7.0-xml php7.0-zip php7.0-intl php7.0-bz2
 
 sudo apt-get install php-memcached memcached
 

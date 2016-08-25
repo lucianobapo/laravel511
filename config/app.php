@@ -179,6 +179,8 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
 
+        Websight\GcsProvider\CloudStorageServiceProvider::class,
+
 
     ],
 

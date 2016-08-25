@@ -16,6 +16,7 @@
         "barryvdh/laravel-dompdf": "0.6.*",
         "lucadegasperi/oauth2-server-laravel": "^5.0",
         "backup-manager/laravel": "^1.0",
+        "websight/l5-google-cloud-storage": "dev-master",
         "intervention/image": "^2.3"
 
     },

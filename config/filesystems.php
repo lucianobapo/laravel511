@@ -86,6 +86,20 @@ return [
             'bucket' => env('GOOGLE_BUCKET', 'your-bucket'),
         ],
 
+        'gcs' => [
+                // Select the Google Cloud Storage Disk
+            'driver'                               => 'gcs',
+                // The id of your new service account
+            'service_account'                      => env('GOOGLE_ACCOUNT', 'service@account.iam.gserviceaccount.com'),
+                // The location of the p12 service account certificate
+            'service_account_certificate'          => storage_path() . env('GOOGLE_CERTIFICATE', '/credentials.p12'),
+                // The password you will be given when creating the service account
+            'service_account_certificate_password' => env('GOOGLE_SECRET', 'your-secret'),
+                // The bucket you want this disk to point at
+            'bucket'                               => env('GOOGLE_BUCKET', 'cloud-storage-bucket'),
+            'url'                               => env('GOOGLE_URL', 'url'),
+        ],
+
         'rackspace' => [
             'driver'    => 'rackspace',
             'username'  => 'your-username',

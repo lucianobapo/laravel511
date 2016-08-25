@@ -11,7 +11,13 @@
             @else
                 <div class="col-sm-5">
                     {{ trans('modelAttachment.attributes.file',['numero'=>$i]) }} -
-                    {!! link_to_route('attachment',$attachment->file,isset($host)?[$host,$attachment->file]:[$attachment->file],['target'=>'_blank', 'title'=>$attachment->file]) !!}
+                    <a href="{{ config('filesystems.disks.gcs.url').
+                    config('filesystems.disks.gcs.bucket').
+                    DIRECTORY_SEPARATOR.'attachments'.DIRECTORY_SEPARATOR.$attachment->file }}"
+                       title="{{ $attachment->file }}" target="_blank">
+                        {{ $attachment->file }}
+                    </a>
+{{--                    {!! link_to_route('attachment',$attachment->file,isset($host)?[$host,$attachment->file]:[$attachment->file],['target'=>'_blank', 'title'=>$attachment->file]) !!}--}}
                 </div>
             @endif
 

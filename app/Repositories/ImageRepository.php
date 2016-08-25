@@ -78,7 +78,8 @@ class ImageRepository {
 //            $this->load($tempFile);
 //            $this->resizeToHeight(150);
 //            $this->save($tempFile,IMAGETYPE_PNG);
-            Storage::put($fileDir . $clientOriginalName, file_get_contents($tempFile));
+            Storage::put($fileDir . $clientOriginalName, file_get_contents($tempFile),
+                \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
         } else {
             dd($clientOriginalName);
 //                // sending back with error message.
