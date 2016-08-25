@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command("db:backup --database=mysql_admin --destination=".
             config('delivery.backup_destination').
             " --destinationPath=backups/{$environment}-{$date} --compression=gzip")
-            ->twiceDaily(11,21)
+            ->twiceDaily(02,22)
 //            ->dailyAt('20:41')
 //            ->everyTenMinutes()
             ->sendOutputTo($filePath);
