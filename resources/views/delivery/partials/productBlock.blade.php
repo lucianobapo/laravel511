@@ -1,5 +1,7 @@
 <div class="" style="padding: 5px; height: 150px;">
-    {!! Html::image(config('filesystems.imageUrl').$product->imagem,
+    {!! Html::image(config('filesystems.disks.gcs.url').
+                    config('filesystems.disks.gcs.bucket').
+                    DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.$product->imagem,
     trans('delivery.productBlock.imageAlt', ['product' => $product->nome]),
     ['title'=>trans('delivery.productBlock.imageAlt', ['product' => $product->nome]),
     'class'=>'img-responsive center-block']) !!}
