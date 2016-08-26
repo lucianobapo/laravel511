@@ -24,7 +24,6 @@ use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Cache\Repository as CacheRepository;
 
-use Illuminate\Html\HtmlBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -75,7 +74,7 @@ class DeliveryController extends Controller {
      */
     public function index(Product $product){
         if (Session::has('cart')){
-            $totalCart = formatBRL(Cart::total());
+            $totalCart = formatBRL(Cart::subtotal());
             $cartView = view('delivery.partials.cart', compact('host'))->with([
                 'cart' => Cart::content()->toArray(),
             ]);
@@ -128,13 +127,15 @@ class DeliveryController extends Controller {
             Cart::add($key, $data['nome'][$key], $value, $data['valor'][$key]);
             if(!$request->ajax()) flash()->success(trans('delivery.flash.itemAdd'));
         }
-        if($request->ajax()) return Response::json( [
-            'view' => view('delivery.partials.cart')->with([
-                'cart' => Cart::content()->toArray(),
-            ])->render(),
-            'total' => formatBRL(Cart::total()),
-            'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']),
-        ]);
+        if($request->ajax()) {
+            return Response::json( [
+                'view' => view('delivery.partials.cart')->with([
+                    'cart' => Cart::content()->toArray(),
+                ])->render(),
+                'total' => formatBRL(Cart::subtotal()),
+                'btnPedido' => link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']),
+            ]);
+        }
         else return redirect(route('delivery.index'));
     }
 
@@ -159,7 +160,7 @@ class DeliveryController extends Controller {
         }
 
         if (Session::has('cart')){
-            $totalCart = formatBRL(Cart::total());
+            $totalCart = formatBRL(Cart::subtotal());
             $cartView = view('delivery.partials.cart', compact('host'))->with([
                 'cart' => Cart::content()->toArray(),
             ]);
@@ -171,7 +172,7 @@ class DeliveryController extends Controller {
             ]);
             $panelFormBody = view('delivery.partials.pedidoForm', compact('product', 'host'))->with([
                 'cart' => Cart::content()->toArray(),
-                'totalCartUnformatted' => Cart::total(),
+                'totalCartUnformatted' => Cart::subtotal(),
                 'panelListaEnderecos' => $panelListaEnderecos,
             ]);
         } else {
@@ -210,7 +211,7 @@ class DeliveryController extends Controller {
      */
     private function prepareCart($host='delivery'){
         if (Session::has('cart')){
-            $this->totalCart = formatBRL(Cart::total());
+            $this->totalCart = formatBRL(Cart::subtotal());
             $this->cartView = view('delivery.partials.cart', compact('host'))->with([
                 'cart' => Cart::content()->toArray(),
             ]);

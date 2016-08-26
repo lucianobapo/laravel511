@@ -16,7 +16,7 @@
     </tbody>
 </table>
 <div class="">
-    {{ trans('delivery.nav.cartTotal') }}: {{ formatBRL(Cart::total()) }}
+    {{ trans('delivery.nav.cartTotal') }}: {{ formatBRL(Cart::subtotal()) }}
 </div>
 <div class="">
     {!! link_to_route('delivery.pedido', trans('delivery.nav.cartBtn'), null, ['class'=>'btn btn-success']) !!}

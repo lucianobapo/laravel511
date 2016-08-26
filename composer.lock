@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "64474b9591f40575d28b20be99bca973",
-    "content-hash": "a08729df0f12e593a4af363845071aa4",
+    "hash": "8718a303dca24240f9f2b92c03b02d19",
+    "content-hash": "6295e91474f1be4b7110116892c415eb",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -956,16 +956,16 @@
         },
         {
             "name": "gloudemans/shoppingcart",
-            "version": "dev-master",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Crinsane/LaravelShoppingcart.git",
-                "reference": "71cb7ce694d8625531cb463f420f057c7e470c48"
+                "reference": "3e6195d46cff321cef959231f7e94dc2eda569d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/71cb7ce694d8625531cb463f420f057c7e470c48",
-                "reference": "71cb7ce694d8625531cb463f420f057c7e470c48",
+                "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/3e6195d46cff321cef959231f7e94dc2eda569d0",
+                "reference": "3e6195d46cff321cef959231f7e94dc2eda569d0",
                 "shasum": ""
             },
             "require": {
@@ -1002,7 +1002,7 @@
                 "laravel",
                 "shoppingcart"
             ],
-            "time": "2016-08-03 17:41:35"
+            "time": "2016-07-14 08:07:48"
         },
         {
             "name": "google/apiclient",
@@ -1535,16 +1535,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.1.42",
+            "version": "v5.1.43",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "876189b5ce03d40f0d9380c06fb61a3d0743b19c"
+                "reference": "db580b5b073ea3f1e095b30a75ae5d6394eb8e51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/876189b5ce03d40f0d9380c06fb61a3d0743b19c",
-                "reference": "876189b5ce03d40f0d9380c06fb61a3d0743b19c",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/db580b5b073ea3f1e095b30a75ae5d6394eb8e51",
+                "reference": "db580b5b073ea3f1e095b30a75ae5d6394eb8e51",
                 "shasum": ""
             },
             "require": {
@@ -1660,7 +1660,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-08-23 13:02:52"
+            "time": "2016-08-26 11:44:21"
         },
         {
             "name": "laravel/socialite",
@@ -5271,7 +5271,6 @@
     "stability-flags": {
         "laracasts/flash": 20,
         "bernardino/easy-authenticator": 20,
-        "gloudemans/shoppingcart": 20,
         "websight/l5-google-cloud-storage": 20
     },
     "prefer-stable": false,

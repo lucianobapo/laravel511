@@ -10,7 +10,7 @@
         "laravelcollective/html": "^5",
         "laracasts/flash": "dev-master",
         "bernardino/easy-authenticator": "dev-master",
-        "gloudemans/shoppingcart": "dev-master",
+        "gloudemans/shoppingcart": "^2.1",
         "league/flysystem-aws-s3-v3": "^1.0",
         "graham-campbell/htmlmin": "^4",
         "barryvdh/laravel-dompdf": "0.6.*",
