@@ -28,4 +28,4 @@ Route::get('auth/{provider}/callback', ['as'=>'auth.callback', 'uses'=>'Auth\Aut
 
 RoutesRepository::oAuth2Routes();
 RoutesRepository::erpRoutes();
-RoutesRepository::deliveryRoutes();
+//RoutesRepository::deliveryRoutes();

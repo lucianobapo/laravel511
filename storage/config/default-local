@@ -30,7 +30,7 @@ server {
 	root /var/www/html;
 
 	# Add index.php to the list if you are using PHP
-	index index.html index.htm index.nginx-debian.html;
+	index index.php index.html index.htm index.nginx-debian.html;
 
 	server_name localhost.com;
 
@@ -49,14 +49,15 @@ server {
 	#	fastcgi_pass 127.0.0.1:9000;
 	#	# With php5-fpm:
 	#	fastcgi_pass unix:/var/run/php5-fpm.sock;
+	#	fastcgi_pass unix:/run/php/php7.0-fpm.sock;
 	#}
 
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
 	#
-	#location ~ /\.ht {
-	#	deny all;
-	#}
+	location ~ /\.ht {
+		deny all;
+	}
 
     include /etc/nginx/conf-fpm.conf;
 
