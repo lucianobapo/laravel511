@@ -3,7 +3,7 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
     <div style="text-align: center;">
 {{--        {!! link_to_delivery_logo(config('delivery.emailLogo'), ['delivery']) !!}--}}
-        <a href="https://delvery24horas.com" target="_blank">
+        <a href="https://delivery24horas.com" target="_blank">
             <img src="{{ config('delivery.emailLogo') }}"
                  title="{{ trans('delivery.nav.logoTitle') }}"
                  alt="{{ trans('delivery.nav.logoAlt') }}"
